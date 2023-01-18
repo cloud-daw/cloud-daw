@@ -1,0 +1,1 @@
+- Get matslider value into .ts

@@ -1,6 +1,13 @@
 # cloud-daw
 
-Our API Client-Server Relationship
+## To Spin Up:
+
+Requires 2 terminal windows.
+
+1. In client directory, ng serve
+2. In server directory, npm start
+
+## API Client-Server Relationship:
 
 Server: (still need to make more sophisticated, include MIDI npm package & routes, but example illustrated in server.js)
 
