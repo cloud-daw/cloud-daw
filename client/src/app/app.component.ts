@@ -16,7 +16,7 @@ export class AppComponent {
   status: string;
   status$: Observable<any>;
 
-  show() {
+  show() { // test, example method for backend comms
     this.status$.subscribe({
       next: s => {
         console.log('show, s');
@@ -27,4 +27,35 @@ export class AppComponent {
       complete: () => console.log('complete'),
     });
   }
+
+  onPlay(event : any) {
+    console.log('play clicked');
+    console.log(event);
+  }
+
+  onPause(event : any) {
+    console.log('pause clicked');
+    console.log(event);
+  }
+
+  onRewind(event : any) {
+    console.log('rewind clicked');
+    console.log(event);
+  }
+
+  onRecord(event : any) {
+    console.log('record clicked');
+    console.log(event);
+  }
+
+  onUndo(event: any) {
+    console.log('undo clicked');
+    console.log(event);
+  }
+
+  onMainVolumeChange(event: any) {
+    console.log('volume changed');
+    console.log(event);
+  }
+
 }
