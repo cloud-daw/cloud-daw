@@ -34,6 +34,10 @@
             </svg>
         </button>
     </div>
+    <div class="w-32 ml-4 h-16 bg-red-400 flex justify-between px-2 py-1.5">
+        <div class="w-12 h-12 bg-blue-400">{{metronome.currentMeasure}}</div>
+        <div class="w-12 h-12 bg-blue-400">{{metronome.currentBeat}}</div>
+    </div>
     <div class="w-60 h-10 ml-12 bg-gray-200">
         <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
     </div>

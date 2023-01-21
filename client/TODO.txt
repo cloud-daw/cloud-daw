@@ -1,1 +1,2 @@
 - Get matslider value into .ts
+- Change timing engine w/in metronome class to use Tone API

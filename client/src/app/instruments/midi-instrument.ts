@@ -1,11 +1,17 @@
 import * as Tone from 'tone';
 
+//monophonic (poly requires refactor) instrument class
+
 export class MidiInstrument {
     public name: string;
     public soundpack?: AudioBuffer; //i think this is the right type
     public sound: string;
     public engine: any;
+    public isPlaying: boolean;
+    public currentNote: string;
     private keyDict: Record<string, string>;
+    private attack: number;
+    private release: number;
     constructor(name: string) {
         this.name = name;
         this.sound = "something.mp3" //to load for later
@@ -23,12 +29,27 @@ export class MidiInstrument {
             "h": "A4",
             "u": "A#4",
             "j": "B4",
-            "k": "C5"
+            "k": "C5",
+            "o": "C#5",
+            "l": "D5",
+            "p": "D#5",
+            ";": "E5",
         }
+        this.isPlaying = false;
+        this.currentNote = "";
+        this.attack = 0;
+        this.release = 0.1;
     }
-    Play(noteKey : string, length: number) {
-       //code to emit sound 
-        let now = Tone.now();
-        this.engine.triggerAttackRelease(this.keyDict[noteKey], length, now);
+    Play(noteKey : string) {
+       //code to emit sound
+        this.currentNote = this.keyDict[noteKey];
+        this.engine.triggerAttack(this.currentNote, Tone.now());
+        this.isPlaying = true;
+    }
+
+    Release() {
+        this.currentNote = "";
+        this.engine.triggerRelease(this.release);
+        this.isPlaying = false;
     }
 }

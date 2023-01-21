@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
+import { Metronome } from '../../../instruments/metronome';
 
 @Component({
   selector: 'app-main-controls',
@@ -12,6 +13,7 @@ export class MainControlsComponent {
   @Output() rewind: EventEmitter<boolean> = new EventEmitter();
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
+  @Input() metronome: Metronome | any;
 
   clickPlay() {
     this.play.emit(true);
