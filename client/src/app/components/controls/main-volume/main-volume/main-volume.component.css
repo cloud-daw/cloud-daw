@@ -1,3 +1,4 @@
 mat-slider {
     @apply w-3/4 ml-8 mb-1 -mt-0.5;
+    margin-top: -0.75em;
 }

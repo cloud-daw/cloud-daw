@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import * as Tone from 'tone';
 
 //monophonic (poly requires refactor) instrument class
@@ -15,7 +16,7 @@ export class MidiInstrument {
     constructor(name: string) {
         this.name = name;
         this.sound = "something.mp3" //to load for later
-        this.engine = new Tone.Synth().toDestination();
+        this.engine = new Tone.PolySynth(Tone.Synth).toDestination();
         this.keyDict = {
             "a": "C4",
             "w": "C#4",
@@ -48,8 +49,8 @@ export class MidiInstrument {
     }
 
     Release() {
+        this.engine.triggerRelease(this.currentNote, '+0.1');
         this.currentNote = "";
-        this.engine.triggerRelease(this.release);
         this.isPlaying = false;
     }
 }

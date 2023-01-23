@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Metronome } from './instruments/metronome';
 import { MidiInstrument } from './instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
+import { MidiControllerComponent } from './components/midi-controller/midi-controller.component';
 
 @Component({
   selector: 'app-root',
@@ -15,17 +16,22 @@ export class AppComponent {
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     console.log(event);
-    if (!this.synth.isPlaying) this.synth.Play(event.key);
+    if (!this.synth.isPlaying) {
+      this.synth.Play(event.key);
+      this.controller.showNotes(this.synth.currentNote);
+    }
   }
   @HostListener('window:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
     this.synth.Release();
+    this.controller.hideNotes(this.synth.currentNote);
   }
 
   constructor(public ApiHttpService: ApiHttpService) { 
     this.status = 'no stat update';
     this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
     this.synth = new MidiInstrument("test");
+    this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
   }
   status: string;
@@ -35,6 +41,7 @@ export class AppComponent {
   tempo: number = 120; //default
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
   synth: MidiInstrument;
+  controller: MidiControllerComponent;
   metronome: Metronome;
   
 

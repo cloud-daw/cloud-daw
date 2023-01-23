@@ -7,12 +7,14 @@ import { MainControlsComponent } from './components/controls/main-controls/main-
 import { MainVolumeComponent } from './components/controls/main-volume/main-volume/main-volume.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
+import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainControlsComponent,
-    MainVolumeComponent
+    MainVolumeComponent,
+    MidiNoteComponent,
   ],
   imports: [
     BrowserModule,
