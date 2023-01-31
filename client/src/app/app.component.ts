@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ApiHttpService } from './services/httpservice.service';
 import { Observable } from 'rxjs';
-import { Metronome } from './instruments/metronome';
-import { MidiInstrument } from './instruments/midi-instrument'; //for now, do here -> in future, put in track
+import { Metronome } from './models/instruments/metronome';
+import { MidiInstrument } from './models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
 import { MidiControllerComponent } from './components/midi-controller/midi-controller.component';
+import * as Tone from 'tone';
 
 @Component({
   selector: 'app-root',
@@ -29,13 +30,13 @@ export class AppComponent {
 
   constructor(public ApiHttpService: ApiHttpService) { 
     this.status = 'no stat update';
-    this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
+    //this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
   }
   status: string;
-  status$: Observable<any>;
+  //status$: Observable<any>;
   masterVolume: number = 0;
   isPlaying: boolean = false;
   tempo: number = 120; //default
@@ -43,25 +44,27 @@ export class AppComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
+  metronomeOn: boolean = true;
   
 
-  show() { // test, example method for backend comms
-    this.status$.subscribe({
-      next: s => {
-        console.log('show, s');
-        console.log(s);
-        this.status = s.status || 'uh oh';
-      },
-      error: e => this.status = e.message || 'err',
-      complete: () => console.log('complete'),
-    });
-  }
+  // show() { // test, example method for backend comms
+  //   this.status$.subscribe({
+  //     next: s => {
+  //       console.log('show, s');
+  //       console.log(s);
+  //       this.status = s.status || 'uh oh';
+  //     },
+  //     error: e => this.status = e.message || 'err',
+  //     complete: () => console.log('complete'),
+  //   });
+  // }
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
       console.log('play clicked');
       console.log(event);
       this.isPlaying = true;
+      Tone.start();
       this.metronome.Start();
     }
   }

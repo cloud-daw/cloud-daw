@@ -7,7 +7,7 @@ export class MidiInstrument {
     public name: string;
     public soundpack?: AudioBuffer; //i think this is the right type
     public sound: string;
-    public engine: any;
+    public instrument: Tone.Synth;
     public isPlaying: boolean;
     public currentNote: string;
     private keyDict: Record<string, string>;
@@ -16,7 +16,7 @@ export class MidiInstrument {
     constructor(name: string) {
         this.name = name;
         this.sound = "something.mp3" //to load for later
-        this.engine = new Tone.PolySynth(Tone.Synth).toDestination();
+        this.instrument = new Tone.Synth().toDestination();
         this.keyDict = {
             "a": "C4",
             "w": "C#4",
@@ -41,16 +41,32 @@ export class MidiInstrument {
         this.attack = 0;
         this.release = 0.1;
     }
+
+    /**
+     * Starts note from input
+     * @param noteKey key string e.g., "a"
+     */
     Play(noteKey : string) {
        //code to emit sound
         this.currentNote = this.keyDict[noteKey];
-        this.engine.triggerAttack(this.currentNote, Tone.now());
+        this.instrument.triggerAttack(this.currentNote, Tone.now());
         this.isPlaying = true;
     }
 
+    /**
+     * Triggers when keyup is detected
+     */
     Release() {
-        this.engine.triggerRelease(this.currentNote, '+0.1');
+        this.instrument.triggerRelease(`+${this.release}`);
         this.currentNote = "";
         this.isPlaying = false;
     }
+
+    AdjustVolume(db: number) {
+        this.instrument.volume.value = db;
+    }
+
+    // Mute(status: boolean) {
+    //     this.instrument.volume.
+    // }
 }

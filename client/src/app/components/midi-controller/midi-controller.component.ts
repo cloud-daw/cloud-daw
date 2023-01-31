@@ -1,5 +1,5 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
-import { MidiInstrument } from 'src/app/instruments/midi-instrument';
+import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 
 @Component({
   selector: 'app-midi-controller',
