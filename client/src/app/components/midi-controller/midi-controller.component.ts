@@ -6,6 +6,7 @@ import { MidiInstrument } from 'src/app/instruments/midi-instrument';
   templateUrl: './midi-controller.component.html',
   styleUrls: ['./midi-controller.component.css']
 })
+
 export class MidiControllerComponent {
   private keyDict: Record<string, number>;
   public instrument: MidiInstrument;
@@ -40,18 +41,14 @@ export class MidiControllerComponent {
           "E5" : 16,
       }
   }
-
+  
   // ngOnChanges(instrument: MidiInstrument) {
-  //   console.log('Play Detected:', this.instrument.currentNote);
-  //   for (let i = 0; i < this.keys.length; i++) {
-  //     if (this.keyDict[instrument.currentNote] == i) {
-  //       this.keys[i] = 1
-  //     }
-  //     else {
-  //       this.keys[i] = 0
-  //     }
-  //   }
+  //   if (instrument.isPlaying) 
+  //     this.keys[this.keyDict[instrument.currentNote]] = 1;
+  //   else 
+  //     this.keys[this.keyDict[instrument.currentNote]] = 0;
   // }
+
   showNotes(note: string) {
     if (this.instrument.isPlaying) {
       this.keys[this.keyDict[note]] = 1;
@@ -68,5 +65,3 @@ export class MidiControllerComponent {
     }
   }
 }
-
-
