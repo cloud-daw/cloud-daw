@@ -1,5 +1,6 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
-import { Metronome } from '../../../instruments/metronome';
+import { Metronome } from '../../../models/instruments/metronome';
+import * as Tone from 'tone';
 
 @Component({
   selector: 'app-main-controls',
@@ -36,6 +37,15 @@ export class MainControlsComponent {
   }
 
   onVolumeChange(event: number) {
+    this.adjustMasterVolume(event);
     this.volume.emit(event);
   }
+
+  /**
+   * Changes master node volume level.
+   * @param db The new value for master volume
+   */
+  private adjustMasterVolume(db: number) {
+    Tone.Destination.volume.value = db;
+}
 }
