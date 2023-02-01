@@ -10,6 +10,7 @@ export class MidiInstrument {
     public instrument: Tone.Synth;
     public isPlaying: boolean;
     public currentNote: string;
+    public currentOctave: number = 4;
     private keyDict: Record<string, string>;
     private attack: number;
     private release: number;
@@ -18,23 +19,23 @@ export class MidiInstrument {
         this.sound = "something.mp3" //to load for later
         this.instrument = new Tone.Synth().toDestination();
         this.keyDict = {
-            "a": "C4",
-            "w": "C#4",
-            "s": "D4",
-            "e": "D#4",
-            "d": "E4",
-            "f": "F4",
-            "t": "F#4",
-            "g": "G4",
-            "y": "G#4",
-            "h": "A4",
-            "u": "A#4",
-            "j": "B4",
-            "k": "C5",
-            "o": "C#5",
-            "l": "D5",
-            "p": "D#5",
-            ";": "E5",
+            "a": `C${this.currentOctave}`,
+            "w": `C#${this.currentOctave}`,
+            "s": `D${this.currentOctave}`,
+            "e": `D#${this.currentOctave}`,
+            "d": `E${this.currentOctave}`,
+            "f": `F${this.currentOctave}`,
+            "t": `F#${this.currentOctave}`,
+            "g": `G${this.currentOctave}`,
+            "y": `G#${this.currentOctave}`,
+            "h": `A${this.currentOctave}`,
+            "u": `A#${this.currentOctave}`,
+            "j": `B${this.currentOctave}`,
+            "k": `C${this.currentOctave + 1}`,
+            "o": `C#${this.currentOctave + 1}`,
+            "l": `D${this.currentOctave + 1}`,
+            "p": `D#${this.currentOctave + 1}`,
+            ";": `E${this.currentOctave + 1}`,
         }
         this.isPlaying = false;
         this.currentNote = "";
@@ -46,11 +47,12 @@ export class MidiInstrument {
      * Starts note from input
      * @param noteKey key string e.g., "a"
      */
-    Play(noteKey : string) {
+    Play(noteKey : string) : string {
        //code to emit sound
         this.currentNote = this.keyDict[noteKey];
         this.instrument.triggerAttack(this.currentNote, Tone.now());
         this.isPlaying = true;
+        return this.currentNote;
     }
 
     /**
@@ -64,6 +66,10 @@ export class MidiInstrument {
 
     AdjustVolume(db: number) {
         this.instrument.volume.value = db;
+    }
+
+    NotePlayback(value: string, duration: string) {
+        this.instrument.triggerAttackRelease(value, duration);
     }
 
     // Mute(status: boolean) {

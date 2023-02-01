@@ -5,6 +5,9 @@ import { Metronome } from './models/instruments/metronome';
 import { MidiInstrument } from './models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
 import { MidiControllerComponent } from './components/midi-controller/midi-controller.component';
+import { Recording } from './models/recording/recording';
+import { Note } from './models/recording/note';
+import { SchedulePlayback } from './services/playback-service.service';
 import * as Tone from 'tone';
 
 @Component({
@@ -18,14 +21,16 @@ export class AppComponent {
   handleKeydownEvent(event: KeyboardEvent) {
     console.log(event);
     if (!this.synth.isPlaying) {
-      this.synth.Play(event.key);
+      let note = this.synth.Play(event.key);
       this.controller.showNotes(this.synth.currentNote);
+      if (this.isRecording) this.testRecording.RecordNote(new Note(note, Tone.Transport.position.toString(), ""))
     }
   }
   @HostListener('window:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
     this.synth.Release();
     this.controller.hideNotes(this.synth.currentNote);
+    if (this.isRecording) this.testRecording.AddRelease(this.testRecording.data.length - 1, Tone.Transport.position.toString())
   }
 
   constructor(public ApiHttpService: ApiHttpService) { 
@@ -45,6 +50,8 @@ export class AppComponent {
   controller: MidiControllerComponent;
   metronome: Metronome;
   metronomeOn: boolean = true;
+  testRecording: Recording = new Recording();
+  isRecording: boolean = false;
   
 
   // show() { // test, example method for backend comms
@@ -67,13 +74,18 @@ export class AppComponent {
       Tone.start();
       this.metronome.Start();
     }
+    if (this.testRecording.data.length > 0) {
+      SchedulePlayback(this.testRecording.data, this.synth);
+    }
   }
 
   onPause(event : boolean) {
     console.log('pause clicked');
     console.log(event);
     this.isPlaying = false;
+    this.isRecording = false;
     this.metronome.Stop();
+    console.log(this.testRecording);
   }
 
   onRewind(event : boolean) {
@@ -82,9 +94,8 @@ export class AppComponent {
     this.metronome.Reset();
   }
 
-  onRecord(event : boolean) {
-    console.log('record clicked');
-    console.log(event);
+  onRecord(event: boolean) {
+    this.isRecording = true;
   }
 
   onUndo(event: number) {
