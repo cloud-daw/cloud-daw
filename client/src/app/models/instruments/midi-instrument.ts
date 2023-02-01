@@ -18,25 +18,7 @@ export class MidiInstrument {
         this.name = name;
         this.sound = "something.mp3" //to load for later
         this.instrument = new Tone.Synth().toDestination();
-        this.keyDict = {
-            "a": `C${this.currentOctave}`,
-            "w": `C#${this.currentOctave}`,
-            "s": `D${this.currentOctave}`,
-            "e": `D#${this.currentOctave}`,
-            "d": `E${this.currentOctave}`,
-            "f": `F${this.currentOctave}`,
-            "t": `F#${this.currentOctave}`,
-            "g": `G${this.currentOctave}`,
-            "y": `G#${this.currentOctave}`,
-            "h": `A${this.currentOctave}`,
-            "u": `A#${this.currentOctave}`,
-            "j": `B${this.currentOctave}`,
-            "k": `C${this.currentOctave + 1}`,
-            "o": `C#${this.currentOctave + 1}`,
-            "l": `D${this.currentOctave + 1}`,
-            "p": `D#${this.currentOctave + 1}`,
-            ";": `E${this.currentOctave + 1}`,
-        }
+        this.keyDict = this.MakeKeyDict();
         this.isPlaying = false;
         this.currentNote = "";
         this.attack = 0;
@@ -70,6 +52,33 @@ export class MidiInstrument {
 
     NotePlayback(value: string, duration: string) {
         this.instrument.triggerAttackRelease(value, duration);
+    }
+
+    public changeOctave(newOctave: number) {
+        this.currentOctave = newOctave;
+        this.keyDict = this.MakeKeyDict();
+    }
+
+    private MakeKeyDict() {
+        return {
+            "a": `C${this.currentOctave}`,
+            "w": `C#${this.currentOctave}`,
+            "s": `D${this.currentOctave}`,
+            "e": `D#${this.currentOctave}`,
+            "d": `E${this.currentOctave}`,
+            "f": `F${this.currentOctave}`,
+            "t": `F#${this.currentOctave}`,
+            "g": `G${this.currentOctave}`,
+            "y": `G#${this.currentOctave}`,
+            "h": `A${this.currentOctave}`,
+            "u": `A#${this.currentOctave}`,
+            "j": `B${this.currentOctave}`,
+            "k": `C${this.currentOctave + 1}`,
+            "o": `C#${this.currentOctave + 1}`,
+            "l": `D${this.currentOctave + 1}`,
+            "p": `D#${this.currentOctave + 1}`,
+            ";": `E${this.currentOctave + 1}`,
+        }
     }
 
     // Mute(status: boolean) {
