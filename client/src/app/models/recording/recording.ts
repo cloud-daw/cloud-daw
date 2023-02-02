@@ -1,8 +1,12 @@
 import { Note } from './note';
+import { MidiInstrument } from '../instruments/midi-instrument';
+import { MakeKeyDict } from '../../lib/keydict';
 
 export class Recording {
     public data: Note[] = [];
-    constructor(data?: Note[]) {
+    public synth: MidiInstrument;
+    constructor(synth: MidiInstrument, data?: Note[]) {
+        this.synth = synth;
         if (data) this.data = data;
     }
 
@@ -10,13 +14,15 @@ export class Recording {
         
     }
 
-    public RecordNote(note: Note) {
-        this.data.push(note);
+    public RecordNote(key: string, time: string) {
+        this.data.push(new Note(key, time, ""));
     }
 
     //TODO: Improve recording process
-    public AddRelease(index: number, release: string) {
-        this.data[index].release = release;
+    public AddRelease(key: string, release: string) {
+        for (let i = 0; i < this.data.length; i++) {
+            if (this.data[i].value == key && this.data[i].release == "") this.data[i].release = release;
+        }
     }
 
     /**

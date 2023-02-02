@@ -8,7 +8,7 @@ import { MidiControllerComponent } from './components/midi-controller/midi-contr
 import { Recording } from './models/recording/recording';
 import { Note } from './models/recording/note';
 import { SchedulePlayback } from './services/playback-service.service';
-import * as Tone from 'tone';
+import * as Tone from 'tone'; 
 
 @Component({
   selector: 'app-root',
@@ -17,20 +17,31 @@ import * as Tone from 'tone';
 })
 export class AppComponent {
   title = 'CloudDaw';
+
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    console.log(event);
-    if (!this.synth.isPlaying) {
-      let note = this.synth.Play(event.key);
-      this.controller.showNotes(this.synth.currentNote);
-      if (this.isRecording) this.testRecording.RecordNote(new Note(note, Tone.Transport.position.toString(), ""))
+    //console.log(event);
+    if (this.keyboardStatus[event.key] != 3) {
+      this.keyboardStatus[event.key] = 2;
+      //let key = this.synth.Play(event.key);
+      //if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
     }
+    console.log(this.keyboardStatus);
+    this.PlayRelease();
+    console.log(this.keyboardStatus);
+    //this.controller.showNotes(this.synth.currentNote); //update to use array
   }
+
   @HostListener('window:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    this.synth.Release();
-    this.controller.hideNotes(this.synth.currentNote);
-    if (this.isRecording) this.testRecording.AddRelease(this.testRecording.data.length - 1, Tone.Transport.position.toString())
+    console.log(event)
+    if (this.keyboardStatus[event.key] == 3) this.keyboardStatus[event.key] = 1;
+    console.log(this.keyboardStatus);
+    this.PlayRelease();
+    console.log(this.keyboardStatus);
+    //let key = this.synth.Release(event.key);
+    //if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString())
+    //this.controller.hideNotes(this.synth.currentNote); //update to use array
   }
 
   constructor(public ApiHttpService: ApiHttpService) { 
@@ -39,6 +50,26 @@ export class AppComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.testRecording = new Recording(this.synth);
+    this.keyboardStatus = { //0 = do nothing, 1 = to release, 2 = to play, 3 = is playing
+            "a": 0,
+            "w": 0,
+            "s": 0,
+            "e": 0,
+            "d": 0,
+            "f": 0,
+            "t": 0,
+            "g": 0,
+            "y": 0,
+            "h": 0,
+            "u": 0,
+            "j": 0,
+            "k": 0,
+            "o": 0,
+            "l": 0,
+            "p": 0,
+            ";": 0,
+        }
   }
   status: string;
   //status$: Observable<any>;
@@ -50,8 +81,9 @@ export class AppComponent {
   controller: MidiControllerComponent;
   metronome: Metronome;
   metronomeOn: boolean = true;
-  testRecording: Recording = new Recording();
+  testRecording: Recording;
   isRecording: boolean = false;
+  keyboardStatus: Record<string, number>;
   
 
   // show() { // test, example method for backend comms
@@ -107,6 +139,26 @@ export class AppComponent {
     console.log('volume changed');
     console.log(event);
     this.masterVolume = event;
+  }
+
+  PlayRelease() {
+    let key;
+    for (let k in this.keyboardStatus) {
+      switch (this.keyboardStatus[k]) {
+        case 2: //to play
+          this.keyboardStatus[k] = 3 //set to is playing
+          key = this.synth.Play(k);
+          if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
+          break;
+        case 1: //to release
+          this.keyboardStatus[k] = 0; //set to nothing
+          key = this.synth.Release(k);
+          if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString());
+          break;
+        default:
+          break;
+      }
+    }
   }
 
 }
