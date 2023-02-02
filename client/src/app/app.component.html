@@ -1,6 +1,15 @@
-<div class="bg-[#1F1F1F] w-screen h-screen">
-  <app-main-controls (play)="onPlay($event)" (record)="onRecord($event)" (pause)="onPause($event)" (undo)="onUndo($event)" (rewind)="onRewind($event)" (volume)="onMainVolumeChange($event)" [metronome]="metronome"></app-main-controls>
-  <!-- <button class="w-40 h-40 bg-green-300 ml-8 mt-6" (click)="playTest()">TEST AUDIO</button> -->
-</div>
-
+<div *ngIf="!isSignedIn">
+    <h2>Sign up</h2>
+    <input type="text" #emailSignup/>
+    <input type="text" #passwordSignup/>
+    <button (click)="onSignup(emailSignup.value,passwordSignup.value)">Sign up</button>
+  </div>
+  <hr>
+  <div *ngIf="!isSignedIn">
+    <h2>Sign In</h2>
+    <input type="text" #email/>
+    <input type="text" #password/>
+    <button (click)="onSignin(email.value,password.value)">Sign in</button>
+  </div>
+  <app-home *ngIf="isSignedIn" (isLogout)="handleLogout()"></app-home>
 <router-outlet></router-outlet>

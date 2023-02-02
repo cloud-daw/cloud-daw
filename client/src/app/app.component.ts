@@ -1,11 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiHttpService } from './services/httpservice.service';
-import { Observable } from 'rxjs';
-import { Metronome } from './models/instruments/metronome';
-import { MidiInstrument } from './models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
-import { MidiControllerComponent } from './components/midi-controller/midi-controller.component';
-import * as Tone from 'tone';
+import { FirebaseService } from './services/firebase.service';
 
 @Component({
   selector: 'app-root',
@@ -14,88 +8,27 @@ import * as Tone from 'tone';
 })
 export class AppComponent {
   title = 'CloudDaw';
-  @HostListener('document:keydown', ['$event'])
-  handleKeydownEvent(event: KeyboardEvent) {
-    console.log(event);
-    if (!this.synth.isPlaying) {
-      this.synth.Play(event.key);
-      this.controller.showNotes(this.synth.currentNote);
-    }
+  isSignedIn = false
+  constructor(public firebaseService : FirebaseService){}
+  ngOnInit(){
+    if(localStorage.getItem('user')!== null)
+    this.isSignedIn= true
+    else
+    this.isSignedIn = false
   }
-  @HostListener('window:keyup', ['$event'])
-  handleKeyupEvent(event: KeyboardEvent) {
-    this.synth.Release();
-    this.controller.hideNotes(this.synth.currentNote);
+  async onSignup(email:string,password:string){
+    await this.firebaseService.signup(email,password)
+    if(this.firebaseService.isLoggedIn)
+    this.isSignedIn = true
   }
-
-  constructor(public ApiHttpService: ApiHttpService) { 
-    this.status = 'no stat update';
-    //this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
-    this.synth = new MidiInstrument("test");
-    this.controller = new MidiControllerComponent(this.synth);
-    this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+  async onSignin(email:string,password:string){
+    await this.firebaseService.signin(email,password)
+    if(this.firebaseService.isLoggedIn)
+    this.isSignedIn = true
   }
-  status: string;
-  //status$: Observable<any>;
-  masterVolume: number = 0;
-  isPlaying: boolean = false;
-  tempo: number = 120; //default
-  timeoutValue: number = (60 / this.tempo) * 1000; //in ms
-  synth: MidiInstrument;
-  controller: MidiControllerComponent;
-  metronome: Metronome;
-  metronomeOn: boolean = true;
-  
+  handleLogout(){
+    this.isSignedIn = false
 
-  // show() { // test, example method for backend comms
-  //   this.status$.subscribe({
-  //     next: s => {
-  //       console.log('show, s');
-  //       console.log(s);
-  //       this.status = s.status || 'uh oh';
-  //     },
-  //     error: e => this.status = e.message || 'err',
-  //     complete: () => console.log('complete'),
-  //   });
-  // }
-
-  onPlay(event: boolean) {
-    if (!this.isPlaying) {
-      console.log('play clicked');
-      console.log(event);
-      this.isPlaying = true;
-      Tone.start();
-      this.metronome.Start();
-    }
-  }
-
-  onPause(event : boolean) {
-    console.log('pause clicked');
-    console.log(event);
-    this.isPlaying = false;
-    this.metronome.Stop();
-  }
-
-  onRewind(event : boolean) {
-    console.log('rewind clicked');
-    console.log(event);
-    this.metronome.Reset();
-  }
-
-  onRecord(event : boolean) {
-    console.log('record clicked');
-    console.log(event);
-  }
-
-  onUndo(event: number) {
-    console.log('undo clicked');
-    console.log(event);
-  }
-
-  onMainVolumeChange(event: number) {
-    console.log('volume changed');
-    console.log(event);
-    this.masterVolume = event;
   }
 
 }
