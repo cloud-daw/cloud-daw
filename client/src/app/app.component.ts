@@ -5,6 +5,8 @@ import { Metronome } from './models/instruments/metronome';
 import { MidiInstrument } from './models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
 import { MidiControllerComponent } from './components/midi-controller/midi-controller.component';
+import { MidiTrackComponent } from './components/midi-track/midi-track.component';
+import { TrackContainerComponent } from './components/track-container/track-container.component';
 import * as Tone from 'tone';
 
 @Component({
@@ -34,6 +36,8 @@ export class AppComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.tracks = [new MidiTrackComponent()];
+    this.trackContainer = new TrackContainerComponent(this.tracks);
   }
   status: string;
   //status$: Observable<any>;
@@ -44,6 +48,8 @@ export class AppComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
+  tracks: Array<MidiTrackComponent>;
+  trackContainer: TrackContainerComponent;
   metronomeOn: boolean = true;
   
 

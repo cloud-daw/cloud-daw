@@ -8,6 +8,8 @@ import { MainVolumeComponent } from './components/controls/main-volume/main-volu
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
+import { MidiTrackComponent } from './components/midi-track/midi-track.component';
+import { TrackContainerComponent } from './components/track-container/track-container.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-n
     MainControlsComponent,
     MainVolumeComponent,
     MidiNoteComponent,
+    MidiTrackComponent,
+    TrackContainerComponent,
   ],
   imports: [
     BrowserModule,
