@@ -11,6 +11,8 @@ import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-n
 import { AngularFireModule } from '@angular/fire/compat';
 import { HomeComponent } from './components/home/home.component';
 import { FirebaseService } from './services/firebase.service';
+import {environment} from '../environments/environment'
+require('dotenv').config();
 
 @NgModule({
   declarations: [
@@ -27,12 +29,12 @@ import { FirebaseService } from './services/firebase.service';
     NoopAnimationsModule,
     MatSliderModule,
     AngularFireModule.initializeApp({
-        apiKey: "AIzaSyCRqEzoN5AkCccTaFLkQo_GJx4qHulsng4",
-        authDomain: "clouddaw-a7e78.firebaseapp.com",
-        projectId: "clouddaw-a7e78",
-        storageBucket: "clouddaw-a7e78.appspot.com",
-        messagingSenderId: "612080396120",
-        appId: "1:612080396120:web:1293649897f5da6b76672d"
+        apiKey: environment.apiKey,
+        authDomain: environment.authDomain,
+        projectId: environment.projectId,
+        storageBucket: environment.storageBucket,
+        messagingSenderId: environment.messagingSenderId,
+        appId: environment.appId,
     })
   ],
   providers: [FirebaseService],
