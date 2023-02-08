@@ -10,15 +10,20 @@ export class Recording {
         if (data) this.data = data;
     }
 
-    public SchedulePlayback() {
-        
+    /**
+     * Pushes newly played note onto recording array
+     * @param key key value e.g. 'C4'
+     * @param attack attack time in bars:beats:sixteenths
+     */
+    public RecordNote(key: string, attack: string) {
+        this.data.push(new Note(key, attack, ""));
     }
 
-    public RecordNote(key: string, time: string) {
-        this.data.push(new Note(key, time, ""));
-    }
-
-    //TODO: Improve recording process
+    /**
+     * Sets the release of note in recording array
+     * @param key key to add release to e.g. 'C4'
+     * @param release release time in bars:beats:sixteenths
+     */
     public AddRelease(key: string, release: string) {
         for (let i = 0; i < this.data.length; i++) {
             if (this.data[i].value == key && this.data[i].release == "") this.data[i].release = release;
@@ -26,7 +31,7 @@ export class Recording {
     }
 
     /**
-     * 
+     * Deletes note from an array
      * @param note can pass in Note to delete. less efficient
      * @param index can pass in index of note in data array. more efficient, less straightforward
      */
