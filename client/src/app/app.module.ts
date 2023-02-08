@@ -12,7 +12,6 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { HomeComponent } from './components/home/home.component';
 import { FirebaseService } from './services/firebase.service';
 import {environment} from '../environments/environment'
-require('dotenv').config();
 
 @NgModule({
   declarations: [
