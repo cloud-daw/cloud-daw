@@ -143,3 +143,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# environment variables
+client/src/environments/*
