@@ -12,6 +12,16 @@ import { Recording } from './models/recording/recording';
 import { Note } from './models/recording/note';
 import { SchedulePlayback } from './services/playback-service.service';
 
+/**
+ * Int status of keys for keyboard
+ */
+enum keyStatus { 
+  notPlaying = 0,
+  toRelease = 1,
+  toAttack = 2,
+  isPlaying = 3,
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,60 +32,43 @@ export class AppComponent {
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    //console.log(event);
-    if (this.keyboardStatus[event.key] != 3) {
-      this.keyboardStatus[event.key] = 2;
-      //let key = this.synth.Play(event.key);
-      //if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
-    }
-    console.log(this.keyboardStatus);
+    if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
     this.PlayRelease();
-    console.log(this.keyboardStatus);
-    //this.controller.showNotes(this.synth.currentNote); //update to use array
   }
 
   @HostListener('window:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    console.log(event)
-    if (this.keyboardStatus[event.key] == 3) this.keyboardStatus[event.key] = 1;
-    console.log(this.keyboardStatus);
+    if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
     this.PlayRelease();
-    console.log(this.keyboardStatus);
-    //let key = this.synth.Release(event.key);
-    //if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString())
-    //this.controller.hideNotes(this.synth.currentNote); //update to use array
   }
 
-  constructor(public ApiHttpService: ApiHttpService) { 
-    this.status = 'no stat update';
-    //this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
+  constructor(public ApiHttpService: ApiHttpService) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
     this.tracks = [new MidiTrackComponent()];
     this.trackContainer = new TrackContainerComponent(this.tracks);
     this.testRecording = new Recording(this.synth);
-    this.keyboardStatus = { //0 = do nothing, 1 = to release, 2 = to play, 3 = is playing
-            "a": 0,
-            "w": 0,
-            "s": 0,
-            "e": 0,
-            "d": 0,
-            "f": 0,
-            "t": 0,
-            "g": 0,
-            "y": 0,
-            "h": 0,
-            "u": 0,
-            "j": 0,
-            "k": 0,
-            "o": 0,
-            "l": 0,
-            "p": 0,
-            ";": 0,
+    this.keyboardStatus = {
+            "a": keyStatus.notPlaying,
+            "w": keyStatus.notPlaying,
+            "s": keyStatus.notPlaying,
+            "e": keyStatus.notPlaying,
+            "d": keyStatus.notPlaying,
+            "f": keyStatus.notPlaying,
+            "t": keyStatus.notPlaying,
+            "g": keyStatus.notPlaying,
+            "y": keyStatus.notPlaying,
+            "h": keyStatus.notPlaying,
+            "u": keyStatus.notPlaying,
+            "j": keyStatus.notPlaying,
+            "k": keyStatus.notPlaying,
+            "o": keyStatus.notPlaying,
+            "l": keyStatus.notPlaying,
+            "p": keyStatus.notPlaying,
+            ";": keyStatus.notPlaying,
         }
   }
-  status: string;
   //status$: Observable<any>;
   masterVolume: number = 0;
   isPlaying: boolean = false;
@@ -90,24 +83,9 @@ export class AppComponent {
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
-  
-
-  // show() { // test, example method for backend comms
-  //   this.status$.subscribe({
-  //     next: s => {
-  //       console.log('show, s');
-  //       console.log(s);
-  //       this.status = s.status || 'uh oh';
-  //     },
-  //     error: e => this.status = e.message || 'err',
-  //     complete: () => console.log('complete'),
-  //   });
-  // }
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
-      console.log('play clicked');
-      console.log(event);
       this.isPlaying = true;
       Tone.start();
       this.metronome.Start();
@@ -118,8 +96,6 @@ export class AppComponent {
   }
 
   onPause(event : boolean) {
-    console.log('pause clicked');
-    console.log(event);
     this.isPlaying = false;
     this.isRecording = false;
     this.metronome.Stop();
@@ -127,8 +103,6 @@ export class AppComponent {
   }
 
   onRewind(event : boolean) {
-    console.log('rewind clicked');
-    console.log(event);
     this.metronome.Reset();
   }
 
@@ -142,22 +116,23 @@ export class AppComponent {
   }
 
   onMainVolumeChange(event: number) {
-    console.log('volume changed');
-    console.log(event);
     this.masterVolume = event;
   }
 
+  /**
+   * Uses keyboard status dictionary (scheduled on note plays) to record correct attack & release time
+   */
   PlayRelease() {
     let key;
     for (let k in this.keyboardStatus) {
       switch (this.keyboardStatus[k]) {
-        case 2: //to play
-          this.keyboardStatus[k] = 3 //set to is playing
+        case keyStatus.toAttack: //to play
+          this.keyboardStatus[k] = keyStatus.isPlaying;
           key = this.synth.Play(k);
           if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
           break;
-        case 1: //to release
-          this.keyboardStatus[k] = 0; //set to nothing
+        case keyStatus.toRelease:
+          this.keyboardStatus[k] = keyStatus.notPlaying;
           key = this.synth.Release(k);
           if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString());
           break;
