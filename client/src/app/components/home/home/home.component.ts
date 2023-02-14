@@ -7,7 +7,7 @@ import { MidiControllerComponent } from '../../midi-controller/midi-controller.c
 import { Recording } from '../../../models/recording/recording';
 import { Note } from '../../../models/recording/note';
 import { SchedulePlayback } from '../../../services/recording/playback-service.service';
-import { ApiHttpService } from 'src/app/services/httpservice.service';
+import { ApiHttpService } from '../../../services/http/httpservice.service';
 import * as Tone from 'tone'; 
   
 /**
