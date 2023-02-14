@@ -30,12 +30,12 @@ import { HomeComponent } from './components/home/home/home.component';
     NoopAnimationsModule,
     MatSliderModule,
     AngularFireModule.initializeApp({
-        apiKey: environment.apiKey,
-        authDomain: environment.authDomain,
-        projectId: environment.projectId,
-        storageBucket: environment.storageBucket,
-        messagingSenderId: environment.messagingSenderId,
-        appId: environment.appId,
+        apiKey: environment.firebase.apiKey,
+        authDomain: environment.firebase.authDomain,
+        projectId: environment.firebase.projectId,
+        storageBucket: environment.firebase.storageBucket,
+        messagingSenderId: environment.firebase.messagingSenderId,
+        appId: environment.firebase.appId,
     })
   ],
   providers: [FirebaseService],

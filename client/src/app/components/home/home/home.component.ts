@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../../models/instruments/metronome';
 import { MidiInstrument } from '../../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
 import { MidiControllerComponent } from '../../midi-controller/midi-controller.component';
 import { Recording } from '../../../models/recording/recording';
 import { Note } from '../../../models/recording/note';
 import { SchedulePlayback } from '../../../services/recording/playback-service.service';
 import { ApiHttpService } from '../../../services/http/httpservice.service';
 import * as Tone from 'tone'; 
+import { FirebaseService } from '../../../services/firebase.service';
   
 /**
  * Int status of keys for keyboard
@@ -38,7 +38,9 @@ export class HomeComponent {
     this.PlayRelease();
   }
 
-  constructor(public ApiHttpService: ApiHttpService) {
+  @Output() isLogout = new EventEmitter<void>()
+
+  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
@@ -132,5 +134,10 @@ export class HomeComponent {
           break;
       }
     }
+  }
+
+  logout(){
+    this.firebaseService.logout()
+    this.isLogout.emit()
   }
 }
