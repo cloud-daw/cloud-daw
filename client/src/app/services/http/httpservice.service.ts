@@ -31,4 +31,7 @@ export class ApiHttpService {
   get<T>(api : string): Observable<T> {
     return this.http.get<T>(this.endpoint + api);
   }
+  post<T>(api: string, params: any): Observable<T> {
+    return this.http.post<T>(this.endpoint + api, params);
+  }
 }

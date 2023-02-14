@@ -1,5 +1,5 @@
-import { Note } from '../models/recording/note';
-import { MidiInstrument } from '../models/instruments/midi-instrument'
+import { Note } from '../../models/recording/note';
+import { MidiInstrument } from '../../models/instruments/midi-instrument'
 import * as Tone from 'tone';
 
 /**
