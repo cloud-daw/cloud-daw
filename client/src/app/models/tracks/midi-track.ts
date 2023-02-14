@@ -5,8 +5,9 @@ export class MidiTrack {
     volume: number = -12;
     instrument: MidiInstrument;
     effects: string[] = [];
-    constructor(instrument: MidiInstrument) {
+    constructor(instrument: MidiInstrument, effects?: string[]) {
         this.instrument = instrument;
+        if (effects) this.effects = effects;
     }
 
     /**

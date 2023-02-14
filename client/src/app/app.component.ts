@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+    title = 'CloudDaw';
     constructor(public _router: Router) { }
     ngOnInit(){
         this._router.navigateByUrl('/login');
