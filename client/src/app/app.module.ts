@@ -10,8 +10,9 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { HomeComponent } from './components/home/home.component';
+import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
-import {environment} from '../environments/environment'
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {environment} from '../environments/environment'
     MainVolumeComponent,
     MidiNoteComponent,
     HomeComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
