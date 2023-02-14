@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiHttpService } from './services/httpservice.service';
+import { ApiHttpService } from './services/http/httpservice.service';
 import { Observable } from 'rxjs';
 import { Metronome } from './models/instruments/metronome';
 import { MidiInstrument } from './models/instruments/midi-instrument'; //for now, do here -> in future, put in track
