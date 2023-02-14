@@ -8,6 +8,10 @@ import { MainVolumeComponent } from './components/controls/main-volume/main-volu
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AuthComponent } from './components/Authentication/auth.component';
+import { FirebaseService } from './services/firebase.service';
+import { environment } from '../environments/environment';
 import { HomeComponent } from './components/home/home/home.component';
 
 @NgModule({
@@ -17,15 +21,24 @@ import { HomeComponent } from './components/home/home/home.component';
     MainVolumeComponent,
     MidiNoteComponent,
     HomeComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NoopAnimationsModule,
-    MatSliderModule
+    MatSliderModule,
+    AngularFireModule.initializeApp({
+        apiKey: environment.apiKey,
+        authDomain: environment.authDomain,
+        projectId: environment.projectId,
+        storageBucket: environment.storageBucket,
+        messagingSenderId: environment.messagingSenderId,
+        appId: environment.appId,
+    })
   ],
-  providers: [],
+  providers: [FirebaseService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
