@@ -99,8 +99,4 @@ export class HomeComponent {
     console.log(event);
     this.masterVolume = event;
   }
-  logout(){
-    this.firebaseService.logout()
-    this.isLogout.emit()
-  }
 }
