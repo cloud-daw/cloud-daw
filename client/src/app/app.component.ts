@@ -22,6 +22,12 @@ enum keyStatus {
   isPlaying = 3,
 }
 
+export interface TrackInfo {
+  title: String,
+  id: number,
+  instrument: MidiInstrument,
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -46,8 +52,13 @@ export class AppComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.defaultInfo = {
+      title: 'Track 1',
+      id: 0,
+      instrument: this.synth,
+    }
     this.tracks = [new MidiTrackComponent()];
-    this.trackContainer = new TrackContainerComponent(this.tracks);
+    this.trackContainer = new TrackContainerComponent();
     this.testRecording = new Recording(this.synth);
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
@@ -83,6 +94,7 @@ export class AppComponent {
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
+  defaultInfo: TrackInfo;
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {

@@ -1,5 +1,3 @@
 <div className="tracksContainer-container">
-    <div className="track-container">
-        
-    </div>
+    <midi-track *ngFor="let track of tracks" [track]="track"></midi-track>
 </div>
