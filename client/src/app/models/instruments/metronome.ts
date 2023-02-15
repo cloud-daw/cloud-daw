@@ -2,21 +2,21 @@ import * as Tone from 'tone';
 
 export class Metronome {
     public tempo: number;
-    public signature: number;
+    public signature: number | number[];
     private clickerSound: Tone.PluckSynth;
     public currentMeasure: string;
     public currentBeat: string;
     public currentSixteenth: string;
     public isPlaying: boolean;
     private isReset: boolean;
-    constructor(tempo: number, signature: number) {
-        this.tempo = tempo;
+    constructor(tempo?: number, signature?: number) {
+        tempo ? this.tempo = tempo : this.tempo = Tone.Transport.bpm.value;
+        signature ? this.signature = signature : this.signature = Tone.Transport.timeSignature
         this.clickerSound = new Tone.PluckSynth().toDestination();
         this.currentMeasure = '1';
         this.currentBeat = '1';
-        this.currentSixteenth = '1'
-        this.signature = signature;
-        Tone.Transport.bpm.value = tempo;
+        this.currentSixteenth = '1';
+        Tone.Transport.bpm.value = this.tempo;
         this.isPlaying = false;
         this.isReset = true;
     }
