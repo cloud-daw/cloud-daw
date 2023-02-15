@@ -38,9 +38,7 @@ export class HomeComponent {
     if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
     this.PlayRelease();
   }
-
-  //@Output() isLogout = new EventEmitter<void>()
-
+  
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
