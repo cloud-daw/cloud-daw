@@ -8,6 +8,11 @@ import { MainVolumeComponent } from './components/controls/main-volume/main-volu
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AuthComponent } from './components/authentication/auth.component';
+import { FirebaseService } from './services/firebase.service';
+import { environment } from 'src/app/environments/environment';
+import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { TrackContainerComponent } from './components/track-container/track-container.component';
 
@@ -19,15 +24,25 @@ import { TrackContainerComponent } from './components/track-container/track-cont
     MidiNoteComponent,
     MidiTrackComponent,
     TrackContainerComponent,
+    HomeComponent,
+    AuthComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NoopAnimationsModule,
-    MatSliderModule
+    MatSliderModule,
+    AngularFireModule.initializeApp({
+        apiKey: environment.firebase.apiKey,
+        authDomain: environment.firebase.authDomain,
+        projectId: environment.firebase.projectId,
+        storageBucket: environment.firebase.storageBucket,
+        messagingSenderId: environment.firebase.messagingSenderId,
+        appId: environment.firebase.appId,
+    })
   ],
-  providers: [],
+  providers: [FirebaseService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

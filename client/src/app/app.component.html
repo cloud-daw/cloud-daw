@@ -1,8 +1,1 @@
-<div class="bg-[#1F1F1F] w-screen h-screen">
-  <app-main-controls (play)="onPlay($event)" (record)="onRecord($event)" (pause)="onPause($event)" (undo)="onUndo($event)" (rewind)="onRewind($event)" (volume)="onMainVolumeChange($event)" [metronome]="metronome"></app-main-controls>
-  <!-- <button class="w-40 h-40 bg-green-300 ml-8 mt-6" (click)="playTest()">TEST AUDIO</button> -->
-  <!-- <app-track-container></app-track-container> -->
-  <track-container [tracks]="tracks"></track-container>
-</div>
-
 <router-outlet></router-outlet>
