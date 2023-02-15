@@ -7,10 +7,18 @@ import { Router } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+  
 export class AppComponent {
     title = 'CloudDaw';
     constructor(public _router: Router) { }
-    ngOnInit(){
+    ngOnInit() {
+      if (localStorage.getItem('user') !== null) {
+        //is signed in
+        this._router.navigateByUrl('/home');
+      }
+      else {
+        //is not signed in
         this._router.navigateByUrl('/login');
+      }
     }
 }

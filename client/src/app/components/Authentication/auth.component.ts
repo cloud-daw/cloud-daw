@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
-import { HomeComponent } from '../home/home.component';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'auth',
@@ -10,25 +10,16 @@ import { HomeComponent } from '../home/home.component';
 
 export class AuthComponent {
     title = 'Log in';
-    isSignedIn = false
-    constructor(public firebaseService : FirebaseService){}
-    ngOnInit(){
-        if(localStorage.getItem('user') !== null)
-            this.isSignedIn = true
-        else
-            this.isSignedIn = false
-    }
+    constructor(public firebaseService : FirebaseService, public _router: Router){}
     async onSignup(email:string,password:string){
         await this.firebaseService.signup(email,password)
-            if(this.firebaseService.isLoggedIn)
-                this.isSignedIn = true
+            if (this.firebaseService.isLoggedIn) {
+                this._router.navigateByUrl('/home')
+            }
     }
     async onSignin(email:string,password:string){
         await this.firebaseService.signin(email,password)
-            if(this.firebaseService.isLoggedIn)
-                this.isSignedIn = true
-    }
-    handleLogout(){
-        this.isSignedIn = false
-    }
+            if (this.firebaseService.isLoggedIn) 
+                this._router.navigateByUrl('/home')
+            }
 }

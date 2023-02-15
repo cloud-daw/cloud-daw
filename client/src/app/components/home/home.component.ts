@@ -9,6 +9,7 @@ import { SchedulePlayback } from '../../services/recording/playback-service.serv
 import { ApiHttpService } from '../../services/http/httpservice.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
+import { Router } from '@angular/router';
   
 /**
  * Int status of keys for keyboard
@@ -38,9 +39,9 @@ export class HomeComponent {
     this.PlayRelease();
   }
 
-  @Output() isLogout = new EventEmitter<void>()
+  //@Output() isLogout = new EventEmitter<void>()
 
-  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService) {
+  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
@@ -136,8 +137,9 @@ export class HomeComponent {
     }
   }
 
-  logout(){
+  onLogout(){
     this.firebaseService.logout()
-    this.isLogout.emit()
+    this._router.navigateByUrl('/login')
+    //this.isLogout.emit()
   }
 }
