@@ -10,6 +10,8 @@ import { ApiHttpService } from '../../services/http/httpservice.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
+import { MidiTrackComponent } from '../midi-track/midi-track.component';
+import { TrackContainerComponent } from '../track-container/track-container.component';
   
 /**
  * Int status of keys for keyboard
@@ -19,6 +21,12 @@ enum keyStatus {
   toRelease = 1,
   toAttack = 2,
   isPlaying = 3,
+}
+
+export interface TrackInfo {
+  title: string,
+  id: number,
+  instrument: MidiInstrument,
 }
 
 @Component({
@@ -45,6 +53,13 @@ export class HomeComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.defaultInfo = {
+      title: 'Track 1',
+      id: 0,
+      instrument: this.synth,
+    }
+    this.tracks = [new MidiTrackComponent()];
+    this.trackContainer = new TrackContainerComponent();
     this.testRecording = new Recording(this.synth);
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
@@ -74,10 +89,13 @@ export class HomeComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
+  tracks: Array<MidiTrackComponent>;
+  trackContainer: TrackContainerComponent;
   metronomeOn: boolean = true;
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
+  defaultInfo: TrackInfo;
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {

@@ -1,5 +1,5 @@
 import { Component, Inject, Input } from '@angular/core';
-import { TrackInfo } from 'src/app/app.component';
+import { TrackInfo } from '../home/home.component';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { TrackContainerComponent } from '../track-container/track-container.component';
 
