@@ -14,7 +14,7 @@ export class AuthComponent {
     constructor(public firebaseService : FirebaseService){}
     ngOnInit(){
         if(localStorage.getItem('user') !== null)
-            this.isSignedIn= true
+            this.isSignedIn = true
         else
             this.isSignedIn = false
     }

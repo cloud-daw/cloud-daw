@@ -1,12 +1,24 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { ApiHttpService } from '../../services/httpservice.service';
+import { Component, Output, EventEmitter, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import { HostListener } from '@angular/core'; //for now, put in track later (to be trapped w/ focus from here)
 import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
+import { Recording } from '../../models/recording/recording';
+import { Note } from '../../models/recording/note';
+import { SchedulePlayback } from '../../services/recording/playback-service.service';
+import { ApiHttpService } from '../../services/http/httpservice.service';
+import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
-import * as Tone from 'tone';
+  
+/**
+ * Int status of keys for keyboard
+ */
+enum keyStatus { 
+  notPlaying = 0,
+  toRelease = 1,
+  toAttack = 2,
+  isPlaying = 3,
+}
 
 @Component({
   selector: 'app-home',
@@ -14,30 +26,45 @@ import * as Tone from 'tone';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  @Output() isLogout = new EventEmitter<void>()
-  
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    console.log(event);
-    if (!this.synth.isPlaying) {
-      this.synth.Play(event.key);
-      this.controller.showNotes(this.synth.currentNote);
-    }
-  }
-  @HostListener('window:keyup', ['$event'])
-  handleKeyupEvent(event: KeyboardEvent) {
-    this.synth.Release();
-    this.controller.hideNotes(this.synth.currentNote);
+    if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+    this.PlayRelease();
   }
 
-  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService) { 
-    this.status = 'no stat update';
-    //this.status$ = this.ApiHttpService.getStatus() //SAMPLE: grabs observable return from server
+  @HostListener('window:keyup', ['$event'])
+  handleKeyupEvent(event: KeyboardEvent) {
+    if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
+    this.PlayRelease();
+  }
+
+  @Output() isLogout = new EventEmitter<void>()
+
+  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.testRecording = new Recording(this.synth);
+    this.keyboardStatus = {
+            "a": keyStatus.notPlaying,
+            "w": keyStatus.notPlaying,
+            "s": keyStatus.notPlaying,
+            "e": keyStatus.notPlaying,
+            "d": keyStatus.notPlaying,
+            "f": keyStatus.notPlaying,
+            "t": keyStatus.notPlaying,
+            "g": keyStatus.notPlaying,
+            "y": keyStatus.notPlaying,
+            "h": keyStatus.notPlaying,
+            "u": keyStatus.notPlaying,
+            "j": keyStatus.notPlaying,
+            "k": keyStatus.notPlaying,
+            "o": keyStatus.notPlaying,
+            "l": keyStatus.notPlaying,
+            "p": keyStatus.notPlaying,
+            ";": keyStatus.notPlaying,
+        }
   }
-  status: string;
   //status$: Observable<any>;
   masterVolume: number = 0;
   isPlaying: boolean = false;
@@ -47,46 +74,34 @@ export class HomeComponent {
   controller: MidiControllerComponent;
   metronome: Metronome;
   metronomeOn: boolean = true;
-  
-
-  // show() { // test, example method for backend comms
-  //   this.status$.subscribe({
-  //     next: s => {
-  //       console.log('show, s');
-  //       console.log(s);
-  //       this.status = s.status || 'uh oh';
-  //     },
-  //     error: e => this.status = e.message || 'err',
-  //     complete: () => console.log('complete'),
-  //   });
-  // }
+  testRecording: Recording;
+  isRecording: boolean = false;
+  keyboardStatus: Record<string, number>;
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
-      console.log('play clicked');
-      console.log(event);
       this.isPlaying = true;
       Tone.start();
       this.metronome.Start();
     }
+    if (this.testRecording.data.length > 0) {
+      SchedulePlayback(this.testRecording.data, this.synth);
+    }
   }
 
   onPause(event : boolean) {
-    console.log('pause clicked');
-    console.log(event);
     this.isPlaying = false;
+    this.isRecording = false;
     this.metronome.Stop();
+    console.log(this.testRecording);
   }
 
   onRewind(event : boolean) {
-    console.log('rewind clicked');
-    console.log(event);
     this.metronome.Reset();
   }
 
-  onRecord(event : boolean) {
-    console.log('record clicked');
-    console.log(event);
+  onRecord(event: boolean) {
+    this.isRecording = true;
   }
 
   onUndo(event: number) {
@@ -95,8 +110,34 @@ export class HomeComponent {
   }
 
   onMainVolumeChange(event: number) {
-    console.log('volume changed');
-    console.log(event);
     this.masterVolume = event;
+  }
+
+  /**
+   * Uses keyboard status dictionary (scheduled on note plays) to record correct attack & release time
+   */
+  PlayRelease() {
+    let key;
+    for (let k in this.keyboardStatus) {
+      switch (this.keyboardStatus[k]) {
+        case keyStatus.toAttack: //to play
+          this.keyboardStatus[k] = keyStatus.isPlaying;
+          key = this.synth.Play(k);
+          if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
+          break;
+        case keyStatus.toRelease:
+          this.keyboardStatus[k] = keyStatus.notPlaying;
+          key = this.synth.Release(k);
+          if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString());
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  logout(){
+    this.firebaseService.logout()
+    this.isLogout.emit()
   }
 }
