@@ -2,10 +2,14 @@ import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
 
 export class MidiTrack {
+    title: string;
+    id: number;
     volume: number = -12;
     instrument: MidiInstrument;
     effects: string[] = [];
-    constructor(instrument: MidiInstrument, effects?: string[]) {
+    constructor(title: string, id: number, instrument: MidiInstrument, effects?: string[]) {
+        this.title = title;
+        this.id = id;
         this.instrument = instrument;
         if (effects) this.effects = effects;
     }
