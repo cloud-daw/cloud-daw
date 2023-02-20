@@ -1,50 +1,55 @@
-<div id='container' class="w-full flex justify-center place-items-center h-20 bg-[#656565]">
-    <div class="w-9/12 gap-x-8 h-14 bg-[#4E4E4E] px-12 py-4 rounded-md">
-        <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> <!-- UNDO BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
-                className="w-6 h-6 ">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
-            </svg>
-        </button>
-        <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
-                className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                    d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z" />
-            </svg>
-        </button>
-        <button class="control-button" name="play" (click)="clickPlay()"> <!-- PLAY BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
-                className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                    d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-            </svg>
-        </button>
-        <button class="control-button" name="pause" (click)="clickPause()"> <!-- PAUSE BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
-                className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
-            </svg>
-        </button>
-        <button class="control-button" name="record" (click)="clickRecord()"> <!-- RECORD BUTTON -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
-                className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                    d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
-            </svg>
-        </button>
+<div class="control-bar-container">
+    <div class="control-bar-header">
+        <div class="playback-controls-container">
+            <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> <!-- UNDO BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
+                    className="w-6 h-6 ">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
+                </svg>
+            </button>
+            <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
+                    className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M21 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953l7.108-4.062A1.125 1.125 0 0121 8.688v8.123zM11.25 16.811c0 .864-.933 1.405-1.683.977l-7.108-4.062a1.125 1.125 0 010-1.953L9.567 7.71a1.125 1.125 0 011.683.977v8.123z" />
+                </svg>
+            </button>
+            <button class="control-button" name="play" (click)="clickPlay()"> <!-- PLAY BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
+                    className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                </svg>
+            </button>
+            <button class="control-button" name="pause" (click)="clickPause()"> <!-- PAUSE BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
+                    className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
+                </svg>
+            </button>
+            <button class="control-button" name="record" (click)="clickRecord()"> <!-- RECORD BUTTON -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
+                    className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                        d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+                </svg>
+            </button>
         <!-- sample div for testing metronome feature-->
-        <div class="w-48 h-20 bg-green-400 text-lg font-bold">
-            <div class="w-12 my-2 bg-green-500"> 
-                {{metronome.currentMeasure}}
-            </div>
-            <div class="w-12 my-2 bg-green-500"> 
-                {{metronome.currentBeat}}
-            </div>
-            <!-- <input type="text" value = "{{metronome.currentSixteenth}}" class="w-12 my-2 bg-green-500"> -->
         </div>
-        <div class="w-60 h-7 float-right">
+        <div class="volume-slider">
             <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
         </div>
+        <!-- <button class="logout-button" (click)="logout">LOGOUT</button> -->
+    </div>
+    <div class="tempo-control-container">
+        <div class="tempo-display">
+            <span class="currentMeasure">
+                Current Measure: {{metronome.currentMeasure}}
+            </span>
+            <span class="currentBeat">
+                Current Beat: {{metronome.currentBeat}}
+            </span>
+        </div>
+        <!-- <input type="text" value = "{{metronome.currentSixteenth}}" class="w-12 my-2 bg-green-500"> -->
     </div>
 </div>

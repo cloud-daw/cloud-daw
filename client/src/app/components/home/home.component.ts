@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -12,6 +12,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { TrackContainerComponent } from '../track-container/track-container.component';
+import { MidiTrack } from 'src/app/models/tracks/midi-track';
   
 /**
  * Int status of keys for keyboard
@@ -23,16 +24,10 @@ enum keyStatus {
   isPlaying = 3,
 }
 
-export interface TrackInfo {
-  title: string,
-  id: number,
-  instrument: MidiInstrument,
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css'],
 })
 export class HomeComponent {
   @HostListener('document:keydown', ['$event'])
@@ -53,13 +48,7 @@ export class HomeComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
-    this.defaultInfo = {
-      title: 'Track 1',
-      id: 0,
-      instrument: this.synth,
-    }
-    this.tracks = [new MidiTrackComponent()];
-    this.trackContainer = new TrackContainerComponent();
+    this.tracks = [new MidiTrack('Track 0', 0, this.synth)];
     this.testRecording = new Recording(this.synth);
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
@@ -89,13 +78,17 @@ export class HomeComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
-  tracks: Array<MidiTrackComponent>;
-  trackContainer: TrackContainerComponent;
+  tracks: Array<MidiTrack>;
   metronomeOn: boolean = true;
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
-  defaultInfo: TrackInfo;
+
+  newTrack() {
+    let index = this.tracks.length;
+    let newTrack = new MidiTrack(`Track ${index}`, index, this.synth);
+    this.tracks = [...this.tracks, newTrack];
+  }
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {

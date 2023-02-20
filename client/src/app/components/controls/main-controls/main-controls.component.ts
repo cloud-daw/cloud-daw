@@ -15,6 +15,7 @@ export class MainControlsComponent {
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
   @Input() metronome: Metronome | any;
+  @Input() logout: any;
 
   clickPlay() {
     this.play.emit(true);
