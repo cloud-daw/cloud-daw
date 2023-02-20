@@ -5,6 +5,6 @@
 }
 
 .expanding-container {
-    border: 1px solid cyan;
+    /* border: 1px solid cyan; */
     height: auto;
 }

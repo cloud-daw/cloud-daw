@@ -10,10 +10,6 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 })
 
 export class TrackContainerComponent {
-  @Input() tracks: Array<MidiTrack> = [];
-  //@Input() trackInfo: TrackInfo = {title: '', id: 0, instrument: new MidiInstrument("test")};
-  // constructor(tracks: Array<MidiTrackComponent>) {
-  //   this.tracks = tracks;
-  // }
-  // tracks: Array<MidiTrackComponent>;
+  @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
+  @Input() currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
 }

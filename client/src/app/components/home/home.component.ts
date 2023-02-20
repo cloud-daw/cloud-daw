@@ -46,7 +46,10 @@ export class HomeComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
-    this.tracks = [new MidiTrack('Track 0', 0, this.synth)];
+    this.currentTrack = new MidiTrack('Track 0', 0, this.synth, true);
+    this.tracks = new Set();
+    this.tracks.add(this.currentTrack);
+    this.trackIdCounter = 0;
     this.testRecording = new Recording(this.synth);
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
@@ -76,16 +79,19 @@ export class HomeComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
-  tracks: Array<MidiTrack>;
+  currentTrack: MidiTrack;
+  tracks: Set<MidiTrack>;
+  trackIdCounter: number;
   metronomeOn: boolean = true;
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
 
   newTrack() {
-    let index = this.tracks.length;
-    let newTrack = new MidiTrack(`Track ${index}`, index, this.synth);
-    this.tracks = [...this.tracks, newTrack];
+    this.trackIdCounter++;
+    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
+    this.tracks.add(newTrack);
+    this.currentTrack = newTrack;
   }
 
   onPlay(event: boolean) {

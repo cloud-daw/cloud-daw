@@ -2,6 +2,13 @@
     position: relative;
     background-color: #414141;
     color: white;
+    box-shadow: inset 0 0 15px #272626;
+}
+
+.track-container:hover {
+    background-color: #646464;
+    color: rgb(220, 220, 220);
+    cursor: pointer;
 }
 
 .track-title {
@@ -16,4 +23,9 @@
     transform: scale(0.75);
     margin-top: -1em;
     margin-left: -2.25em;
+}
+
+.delete-track {
+    float: right;
+    padding-right: 0.25em;
 }
