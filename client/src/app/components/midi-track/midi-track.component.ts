@@ -15,5 +15,6 @@ export class MidiTrackComponent {
   formatLabel(value: number): string {
     return `${value}db`;
   }
+
   
 }
