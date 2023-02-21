@@ -76,6 +76,7 @@ export class HomeComponent {
   testRecording: Recording;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
+  state = 'curr'
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
@@ -136,8 +137,8 @@ export class HomeComponent {
   }
 
   onLogout(){
-    this.firebaseService.logout()
-    this._router.navigateByUrl('/login')
+    this.firebaseService.logout();
+    this._router.navigateByUrl('/login');
     //this.isLogout.emit()
   }
 }

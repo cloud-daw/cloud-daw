@@ -5,16 +5,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainControlsComponent } from './components/controls/main-controls/main-controls.component';
 import { MainVolumeComponent } from './components/controls/main-volume/main-volume/main-volume.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AuthComponent } from './components/authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
-import { environment } from 'src/app/environments/environment';
+import { environment } from 'src/environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { TrackContainerComponent } from './components/track-container/track-container.component';
+import { SliderComponent } from './components/controls/slider/slider/slider.component';
 
 @NgModule({
   declarations: [
@@ -25,13 +26,14 @@ import { TrackContainerComponent } from './components/track-container/track-cont
     MidiTrackComponent,
     TrackContainerComponent,
     HomeComponent,
-    AuthComponent
+    AuthComponent,
+    SliderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     MatSliderModule,
     AngularFireModule.initializeApp({
         apiKey: environment.firebase.apiKey,
