@@ -1,5 +1,5 @@
 import { Component, Inject, Input } from '@angular/core';
-import { TrackInfo } from 'src/app/app.component';
+// import { TrackInfo } from 'src/app/app.component';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { TrackContainerComponent } from '../track-container/track-container.component';
 
@@ -10,7 +10,7 @@ import { TrackContainerComponent } from '../track-container/track-container.comp
 })
 
 export class MidiTrackComponent {
-  @Input() info: TrackInfo = {title: '', id: 0, instrument: new MidiInstrument("test")}
+//   @Input() info: TrackInfo = {title: '', id: 0, instrument: new MidiInstrument("test")}
   
   // constructor(info: TrackInfo) {
   //   this.title = info.title;

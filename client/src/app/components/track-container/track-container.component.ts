@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
-import { TrackInfo } from 'src/app/app.component';
+// import { TrackInfo } from 'src/app/app.component';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 
 @Component({
