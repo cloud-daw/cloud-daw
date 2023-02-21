@@ -1,3 +1,5 @@
-<div className="tracksContainer-container">
-    <midi-track *ngFor="let track of tracks" [track]="track"></midi-track>
+<div class='container'>
+    <div class="expanding-container" *ngFor="let track of tracks">
+        <app-midi-track [track]="track" [(tracks)]="tracks" [(currentTrack)]="currentTrack"></app-midi-track>
+    </div>
 </div>

@@ -1,0 +1,10 @@
+.container {
+    background-color: #292929;
+    width: 25%;
+    height: 100%;
+}
+
+.expanding-container {
+    /* border: 1px solid cyan; */
+    height: auto;
+}

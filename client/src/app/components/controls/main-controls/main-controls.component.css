@@ -1,15 +1,51 @@
 /* #container {
     background-color: #656565;
 } */
+
+.control-bar-container {
+    background-color: #656565;
+}
+
+.control-bar-header {
+    display: flex;
+    background-color: #4E4E4E;
+    /* border: 1px solid blue; */
+}
+
+.playback-controls-container {
+    width: 50%;
+    margin: auto;
+    /* border: 1px solid red; */
+    text-align: center;
+}
+
 .control-button {
     height: 3em;
     width: 3em; 
     border-radius: 5px;
     padding-inline: 0.5em;
     margin: auto;
-    margin-top: -0.75em;
 }
 
-#arrow {
-    transform: rotate(90);
+.tempo-controls-container {
+    width: 100%;
+}
+
+.tempo-display {
+    margin: auto;
+    /* border: 2px solid green; */
+    text-align: center;
+}
+
+.currentBeat {
+    color: white;
+}
+
+.currentMeasure {
+    color: white;
+}
+
+.volume-slider {
+    margin: auto;
+    /* border: 1px solid yellow; */
 }
