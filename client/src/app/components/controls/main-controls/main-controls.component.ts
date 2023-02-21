@@ -14,7 +14,7 @@ export class MainControlsComponent {
   @Output() rewind: EventEmitter<boolean> = new EventEmitter();
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
-  @Input() metronome: Metronome | any;
+  @Input() metronome: Metronome = new Metronome();
 
   clickPlay() {
     this.play.emit(true);

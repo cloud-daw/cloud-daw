@@ -1,6 +1,8 @@
-<div class="bg-[#1F1F1F] w-screen h-screen">
+<div class="body">
     <button class="absolute right-0 w-32 h-10 rounded-bl-md bg-gray-200" (click)="onLogout()">LOGOUT</button>
     <app-main-controls (play)="onPlay($event)" (record)="onRecord($event)" (pause)="onPause($event)"
         (undo)="onUndo($event)" (rewind)="onRewind($event)" (volume)="onMainVolumeChange($event)"
         [metronome]="metronome"></app-main-controls>
+    <button class="new-track-button" (click)="newTrack()">+ New Track</button>   
+    <app-track-container [tracks]="tracks" [currentTrack]="currentTrack"></app-track-container>
 </div>
