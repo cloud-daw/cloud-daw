@@ -11,7 +11,20 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 
 export class MidiTrackComponent {
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
-  @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
+  
+  private _tracks: Set<MidiTrack> = new Set<MidiTrack>();
+  
+  @Input()
+    set tracks(list: Set<MidiTrack>) {
+      this.tracksChange.emit(list);
+      this._tracks = list;
+    }
+    get tracks() {
+      return this._tracks;
+    }
+
+  @Output() tracksChange: EventEmitter<Set<MidiTrack>> = new EventEmitter<Set<MidiTrack>>();
+  
   private _currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
 
   @Input()
@@ -19,7 +32,6 @@ export class MidiTrackComponent {
       this.currentTrackChange.emit(track);
       this._currentTrack = track;
     }
-  
     get currentTrack() {
       return this._currentTrack;
     }
@@ -46,7 +58,6 @@ export class MidiTrackComponent {
         this.track.selected = false;
       }
     }
-    
     console.log(changes);
     //console.log('selected: ' + changes['currentTrack'].currentValue.title, 'track: ' + changes['track'].currentValue.title);
   }

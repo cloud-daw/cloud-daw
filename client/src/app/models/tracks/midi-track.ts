@@ -8,6 +8,7 @@ export class MidiTrack {
     instrument: MidiInstrument;
     selected: boolean;
     effects: string[] = [];
+    midi: any = [];
     constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects?: string[]) {
         this.title = title;
         this.id = id;
