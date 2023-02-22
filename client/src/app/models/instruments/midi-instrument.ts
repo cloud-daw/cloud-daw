@@ -31,8 +31,9 @@ export class MidiInstrument {
     Play(noteKey : string) : string {
        //code to emit sound
         let key = this.keyDict[noteKey];
+        let now = Tone.now()
         //this.currentNotes.push(key);
-        this.instrument.triggerAttack(key, Tone.now());
+        this.instrument.triggerAttack(key, now);
         this.isPlaying = true;
         return key;
     }

@@ -37,15 +37,6 @@ export class MainControlsComponent {
   }
 
   onVolumeChange(event: number) {
-    this.adjustMasterVolume(event);
     this.volume.emit(event);
   }
-
-  /**
-   * Changes master node volume level.
-   * @param db The new value for master volume
-   */
-  private adjustMasterVolume(db: number) {
-    Tone.Destination.volume.value = db;
-}
 }

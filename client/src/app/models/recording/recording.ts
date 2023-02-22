@@ -25,8 +25,11 @@ export class Recording {
      * @param release release time in bars:beats:sixteenths
      */
     public AddRelease(key: string, release: string) {
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i].value == key && this.data[i].release == "") this.data[i].release = release;
+        for (let i = this.data.length - 1; i >= 0; i--) {
+            if (this.data[i].value == key && this.data[i].release == "") {
+                this.data[i].release = release;
+                break;
+            }
         }
     }
 

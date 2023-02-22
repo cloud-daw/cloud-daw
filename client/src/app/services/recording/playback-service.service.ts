@@ -8,11 +8,15 @@ import * as Tone from 'tone';
  * @param synth Instrument to play
  */
 export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
-    data.forEach((note) => {
-        Tone.Transport.schedule((time) => {
-            synth.NotePlayback(note.value, MakeDuration(note.attack, note.release));
-        }, note.attack);
-    })
+    let len = data.length;
+    let dur : string;
+    for (let i = 0; i < len; ++i) {
+        dur = makeDuration(data[i].attack, data[i].release)
+        console.log(dur);
+        Tone.Transport.scheduleOnce((time) => {
+            synth.NotePlayback(data[i].value, dur);
+        }, data[i].attack);
+    }
 }
 
 /**
@@ -21,12 +25,19 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
  * @param release release of note from recording array
  * @returns a bars:beats:sixteenths length of the note
  */
-function MakeDuration(attack: string, release: string) {
-    let attackMBS = attack.split(':');
-    let releaseMBS = release.split(':');
-    let durationMBS = [0, 0, 0];
-    for (let i = 0; i < 3; i++) {
-        durationMBS[i] = parseInt(releaseMBS[i]) - parseInt(attackMBS[i]);
+function makeDuration(attack: string, release: string) : string {
+    let attackBBS = attack.split(':');
+    let releaseBBS = release.split(':');
+    let bars: number = parseInt(releaseBBS[0]) - parseInt(attackBBS[0])
+    let beats: number = parseInt(releaseBBS[1]) - parseInt(attackBBS[1])
+    let sixteenths: number = parseFloat(releaseBBS[2]) - parseFloat(attackBBS[2])
+    if (sixteenths < 0) {
+        beats -= 1;
+        sixteenths += 4;
     }
-    return durationMBS.join(':');
+    if (beats < 0) {
+        bars -= 1;
+        beats += 4;
+    }
+    return bars + ':' + beats + ':' + sixteenths;
 }

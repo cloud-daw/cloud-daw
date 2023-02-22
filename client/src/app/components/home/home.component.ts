@@ -32,14 +32,12 @@ enum keyStatus {
 export class HomeComponent {
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
-    this.PlayRelease();
+    this.synthOnKeydown(event.key);
   }
 
-  @HostListener('window:keyup', ['$event'])
+  @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
-    this.PlayRelease();
+    this.synthOnKeyup(event.key)
   }
   
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
@@ -95,14 +93,30 @@ export class HomeComponent {
     this.currentTrack = newTrack;
   }
 
+  synthOnKeydown(key: string) {
+    if (this.keyboardStatus[key] != keyStatus.isPlaying) {
+      this.keyboardStatus[key] = keyStatus.isPlaying;
+      let note = this.synth.Play(key);
+      if (this.isRecording) this.testRecording.RecordNote(note, Tone.Transport.position.toString());
+    }
+  }
+
+  synthOnKeyup(key: string) {
+    if (this.keyboardStatus[key] == keyStatus.isPlaying) {
+        this.keyboardStatus[key] = keyStatus.notPlaying;
+        let note = this.synth.Release(key);
+        if (this.isRecording) this.testRecording.AddRelease(note, Tone.Transport.position.toString());
+    }
+  }
+
   onPlay(event: boolean) {
     if (!this.isPlaying) {
       this.isPlaying = true;
       Tone.start();
+      if (this.testRecording.data.length > 0) {
+        SchedulePlayback(this.testRecording.data, this.synth);
+      }
       this.metronome.Start();
-    }
-    if (this.testRecording.data.length > 0) {
-      SchedulePlayback(this.testRecording.data, this.synth);
     }
   }
 
@@ -128,6 +142,14 @@ export class HomeComponent {
 
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
+    this.adjustMasterVolume(this.masterVolume);
+  }
+  /**
+   * Changes master node volume level.
+   * @param db The new value for master volume
+   */
+  private adjustMasterVolume(db: number) {
+    Tone.Destination.volume.value = db;
   }
 
   /**
