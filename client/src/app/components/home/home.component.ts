@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewEncapsulation, SimpleChanges, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -49,8 +49,8 @@ export class HomeComponent {
     this.currentTrack = new MidiTrack('Track 0', 0, this.synth, true);
     this.tracks = new Set();
     this.tracks.add(this.currentTrack);
-    this.trackIdCounter = 0;
-    this.testRecording = new Recording(this.synth);
+    this.currentRecording = new Recording(this.synth);
+    this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
             "w": keyStatus.notPlaying,
@@ -81,11 +81,13 @@ export class HomeComponent {
   metronome: Metronome;
   currentTrack: MidiTrack;
   tracks: Set<MidiTrack>;
-  trackIdCounter: number;
   metronomeOn: boolean = true;
-  testRecording: Recording;
+  currentRecording: Recording;
+  recordings: Map<number, Recording>;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
+
+  public trackIdCounter: number = 0;
 
   newTrack() {
     this.trackIdCounter++;
@@ -100,16 +102,18 @@ export class HomeComponent {
       Tone.start();
       this.metronome.Start();
     }
-    if (this.testRecording.data.length > 0) {
-      SchedulePlayback(this.testRecording.data, this.synth);
+    let currentTrackRecording = this.recordings.get(this.currentTrack.id);
+    if (currentTrackRecording) {
+      SchedulePlayback(currentTrackRecording.data, this.synth);
     }
   }
 
   onPause(event : boolean) {
     this.isPlaying = false;
     this.isRecording = false;
+    if (!this.isRecording) this.onStopRecord();
     this.metronome.Stop();
-    console.log(this.testRecording);
+    console.log(this.currentRecording);
   }
 
   onRewind(event : boolean) {
@@ -117,7 +121,23 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    this.isRecording = true;
+    this.isRecording = false;
+  }
+
+  private onStopRecord() {
+    //append recording to current track recording data
+    console.log('stopping recording on track: ', this.currentTrack.id);
+    this.recordings.set(this.currentTrack.id, this.currentRecording);
+    this.currentTrack.midi = this.currentRecording;
+    // this.updateRecording(this.currentTrack.id);
+    console.log(this.recordings);
+  }
+
+  private updateRecording(id: number) {
+    let setRecording = this.recordings.has(id)
+      ? this.recordings.get(id)
+      : new Recording(this.currentTrack.instrument);
+    this.currentRecording = setRecording || new Recording(this.currentTrack.instrument);
   }
 
   onUndo(event: number) {
@@ -139,12 +159,12 @@ export class HomeComponent {
         case keyStatus.toAttack: //to play
           this.keyboardStatus[k] = keyStatus.isPlaying;
           key = this.synth.Play(k);
-          if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
+          if (this.isRecording) this.currentRecording.RecordNote(key, Tone.Transport.position.toString());
           break;
         case keyStatus.toRelease:
           this.keyboardStatus[k] = keyStatus.notPlaying;
           key = this.synth.Release(k);
-          if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString());
+          if (this.isRecording) this.currentRecording.AddRelease(key, Tone.Transport.position.toString());
           break;
         default:
           break;
@@ -156,5 +176,9 @@ export class HomeComponent {
     this.firebaseService.logout()
     this._router.navigateByUrl('/login')
     //this.isLogout.emit()
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('home level changes: ', changes);
   }
 }

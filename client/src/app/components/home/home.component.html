@@ -4,5 +4,5 @@
         (undo)="onUndo($event)" (rewind)="onRewind($event)" (volume)="onMainVolumeChange($event)"
         [metronome]="metronome"></app-main-controls>
     <button class="new-track-button" (click)="newTrack()">+ New Track</button>   
-    <app-track-container [tracks]="tracks" [currentTrack]="currentTrack"></app-track-container>
+    <app-track-container [tracks]="tracks" [(currentTrack)]="currentTrack" [(recordings)]="recordings" [(currentRecording)]="currentRecording"></app-track-container>
 </div>
