@@ -12,7 +12,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
 
-import { environment } from '../environments/environment';
+import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { TrackContainerComponent } from './components/track-container/track-container.component';
