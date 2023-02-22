@@ -1,3 +1,4 @@
+
 import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { TrackContainerComponent } from '../track-container/track-container.component';

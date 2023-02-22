@@ -11,15 +11,18 @@ import { Router } from '@angular/router';
 export class AuthComponent {
     title = 'Log in';
     constructor(public firebaseService : FirebaseService, public _router: Router){}
-    async onSignup(email:string,password:string){
-        await this.firebaseService.signup(email,password)
-            if (this.firebaseService.isLoggedIn) {
-                this._router.navigateByUrl('/home')
-            }
+    errorShown = false;
+    async onSignup(){
+        // redirect to sign up page
+        this._router.navigateByUrl('/sign-up')
+            
     }
     async onSignin(email:string,password:string){
         await this.firebaseService.signin(email,password)
-            if (this.firebaseService.isLoggedIn) 
-                this._router.navigateByUrl('/home')
+            .then(()=>{
+                if (this.firebaseService.isLoggedIn) 
+                    this._router.navigateByUrl('/home')
+                })
+            .catch (error =>{ this.errorShown = true })
             }
 }

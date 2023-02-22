@@ -9,13 +9,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
-import { AuthComponent } from './components/authentication/auth.component';
+import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
-import { environment } from '../environments/environment';
+
+import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { TrackContainerComponent } from './components/track-container/track-container.component';
 import { SliderComponent } from './components/controls/slider/slider/slider.component';
+import { SignUpComponent } from './components/Authentication/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { SliderComponent } from './components/controls/slider/slider/slider.comp
     TrackContainerComponent,
     HomeComponent,
     AuthComponent,
-    SliderComponent
+    SliderComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,
