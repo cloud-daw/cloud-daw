@@ -11,7 +11,6 @@ import * as Tone from 'tone';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
-import { TrackContainerComponent } from '../track-container/track-container.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
   
 /**
@@ -126,7 +125,7 @@ export class HomeComponent {
 
   private onStopRecord() {
     //append recording to current track recording data
-    console.log('stopping recording on track: ', this.currentTrack.id);
+    console.log('stopping recording on track: ', this.currentTrack.id, this.currentRecording.data);
     this.recordings.set(this.currentTrack.id, this.currentRecording);
     this.currentTrack.midi = this.currentRecording;
     // this.updateRecording(this.currentTrack.id);
@@ -180,5 +179,11 @@ export class HomeComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('home level changes: ', changes);
+  }
+
+  onCurrentTrackChange(newTrack: MidiTrack) {
+    console.log('New track:', newTrack);
+    // Do something with the new value of currentTrack
+    this.currentTrack = newTrack;
   }
 }

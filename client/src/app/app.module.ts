@@ -15,7 +15,6 @@ import { FirebaseService } from './services/firebase.service';
 import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
-import { TrackContainerComponent } from './components/track-container/track-container.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 
 @NgModule({
@@ -25,7 +24,6 @@ import { SignUpComponent } from './components/Authentication/sign-up.component';
     MainVolumeComponent,
     MidiNoteComponent,
     MidiTrackComponent,
-    TrackContainerComponent,
     HomeComponent,
     AuthComponent,
     SignUpComponent

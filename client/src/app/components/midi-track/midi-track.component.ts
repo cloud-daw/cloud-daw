@@ -1,7 +1,6 @@
 
 import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
-import { TrackContainerComponent } from '../track-container/track-container.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { Midi } from 'tone';
 import { Recording } from 'src/app/models/recording/recording';
@@ -18,41 +17,26 @@ export class MidiTrackComponent {
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Output() tracksChange: EventEmitter<Set<MidiTrack>> = new EventEmitter<Set<MidiTrack>>();
   
-  private _currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-  @Input()
-    set currentTrack(track: MidiTrack) {
-      this.currentTrackChange.emit(track);
-      this._currentTrack = track;
-    }
-    get currentTrack() {
-      return this._currentTrack;
-    }
+  // private _currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  // @Input()
+  //   set currentTrack(track: MidiTrack) {
+  //     this.currentTrackChange.emit(track);
+  //     this._currentTrack = track;
+  //   }
+  //   get currentTrack() {
+  //     return this._currentTrack;
+  //   }
+  // @Output() currentTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Input() currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Output() currentTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
 
-  private _currentRecording: Recording = new Recording(this.track.instrument);
-  @Input()
-  set currentRecording(recording: Recording) {
-    this.currentRecordingChange.emit(recording);
-    this._currentRecording = recording;
+  set setCurrentTrack(value: MidiTrack) {
+    this.currentTrack = value;
+    this.currentTrackChange.emit(value);
   }
-  get currentRecording() {
-    return this._currentRecording;
-  }
-  @Output() currentRecordingChange: EventEmitter<Recording> = new EventEmitter<Recording>();
 
-  private _recordings: Map<number, Recording> = new Map<number, Recording>();
-  @Input()
-  set recordings(map: Map<number, Recording>) {
-    this.recordingsChange.emit(map);
-    this._recordings = map;
-  }
-  get recordings() {
-    return this._recordings;
-  }
-  @Output() recordingsChange: EventEmitter<Map<number, Recording>> = new EventEmitter<Map<number, Recording>>();
-
-  
   public midi: Recording = this.track.midi;
+
   
   //functions
   public formatLabel(value: number): string {
@@ -68,14 +52,14 @@ export class MidiTrackComponent {
     this.track.selected = true;
   }
 
-  private updateRecording(id: number) {
-    let setRecording = this.recordings.has(id)
-      ? this.recordings.get(id)
-      : new Recording(this.currentTrack.instrument);
+  // private updateRecording(id: number) {
+  //   let setRecording = this.recordings.has(id)
+  //     ? this.recordings.get(id)
+  //     : new Recording(this.currentTrack.instrument);
   
-    this.currentRecording = setRecording || new Recording(this.currentTrack.instrument);
+  //   this.currentRecording = setRecording || new Recording(this.currentTrack.instrument);
     
-  }
+  // }
 
   ngOnChanges(changes: SimpleChanges) {
     //changes['currentTrack'].currentValue = this.currentTrack;
@@ -83,8 +67,7 @@ export class MidiTrackComponent {
       if (this.track != this.currentTrack) {
         this.track.selected = false;
       }
-      this.updateRecording(this.currentTrack.id);
-      console.log('track level: ', this.currentRecording.data);
+      //this.updateRecording(this.currentTrack.id);
     }
     //console.log(changes);
     //console.log('selected: ' + changes['currentTrack'].currentValue.title, 'track: ' + changes['track'].currentValue.title);
