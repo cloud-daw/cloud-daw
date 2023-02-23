@@ -14,9 +14,11 @@
         <div class="expanding-container" *ngFor="let track of tracks">
             <app-midi-track 
                 [track]="track" 
-                [(tracks)]="tracks" 
+                [tracks]="tracks" 
                 [(selectedTrack)]="selectedTrack" 
-                (selectedTrackChange)="onSelectedTrackChange($event)">
+                (selectedTrackChange)="onSelectedTrackChange($event)"
+                [isRecording]="isRecording"
+            >
             </app-midi-track>
         </div>
     </div>
