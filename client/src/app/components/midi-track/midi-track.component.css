@@ -6,9 +6,13 @@
 }
 
 .track-container:hover {
-    background-color: #646464;
+    background-color: #676767;
     color: rgb(220, 220, 220);
     cursor: pointer;
+}
+
+.selected {
+    background-color: #5b5b5b;
 }
 
 .track-title {

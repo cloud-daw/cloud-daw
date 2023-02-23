@@ -17,26 +17,16 @@ export class MidiTrackComponent {
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Output() tracksChange: EventEmitter<Set<MidiTrack>> = new EventEmitter<Set<MidiTrack>>();
   
-  // private _currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-  // @Input()
-  //   set currentTrack(track: MidiTrack) {
-  //     this.currentTrackChange.emit(track);
-  //     this._currentTrack = track;
-  //   }
-  //   get currentTrack() {
-  //     return this._currentTrack;
-  //   }
-  // @Output() currentTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-  @Input() currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-  @Output() currentTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-
-  set setCurrentTrack(value: MidiTrack) {
-    this.currentTrack = value;
-    this.currentTrackChange.emit(value);
-  }
-
-  public midi: Recording = this.track.midi;
-
+  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  @Input()
+    set selectedTrack(track: MidiTrack) {
+      // this.selectedTrackChange.emit(track);
+      this._selectedTrack = track;
+    }
+    get selectedTrack() {
+      return this._selectedTrack;
+    }
+  @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   
   //functions
   public formatLabel(value: number): string {
@@ -47,30 +37,18 @@ export class MidiTrackComponent {
     this.tracks.delete(this.track);
   }
   
-  public updateCurrentTrack() {
-    this.currentTrack = this.track;
+  public updateSelectedTrack(track: MidiTrack) {
+    this.selectedTrack = track; // set the local `selectedTrack` property
+    this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
     this.track.selected = true;
   }
 
-  // private updateRecording(id: number) {
-  //   let setRecording = this.recordings.has(id)
-  //     ? this.recordings.get(id)
-  //     : new Recording(this.currentTrack.instrument);
-  
-  //   this.currentRecording = setRecording || new Recording(this.currentTrack.instrument);
-    
-  // }
-
   ngOnChanges(changes: SimpleChanges) {
-    //changes['currentTrack'].currentValue = this.currentTrack;
-    if (changes['currentTrack']) {
-      if (this.track != this.currentTrack) {
+    if (changes['selectedTrack']) {
+      if (this.track != this.selectedTrack) {
         this.track.selected = false;
       }
-      //this.updateRecording(this.currentTrack.id);
     }
-    //console.log(changes);
-    //console.log('selected: ' + changes['currentTrack'].currentValue.title, 'track: ' + changes['track'].currentValue.title);
   }
 }
 

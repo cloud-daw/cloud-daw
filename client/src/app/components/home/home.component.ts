@@ -45,9 +45,9 @@ export class HomeComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
-    this.currentTrack = new MidiTrack('Track 0', 0, this.synth, true);
+    this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
     this.tracks = new Set();
-    this.tracks.add(this.currentTrack);
+    this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.synth);
     this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
@@ -78,7 +78,7 @@ export class HomeComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
-  currentTrack: MidiTrack;
+  selectedTrack: MidiTrack;
   tracks: Set<MidiTrack>;
   metronomeOn: boolean = true;
   currentRecording: Recording;
@@ -92,7 +92,7 @@ export class HomeComponent {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
     this.tracks.add(newTrack);
-    this.currentTrack = newTrack;
+    this.selectedTrack = newTrack;
   }
 
   onPlay(event: boolean) {
@@ -101,16 +101,16 @@ export class HomeComponent {
       Tone.start();
       this.metronome.Start();
     }
-    let currentTrackRecording = this.recordings.get(this.currentTrack.id);
-    if (currentTrackRecording) {
-      SchedulePlayback(currentTrackRecording.data, this.synth);
+    let selectedTrackRecording = this.recordings.get(this.selectedTrack.id);
+    if (selectedTrackRecording) {
+      SchedulePlayback(selectedTrackRecording.data, this.synth);
     }
   }
 
   onPause(event : boolean) {
     this.isPlaying = false;
+    if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
-    if (!this.isRecording) this.onStopRecord();
     this.metronome.Stop();
     console.log(this.currentRecording);
   }
@@ -120,23 +120,23 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    this.isRecording = false;
+    this.isRecording = true;
   }
 
   private onStopRecord() {
     //append recording to current track recording data
-    console.log('stopping recording on track: ', this.currentTrack.id, this.currentRecording.data);
-    this.recordings.set(this.currentTrack.id, this.currentRecording);
-    this.currentTrack.midi = this.currentRecording;
-    // this.updateRecording(this.currentTrack.id);
+    console.log('stopping recording on track: ', this.selectedTrack.id, this.currentRecording.data);
+    this.recordings.set(this.selectedTrack.id, this.currentRecording);
+    this.selectedTrack.midi = this.currentRecording;
+    this.updateRecording(this.selectedTrack.id);
     console.log(this.recordings);
   }
 
   private updateRecording(id: number) {
-    let setRecording = this.recordings.has(id)
+    let recordingAtId = this.recordings.has(id)
       ? this.recordings.get(id)
-      : new Recording(this.currentTrack.instrument);
-    this.currentRecording = setRecording || new Recording(this.currentTrack.instrument);
+      : new Recording(this.selectedTrack.instrument);
+    this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
   }
 
   onUndo(event: number) {
@@ -181,9 +181,8 @@ export class HomeComponent {
     console.log('home level changes: ', changes);
   }
 
-  onCurrentTrackChange(newTrack: MidiTrack) {
-    console.log('New track:', newTrack);
-    // Do something with the new value of currentTrack
-    this.currentTrack = newTrack;
+  onSelectedTrackChange(track: MidiTrack) {
+    this.updateRecording(this.selectedTrack.id);
+    console.log(this.selectedTrack.title, this.currentRecording.data);
   }
 }

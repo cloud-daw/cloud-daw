@@ -1,4 +1,7 @@
-<div class='track-container' (click)="updateCurrentTrack()" [ngStyle]="{'background-color': track.selected ? '#595959' : '#414141'}">
+<div class='track-container' 
+    (click)="updateSelectedTrack(track)" 
+    [ngClass]="{'selected': track.selected}"
+>
     <div class="header-container">
         <div class="header">
             <span class='track-title'>{{track.title}}</span>
