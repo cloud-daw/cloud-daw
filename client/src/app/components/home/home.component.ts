@@ -46,7 +46,7 @@ export class HomeComponent {
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
     this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
-    this.tracks = new Set();
+    this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.synth);
     this.recordings = new Map<number, Recording>();
@@ -79,6 +79,7 @@ export class HomeComponent {
   controller: MidiControllerComponent;
   metronome: Metronome;
   selectedTrack: MidiTrack;
+  // tracks: Set<MidiTrack>;
   tracks: Set<MidiTrack>;
   metronomeOn: boolean = true;
   currentRecording: Recording;
@@ -111,6 +112,7 @@ export class HomeComponent {
     this.isPlaying = false;
     if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
+
     this.metronome.Stop();
     console.log(this.currentRecording);
   }
@@ -130,11 +132,9 @@ export class HomeComponent {
    */
   private onStopRecord() {
     console.log('stopping recording on track: ', this.selectedTrack.id, this.currentRecording.data);
-
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.updateRecording(this.selectedTrack.id);
-
     console.log(this.recordings);
   }
 

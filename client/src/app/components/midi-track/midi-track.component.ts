@@ -14,6 +14,8 @@ import { Recording } from 'src/app/models/recording/recording';
 export class MidiTrackComponent {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
+  @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
   
@@ -34,7 +36,7 @@ export class MidiTrackComponent {
   }
   
   public deleteTrack() {
-    this.tracks.delete(this.track);
+    if (this.tracks.size > 1) this.tracks.delete(this.track);
   }
   
   public updateSelectedTrack(track: MidiTrack) {
@@ -42,7 +44,13 @@ export class MidiTrackComponent {
       this.selectedTrack = track; // set the local `selectedTrack` property
       this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
       this.track.selected = true;
+      console.log('Test ', this.track.title, this.track.midi.data);
     }
+  }
+
+  changeTrackTitle(title: string) {
+    this.track.title = title;
+    this.trackChange.emit(this.track);
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -16,6 +16,7 @@ import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
+import { MidiBlockComponent } from './components/midi-block/midi-block.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SignUpComponent } from './components/Authentication/sign-up.component';
     MidiTrackComponent,
     HomeComponent,
     AuthComponent,
-    SignUpComponent
+    SignUpComponent,
+    MidiBlockComponent
   ],
   imports: [
     BrowserModule,

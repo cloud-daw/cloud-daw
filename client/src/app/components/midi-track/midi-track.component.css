@@ -3,6 +3,9 @@
     background-color: #414141;
     color: white;
     box-shadow: inset 0 0 15px #272626;
+    /* border: 1px solid yellow; */
+    height: 5.5em;
+
 }
 
 .track-container:hover {

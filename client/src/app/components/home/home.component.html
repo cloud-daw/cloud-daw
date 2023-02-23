@@ -9,17 +9,28 @@
         (volume)="onMainVolumeChange($event)"
         [metronome]="metronome">
     </app-main-controls>
-    <button class="new-track-button" (click)="newTrack()">+ New Track</button>   
-    <div class='trackContainer-container'>
-        <div class="expanding-container" *ngFor="let track of tracks">
-            <app-midi-track 
-                [track]="track" 
-                [tracks]="tracks" 
-                [(selectedTrack)]="selectedTrack" 
-                (selectedTrackChange)="onSelectedTrackChange($event)"
-                [isRecording]="isRecording"
-            >
-            </app-midi-track>
+    <button class="new-track-button" (click)="newTrack()">+ New Track</button>
+    <div class="production-container">
+        <div class='tracks-container'>
+            <div class="tracks-subContainer" *ngFor="let track of tracks">
+                <!-- <li *ngFor="let item of myMap | keyvalue">
+                    Key: {{item.key}}, value: {{item.value}}
+                  </li> -->
+                <app-midi-track 
+                    [track]="track"
+                    [tracks]="tracks"
+                    [(selectedTrack)]="selectedTrack" 
+                    (selectedTrackChange)="onSelectedTrackChange($event)"
+                    [isRecording]="isRecording">
+                </app-midi-track>
+            </div>
+        </div>
+        <div class="midi-container">
+            <div class="midi-subContainer" *ngFor="let track of tracks">
+                <app-midi-block
+                    [track]="track">
+                </app-midi-block>
+            </div>
         </div>
     </div>
 </div>
