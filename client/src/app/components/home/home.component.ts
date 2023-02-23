@@ -123,20 +123,41 @@ export class HomeComponent {
     this.isRecording = true;
   }
 
+  /**
+   * Called when recording is stopped. 
+   * Updates the recordings map with key: selectedTrackid and value: currentRecording
+   * Calls @method updateRecording(selectedTrack.id)
+   */
   private onStopRecord() {
-    //append recording to current track recording data
     console.log('stopping recording on track: ', this.selectedTrack.id, this.currentRecording.data);
+
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.updateRecording(this.selectedTrack.id);
+
     console.log(this.recordings);
   }
 
+  /**
+   * @param id: id of track to set recording data to
+   * updates currentRecording value to currently stored recording data at @param id
+   * If the selected track has no recording data, create a new empty recording with the track's current instrument
+   */
   private updateRecording(id: number) {
     let recordingAtId = this.recordings.has(id)
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
+  }
+
+  /**
+   * @param track: might not be needed? idk angular sucks
+   * Runs every time a different track is selected.
+   * Calls @method updateRecording() with the currently selected track.
+   */
+  onSelectedTrackChange(track: MidiTrack) {
+    this.updateRecording(this.selectedTrack.id);
+    console.log(this.selectedTrack.title, this.currentRecording.data);
   }
 
   onUndo(event: number) {
@@ -181,8 +202,5 @@ export class HomeComponent {
     console.log('home level changes: ', changes);
   }
 
-  onSelectedTrackChange(track: MidiTrack) {
-    this.updateRecording(this.selectedTrack.id);
-    console.log(this.selectedTrack.title, this.currentRecording.data);
-  }
 }
+
