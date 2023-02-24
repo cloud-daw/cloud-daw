@@ -1,8 +1,9 @@
 
 import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
-import { TrackContainerComponent } from '../track-container/track-container.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { Midi } from 'tone';
+import { Recording } from 'src/app/models/recording/recording';
 
 @Component({
   selector: 'app-midi-track',
@@ -11,55 +12,84 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 })
 
 export class MidiTrackComponent {
+  //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
+  @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+
+  @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
+  @Input() isRecording: boolean = false;
   
-  private _tracks: Set<MidiTrack> = new Set<MidiTrack>();
-  
+  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Input()
-    set tracks(list: Set<MidiTrack>) {
-      this.tracksChange.emit(list);
-      this._tracks = list;
+    set selectedTrack(track: MidiTrack) {
+      // this.selectedTrackChange.emit(track);
+      this._selectedTrack = track;
     }
-    get tracks() {
-      return this._tracks;
+    get selectedTrack() {
+      return this._selectedTrack;
     }
-
-  @Output() tracksChange: EventEmitter<Set<MidiTrack>> = new EventEmitter<Set<MidiTrack>>();
+  @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   
-  private _currentTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-
-  @Input()
-    set currentTrack(track: MidiTrack) {
-      this.currentTrackChange.emit(track);
-      this._currentTrack = track;
-    }
-    get currentTrack() {
-      return this._currentTrack;
-    }
-
-  @Output() currentTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-  
-  formatLabel(value: number): string {
+  //functions
+  public formatLabel(value: number): string {
     return `${value}db`;
   }
-
-  deleteTrack() {
-    this.tracks.delete(this.track);
+  
+  public deleteTrack() {
+    if (this.tracks.size > 1) this.tracks.delete(this.track);
+  }
+  
+  public updateSelectedTrack(track: MidiTrack) {
+    if (!this.isRecording) {
+      this.selectedTrack = track; // set the local `selectedTrack` property
+      this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
+      this.track.selected = true;
+      console.log('Test ', this.track.title, this.track.midi.data);
+    }
   }
 
-  updateCurrentTrack() {
-    this.currentTrack = this.track;
-    this.track.selected = true;
+  changeTrackTitle(title: string) {
+    this.track.title = title;
+    this.trackChange.emit(this.track);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    //changes['currentTrack'].currentValue = this.currentTrack;
-    if (changes['currentTrack']) {
-      if (this.track != this.currentTrack) {
+    if (changes['selectedTrack']) {
+      if (this.track != this.selectedTrack) {
         this.track.selected = false;
       }
     }
-    console.log(changes);
-    //console.log('selected: ' + changes['currentTrack'].currentValue.title, 'track: ' + changes['track'].currentValue.title);
   }
 }
+
+/**
+ * Sample Code for Midi Playback
+ * let tape = {
+  ppq: 24,
+  bpm: 110,
+  tracks: [
+    {
+      noteOn: {},
+      noteOff: {},
+    }
+  ],
+};
+let step = 0;
+function tick() {
+  tape.tracks.forEach(function (track, trackNumber) {
+    if (typeof track.noteOn[step] !== "undefined") {
+      for (let note in track.noteOn[step]) {
+        getOutputDevice(trackNumber).playNote(note, track.outputChannel, {
+          velocity: track.noteOn[step][note],
+        });
+      }
+    }
+    if (typeof track.noteOff[step] !== "undefined") {
+      track.noteOff[step].forEach(function (note) {
+        getOutputDevice(trackNumber).stopNote(note, track.outputChannel);
+      });
+    }
+  });
+  step++;
+}
+ */
