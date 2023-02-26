@@ -2,9 +2,12 @@
     <div class='block-container' 
         [ngStyle]=
         "{
-            'width': track.midi.data.length,
+            'width': blockWidth,
             'visibility': isVisible
-        }">
+        }"
+        >
         {{track.title}}
     </div>
 </div>
+
+<!--  -->

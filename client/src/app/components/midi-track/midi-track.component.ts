@@ -44,7 +44,6 @@ export class MidiTrackComponent {
       this.selectedTrack = track; // set the local `selectedTrack` property
       this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
       this.track.selected = true;
-      console.log('Test ', this.track.title, this.track.midi.data);
     }
   }
 

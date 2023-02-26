@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ViewEncapsulation, SimpleChanges, Input } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewEncapsulation, SimpleChanges, Input, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -12,6 +12,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { MidiBlockComponent } from '../midi-block/midi-block.component';
   
 /**
  * Int status of keys for keyboard
@@ -29,6 +30,8 @@ enum keyStatus {
   styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css'],
 })
 export class HomeComponent {
+  @ViewChildren('blockRef')blockRefs?: QueryList<MidiBlockComponent>;
+
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
@@ -94,6 +97,7 @@ export class HomeComponent {
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
     this.tracks.add(newTrack);
     this.selectedTrack = newTrack;
+    this.updateRecording(this.selectedTrack.id);
   }
 
   onPlay(event: boolean) {
@@ -135,6 +139,11 @@ export class HomeComponent {
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.updateRecording(this.selectedTrack.id);
+    this.blockRefs?.forEach((block) => {
+      if (block.track.id == this.selectedTrack.id) {
+        block.updateVisual();
+      }
+    });
     console.log(this.recordings);
   }
 

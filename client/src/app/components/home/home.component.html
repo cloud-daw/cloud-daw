@@ -28,6 +28,7 @@
         <div class="midi-container">
             <div class="midi-subContainer" *ngFor="let track of tracks">
                 <app-midi-block
+                    #blockRef
                     [track]="track">
                 </app-midi-block>
             </div>
