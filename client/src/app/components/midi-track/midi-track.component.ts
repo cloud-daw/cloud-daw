@@ -2,8 +2,6 @@
 import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
-import { Midi } from 'tone';
-import { Recording } from 'src/app/models/recording/recording';
 
 @Component({
   selector: 'app-midi-track',
@@ -19,7 +17,6 @@ export class MidiTrackComponent {
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
   
-  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Input()
     set selectedTrack(track: MidiTrack) {
       // this.selectedTrackChange.emit(track);
@@ -29,6 +26,7 @@ export class MidiTrackComponent {
       return this._selectedTrack;
     }
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   
   //functions
   public formatLabel(value: number): string {
