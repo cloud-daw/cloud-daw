@@ -17,7 +17,7 @@ export class MidiInstrument {
     constructor(name: string) {
         this.name = name;
         this.sound = "something.mp3" //to load for later
-        this.instrument = new Tone.PolySynth().toDestination();
+        this.instrument = new Tone.PolySynth(Tone.AMSynth).toDestination();
         this.keyDict = MakeKeyDict(4);
         this.isPlaying = false;
         this.attack = 0;

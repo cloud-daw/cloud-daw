@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewEncapsulation, SimpleChanges, Input, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -11,8 +11,8 @@ import * as Tone from 'tone';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
-import { TrackContainerComponent } from '../track-container/track-container.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { MidiBlockComponent } from '../midi-block/midi-block.component';
   
 /**
  * Int status of keys for keyboard
@@ -30,6 +30,8 @@ enum keyStatus {
   styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css'],
 })
 export class HomeComponent {
+  @ViewChildren('blockRef')blockRefs?: QueryList<MidiBlockComponent>;
+
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
@@ -54,11 +56,11 @@ export class HomeComponent {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
     this.metronome = new Metronome(120, 4); //120 bpm at 4/4
-    this.currentTrack = new MidiTrack('Track 0', 0, this.synth, true);
-    this.tracks = new Set();
-    this.tracks.add(this.currentTrack);
-    this.trackIdCounter = 0;
-    this.testRecording = new Recording(this.synth);
+    this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
+    this.tracks = new Set<MidiTrack>();
+    this.tracks.add(this.selectedTrack);
+    this.currentRecording = new Recording(this.synth);
+    this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
             "a": keyStatus.notPlaying,
             "w": keyStatus.notPlaying,
@@ -87,19 +89,23 @@ export class HomeComponent {
   synth: MidiInstrument;
   controller: MidiControllerComponent;
   metronome: Metronome;
-  currentTrack: MidiTrack;
+  selectedTrack: MidiTrack;
+  // tracks: Set<MidiTrack>;
   tracks: Set<MidiTrack>;
-  trackIdCounter: number;
   metronomeOn: boolean = true;
-  testRecording: Recording;
+  currentRecording: Recording;
+  recordings: Map<number, Recording>;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
+
+  public trackIdCounter: number = 0;
 
   newTrack() {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
     this.tracks.add(newTrack);
-    this.currentTrack = newTrack;
+    this.selectedTrack = newTrack;
+    this.updateRecording(this.selectedTrack.id);
   }
 
   onPlay(event: boolean) {
@@ -108,16 +114,19 @@ export class HomeComponent {
       Tone.start();
       this.metronome.Start();
     }
-    if (this.testRecording.data.length > 0) {
-      SchedulePlayback(this.testRecording.data, this.synth);
+    let selectedTrackRecording = this.recordings.get(this.selectedTrack.id);
+    if (selectedTrackRecording) {
+      SchedulePlayback(selectedTrackRecording.data, this.synth);
     }
   }
 
   onPause(event : boolean) {
     this.isPlaying = false;
+    if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
+
     this.metronome.Stop();
-    console.log(this.testRecording);
+    console.log(this.currentRecording);
   }
 
   onRewind(event : boolean) {
@@ -126,6 +135,46 @@ export class HomeComponent {
 
   onRecord(event: boolean) {
     this.isRecording = true;
+  }
+
+  /**
+   * Called when recording is stopped. 
+   * Updates the recordings map with key: selectedTrackid and value: currentRecording
+   * Calls @method updateRecording(selectedTrack.id)
+   */
+  private onStopRecord() {
+    console.log('stopping recording on track: ', this.selectedTrack.id, this.currentRecording.data);
+    this.recordings.set(this.selectedTrack.id, this.currentRecording);
+    this.selectedTrack.midi = this.currentRecording;
+    this.updateRecording(this.selectedTrack.id);
+    this.blockRefs?.forEach((block) => {
+      if (block.track.id == this.selectedTrack.id) {
+        block.updateVisual();
+      }
+    });
+    console.log(this.recordings);
+  }
+
+  /**
+   * @param id: id of track to set recording data to
+   * updates currentRecording value to currently stored recording data at @param id
+   * If the selected track has no recording data, create a new empty recording with the track's current instrument
+   */
+  private updateRecording(id: number) {
+    let recordingAtId = this.recordings.has(id)
+      ? this.recordings.get(id)
+      : new Recording(this.selectedTrack.instrument);
+    this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
+  }
+
+  /**
+   * @param track: might not be needed? idk angular sucks
+   * Runs every time a different track is selected.
+   * Calls @method updateRecording() with the currently selected track.
+   */
+  onSelectedTrackChange(track: MidiTrack) {
+    this.updateRecording(this.selectedTrack.id);
+    console.log(this.selectedTrack.title, this.currentRecording.data);
   }
 
   onUndo(event: number) {
@@ -147,12 +196,12 @@ export class HomeComponent {
         case keyStatus.toAttack: //to play
           this.keyboardStatus[k] = keyStatus.isPlaying;
           key = this.synth.Play(k);
-          if (this.isRecording) this.testRecording.RecordNote(key, Tone.Transport.position.toString());
+          if (this.isRecording) this.currentRecording.RecordNote(key, Tone.Transport.position.toString());
           break;
         case keyStatus.toRelease:
           this.keyboardStatus[k] = keyStatus.notPlaying;
           key = this.synth.Release(k);
-          if (this.isRecording) this.testRecording.AddRelease(key, Tone.Transport.position.toString());
+          if (this.isRecording) this.currentRecording.AddRelease(key, Tone.Transport.position.toString());
           break;
         default:
           break;
@@ -165,4 +214,10 @@ export class HomeComponent {
     this._router.navigateByUrl('/login')
     //this.isLogout.emit()
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('home level changes: ', changes);
+  }
+
 }
+

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrackContainerComponent } from './track-container.component';
+import { MidiBlockComponent } from './midi-block.component';
 
-describe('TrackContainerComponent', () => {
-  let component: TrackContainerComponent;
-  let fixture: ComponentFixture<TrackContainerComponent>;
+describe('MidiBlockComponent', () => {
+  let component: MidiBlockComponent;
+  let fixture: ComponentFixture<MidiBlockComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TrackContainerComponent ]
+      declarations: [ MidiBlockComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TrackContainerComponent);
+    fixture = TestBed.createComponent(MidiBlockComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

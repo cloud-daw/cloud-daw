@@ -1,5 +1,6 @@
 import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
+import { Recording } from '../recording/recording';
 
 export class MidiTrack {
     title: string;
@@ -8,7 +9,7 @@ export class MidiTrack {
     instrument: MidiInstrument;
     selected: boolean;
     effects: string[] = [];
-    midi: any = [];
+    midi: Recording = new Recording(new MidiInstrument(''));
     constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects?: string[]) {
         this.title = title;
         this.id = id;
