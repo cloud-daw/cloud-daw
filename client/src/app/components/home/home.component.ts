@@ -35,12 +35,20 @@ export class HomeComponent {
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+    const myDiv = document.getElementById(event.key);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }    
     this.PlayRelease();
   }
 
   @HostListener('window:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
     if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
+    const myDiv = document.getElementById(event.key);
+    if (myDiv) {
+      myDiv.classList.remove("active");
+    }    
     this.PlayRelease();
   }
   
