@@ -32,7 +32,6 @@ export class MidiInstrument {
        //code to emit sound
         let key = this.keyDict[noteKey];
         let now = Tone.now()
-        //this.currentNotes.push(key);
         this.instrument.triggerAttack(key, now);
         this.isPlaying = true;
         return key;
@@ -44,8 +43,6 @@ export class MidiInstrument {
     Release(releasedKey : string) {
         let key = this.keyDict[releasedKey];
         this.instrument.triggerRelease(key, `+${this.release}`);
-        //let idx = this.currentNotes.indexOf(key);
-        //this.currentNotes.splice(idx, 1);
         return key;
     }
 
@@ -53,7 +50,7 @@ export class MidiInstrument {
         this.instrument.volume.value = db;
     }
 
-    NotePlayback(value: string, duration: string) {
+    NotePlayback(value: string, duration: Tone.Unit.Time) {
         this.instrument.triggerAttackRelease(value, duration);
     }
 

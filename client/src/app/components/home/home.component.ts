@@ -18,9 +18,7 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
  */
 enum keyStatus { 
   notPlaying = 0,
-  toRelease = 1,
-  toAttack = 2,
-  isPlaying = 3,
+  isPlaying = 1,
 }
 
 @Component({
@@ -38,7 +36,6 @@ export class HomeComponent {
   handleKeyupEvent(event: KeyboardEvent) {
     this.synthOnKeyup(event.key)
   }
-  
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
@@ -49,24 +46,25 @@ export class HomeComponent {
     this.currentRecording = new Recording(this.synth);
     this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
-            "a": keyStatus.notPlaying,
-            "w": keyStatus.notPlaying,
-            "s": keyStatus.notPlaying,
-            "e": keyStatus.notPlaying,
-            "d": keyStatus.notPlaying,
-            "f": keyStatus.notPlaying,
-            "t": keyStatus.notPlaying,
-            "g": keyStatus.notPlaying,
-            "y": keyStatus.notPlaying,
-            "h": keyStatus.notPlaying,
-            "u": keyStatus.notPlaying,
-            "j": keyStatus.notPlaying,
-            "k": keyStatus.notPlaying,
-            "o": keyStatus.notPlaying,
-            "l": keyStatus.notPlaying,
-            "p": keyStatus.notPlaying,
-            ";": keyStatus.notPlaying,
-        }
+      "a": keyStatus.notPlaying,
+      "w": keyStatus.notPlaying,
+      "s": keyStatus.notPlaying,
+      "e": keyStatus.notPlaying,
+      "d": keyStatus.notPlaying,
+      "f": keyStatus.notPlaying,
+      "t": keyStatus.notPlaying,
+      "g": keyStatus.notPlaying,
+      "y": keyStatus.notPlaying,
+      "h": keyStatus.notPlaying,
+      "u": keyStatus.notPlaying,
+      "j": keyStatus.notPlaying,
+      "k": keyStatus.notPlaying,
+      "o": keyStatus.notPlaying,
+      "l": keyStatus.notPlaying,
+      "p": keyStatus.notPlaying,
+      ";": keyStatus.notPlaying,
+    };
+    Tone.start();
   }
   //status$: Observable<any>;
   masterVolume: number = 0;
@@ -85,9 +83,8 @@ export class HomeComponent {
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
   state = 'curr'
-
   public trackIdCounter: number = 0;
-
+  
   newTrack() {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
@@ -99,7 +96,7 @@ export class HomeComponent {
     if (this.keyboardStatus[key] != keyStatus.isPlaying) {
       this.keyboardStatus[key] = keyStatus.isPlaying;
       let note = this.synth.Play(key);
-      if (this.isRecording) this.currentRecording.RecordNote(note, Tone.Transport.position.toString());
+      if (this.isRecording) this.currentRecording.RecordNote(note);
     }
   }
 
@@ -107,22 +104,17 @@ export class HomeComponent {
     if (this.keyboardStatus[key] == keyStatus.isPlaying) {
         this.keyboardStatus[key] = keyStatus.notPlaying;
         let note = this.synth.Release(key);
-        if (this.isRecording) this.currentRecording.AddRelease(note, Tone.Transport.position.toString());
+        if (this.isRecording) this.currentRecording.AddRelease(note);
     }
   }
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
       this.isPlaying = true;
-      Tone.start();
-      if (this.currentRecording.data.length > 0) {
-        SchedulePlayback(this.currentRecording.data, this.synth);
-      }
+      Array.from(this.recordings.values()).forEach((r: Recording) => {
+        SchedulePlayback(r.data, r.synth)
+      });
       this.metronome.Start();
-    }
-    let selectedTrackRecording = this.recordings.get(this.selectedTrack.id);
-    if (selectedTrackRecording) {
-      SchedulePlayback(selectedTrackRecording.data, this.synth);
     }
   }
 
@@ -130,8 +122,7 @@ export class HomeComponent {
     this.isPlaying = false;
     if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
-
-    this.metronome.Stop();
+    this.metronome.Pause();
     console.log(this.currentRecording);
   }
 
@@ -195,28 +186,28 @@ export class HomeComponent {
     Tone.Destination.volume.value = db;
   }
 
-  /**
-   * Uses keyboard status dictionary (scheduled on note plays) to record correct attack & release time
-   */
-  PlayRelease() {
-    let key;
-    for (let k in this.keyboardStatus) {
-      switch (this.keyboardStatus[k]) {
-        case keyStatus.toAttack: //to play
-          this.keyboardStatus[k] = keyStatus.isPlaying;
-          key = this.synth.Play(k);
-          if (this.isRecording) this.currentRecording.RecordNote(key, Tone.Transport.position.toString());
-          break;
-        case keyStatus.toRelease:
-          this.keyboardStatus[k] = keyStatus.notPlaying;
-          key = this.synth.Release(k);
-          if (this.isRecording) this.currentRecording.AddRelease(key, Tone.Transport.position.toString());
-          break;
-        default:
-          break;
-      }
-    }
-  }
+  // /**
+  //  * Uses keyboard status dictionary (scheduled on note plays) to record correct attack & release time
+  //  */
+  // PlayRelease() {
+  //   let key;
+  //   for (let k in this.keyboardStatus) {
+  //     switch (this.keyboardStatus[k]) {
+  //       case keyStatus.toAttack: //to play
+  //         this.keyboardStatus[k] = keyStatus.isPlaying;
+  //         key = this.synth.Play(k);
+  //         if (this.isRecording) this.currentRecording.RecordNote(key);
+  //         break;
+  //       case keyStatus.toRelease:
+  //         this.keyboardStatus[k] = keyStatus.notPlaying;
+  //         key = this.synth.Release(k);
+  //         if (this.isRecording) this.currentRecording.AddRelease(key);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }
 
   onLogout(){
     this.firebaseService.logout();
