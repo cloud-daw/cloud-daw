@@ -1,12 +1,15 @@
 <div class="control-bar-container">
     <div class="control-bar-header">
-        <div class="playback-controls-container">
-            <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> <!-- UNDO BUTTON -->
+        <div class="left-header">
+            <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
+        </div>
+        <div class="center-header">
+            <!-- <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> UNDO BUTTON
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
                     className="w-6 h-6 ">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 15l-6 6m0 0l-6-6m6 6V9a6 6 0 0112 0v3" />
                 </svg>
-            </button>
+            </button> -->
             <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#C9C9C9"
                     className="w-6 h-6">
@@ -36,8 +39,8 @@
             </button>
         <!-- sample div for testing metronome feature-->
         </div>
-        <div class="volume-slider">
-            <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
+        <div class="right-header">
+            
         </div>
         <!-- <button class="logout-button" (click)="logout">LOGOUT</button> -->
     </div>

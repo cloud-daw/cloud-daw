@@ -9,13 +9,20 @@
 .control-bar-header {
     display: flex;
     background-color: #4E4E4E;
-    /* border: 1px solid blue; */
+    border: 1px solid blue;
 }
-
-.playback-controls-container {
-    width: 50%;
+.left-header {
+    width: 15%;
+    /* border: 1px solid yellow; */
+}
+.right-header {
+    width: 15%;
+    /* border: 1px solid yellow; */
+}
+.center-header {
+    width: 70%;
     margin: auto;
-    /* border: 1px solid red; */
+    border: 1px solid green;
     text-align: center;
 }
 
@@ -43,9 +50,4 @@
 
 .currentMeasure {
     color: white;
-}
-
-.volume-slider {
-    margin: auto;
-    /* border: 1px solid yellow; */
 }
