@@ -35,3 +35,22 @@
   .black.active {
     background-color: #333;
   }
+.body {
+    position: relative;
+    background-color: #1F1F1F;
+    width: 100%;
+    height: 100%;
+}
+
+.new-track-button {
+    color: white;
+    background-color: #373737;
+    border-radius: 5px;
+    padding-inline: 0.5em;
+    padding-top: 0.2em;
+    margin-bottom: 0.25em;
+}
+
+.new-track-button:hover {
+    cursor: pointer;
+}

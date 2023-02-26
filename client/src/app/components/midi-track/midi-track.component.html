@@ -1,8 +1,15 @@
-<div className="track">
-    <div className="track-header">
-        Track 1
+<div class='track-container' (click)="updateCurrentTrack()" [ngStyle]="{'background-color': track.selected ? '#595959' : '#414141'}">
+    <div class="header-container">
+        <div class="header">
+            <span class='track-title'>{{track.title}}</span>
+            <button class="delete-track" (click)="deleteTrack()">x</button>
+        </div>
     </div>
-    <div className="track-controls">
-        Controls
+    <div class='track-instrument'>{{track.id}}</div>
+    <div class="volume-slider">
+        <mat-slider min="-12" max="6" step="0.1" value="5" showTickMarks discrete [displayWith]="formatLabel">
+            <input matSliderThumb>
+        </mat-slider>         
     </div>
+    
 </div>

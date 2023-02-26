@@ -1,0 +1,33 @@
+<div class="auth">
+    <div class="authContent">
+        <div class="logoSpace">
+            <p>Logo and stuff go here</p>
+        </div>
+        <div class="logInContent">
+            <div class="signUp">
+                <p class="authHeader">Create A New Account</p>
+                <input type="text" #emailSignup class="inputField" id="signUpEmailInput" placeholder="Email" />
+                <input type="password" #passwordSignup class="inputField" id="signUpPasswordInput"
+                    placeholder="Password" />
+                <input type="password" #passwordSignup2 class="inputField" id="signUpPasswordInput"
+                    placeholder="Retype Password" />
+                <button (click)="onSignup(emailSignup.value,passwordSignup.value,passwordSignup2.value)"
+                    class="logInBtn">Sign up</button>
+            </div>
+            <div class="errorLog">
+                <div>
+                    <p *ngIf="errorShown" class="errorMessage" id="errorMessage">* Make sure your email address is valid
+                    </p>
+                    <p *ngIf="errorShown" class="errorMessage" id="errorMessage">* password must be at least 6
+                        characters long</p>
+                    <p *ngIf="passwordMismatch" class="errorMessage" id="errorMessage">* Passwords do not match</p>
+                </div>
+            </div>
+            <div class="signIn">
+                <p class="signUpNote">Already have an account?</p>
+                <button (click)="onSignin()" class="logInBtn">Log In</button>
+            </div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>
