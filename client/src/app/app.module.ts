@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainControlsComponent } from './components/controls/main-controls/main-controls.component';
 import { MainVolumeComponent } from './components/controls/main-volume/main-volume/main-volume.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
@@ -15,10 +15,12 @@ import { FirebaseService } from './services/firebase.service';
 import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
+import { SliderComponent } from './components/controls/slider/slider/slider.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
+import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
 
 
 @NgModule({
@@ -30,7 +32,10 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     MidiTrackComponent,
     HomeComponent,
     AuthComponent,
+    SliderComponent,
     SignUpComponent,
+    MidiBlockComponent,
+    SliderGridComponent,
     PasswordResetComponent,
     EmailVerificationComponent,
     MidiBlockComponent
@@ -39,7 +44,7 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     MatSliderModule,
     AngularFireModule.initializeApp({
         apiKey: environment.firebase.apiKey,
