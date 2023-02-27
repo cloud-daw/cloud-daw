@@ -32,7 +32,7 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     AuthComponent,
     SignUpComponent,
     PasswordResetComponent,
-    EmailVerificationComponent
+    EmailVerificationComponent,
     MidiBlockComponent
   ],
   imports: [
