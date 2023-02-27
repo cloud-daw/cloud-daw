@@ -19,6 +19,8 @@ import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
+import { MessangerServiceComponent } from './messanger-service/messanger-service.component';
+import { MessengerService } from './globalVariables';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     SignUpComponent,
     PasswordResetComponent,
     EmailVerificationComponent,
-    MidiBlockComponent
+    MidiBlockComponent,
+    MessangerServiceComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -50,7 +54,7 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
         appId: environment.firebase.appId,
     })
   ],
-  providers: [FirebaseService],
+  providers: [FirebaseService, MessengerService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
