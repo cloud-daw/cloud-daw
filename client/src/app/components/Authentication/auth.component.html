@@ -9,6 +9,7 @@
                 <input type="text" #email class="inputField" id="signInEmailInput" placeholder="Email" />
                 <input type="password" #password class="inputField" id="signInPasswordInput" placeholder="Password" />
                 <button (click)="onSignin(email.value,password.value)" class="logInBtn">Sign in</button>
+                <p (click)="forgotPassword()" class="forgotPassword">Forgot Password</p>
             </div>
             <div class="errorLog">
                 <div *ngIf="errorShown">

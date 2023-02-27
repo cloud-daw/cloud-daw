@@ -20,6 +20,10 @@
     border: 1px solid #333;
   }
   
+  .header {
+    border: 1px solid red;
+  }
+
   .white.active {
     background-color: #CCC;
   }
