@@ -2,3 +2,27 @@ mat-slider {
     @apply w-3/4 ml-8 mb-1 -mt-0.5;
     margin-top: -0.75em;
 }
+
+.form-range::-moz-range-track {
+    background-color: #d3d2d2;
+}
+  
+.form-range::-moz-range-thumb {
+    background-color: #00ff62;
+}
+
+.form-range::-moz-range-thumb:hover {
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    background-color: #d3d2d2;
+}
+  
+.form-range::-webkit-slider-thumb {
+    background-color: #00ff62;
+}
+  
+.form-range::-webkit-slider-thumb:hover {
+    cursor: pointer;
+}

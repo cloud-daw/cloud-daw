@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
+
   
 /**
  * Int status of keys for keyboard

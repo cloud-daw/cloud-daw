@@ -1,6 +1,5 @@
 <div class="body">
     <div class='header'>
-        <button class="absolute right-0 w-32 h-10 rounded-bl-md bg-gray-200" (click)="onLogout()">LOGOUT</button>
         <app-main-controls 
             (play)="onPlay($event)" 
             (record)="onRecord($event)" 
@@ -8,12 +7,15 @@
             (undo)="onUndo($event)" 
             (rewind)="onRewind($event)" 
             (volume)="onMainVolumeChange($event)"
+            (logout)="onLogout()"
             [metronome]="metronome">
         </app-main-controls>
     </div>
-    <button class="new-track-button" (click)="newTrack()">+ New Track</button>
     <div class="production-container">
         <div class='tracks-container'>
+            <button class="new-track-button" (click)="newTrack()">
+                Add Track
+            </button>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <!-- <li *ngFor="let item of myMap | keyvalue">
                     Key: {{item.key}}, value: {{item.value}}

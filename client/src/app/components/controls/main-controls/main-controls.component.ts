@@ -14,6 +14,8 @@ export class MainControlsComponent {
   @Output() rewind: EventEmitter<boolean> = new EventEmitter();
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
+  @Output() logout: EventEmitter<any> = new EventEmitter();
+
   @Input() metronome: Metronome = new Metronome();
 
   clickPlay() {
@@ -39,6 +41,10 @@ export class MainControlsComponent {
   onVolumeChange(event: number) {
     this.adjustMasterVolume(event);
     this.volume.emit(event);
+  }
+
+  clickLogout() {
+    this.logout.emit();
   }
 
   /**

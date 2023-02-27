@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
+
 *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -21,7 +23,7 @@
   }
   
   .header {
-    border: 1px solid red;
+    margin-left: -0.5em;
   }
 
   .white.active {
@@ -39,28 +41,37 @@
   .black.active {
     background-color: #333;
   }
+  
 .body {
     position: relative;
     background-color: #1F1F1F;
     width: 100%;
     height: 100%;
+    font-family: 'Inter', sans-serif;
 }
 
+
 .new-track-button {
+    text-align: center;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
     color: white;
-    background-color: #373737;
+    background-color: #3d3d3d;
     border-radius: 5px;
     padding-inline: 0.5em;
     padding-top: 0.2em;
-    margin-bottom: 0.25em;
+    height: 2em;
 }
 
 .new-track-button:hover {
     cursor: pointer;
+    background-color: #4f4f4f;
 }
 
 .production-container {
     height: 100%;
+    width: 100%;
     background-color: #1F1F1F;
     display: flex;
 }
@@ -78,6 +89,12 @@
 
 .midi-container {
     width: 80%;
-    height: 100%;
-    border: 1px solid violet;
+    height: 100em;
+    margin-top: 2em;
+    overflow-x: scroll;
+    /* border: 1px solid pink; */
+}
+
+.midi-subContainer {
+  width: max-content;
 }
