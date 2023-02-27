@@ -23,7 +23,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   signature : number = 4
   @Output() positionChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() sPos: EventEmitter<number> = new EventEmitter<number>();
-  totalTime = (((this.bars * this.signature) / this.bpm) * 60000) - (60000 / this.bpm);
+  totalTime = (((this.bars * this.signature) / this.bpm) * 60000);
   timeOffset = 0;
   _slider: Element | any;
   factory: AnimationFactory | undefined;
