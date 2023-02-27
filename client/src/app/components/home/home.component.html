@@ -17,23 +17,23 @@
             <button type="button" class="expand-piano" (click)="toggleExpand()">Show/Hide Piano</button>
         </div>
         <div class="piano">
-            <div id="a" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
-            <div id="w" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
-            <div id="s" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
-            <div id="e" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">E</div>
-            <div id="d" class="key white" style = "display:flex;justify-content:center;align-items:center;">D</div>
-            <div id="f" class="key white" style = "display:flex;justify-content:center;align-items:center;">F</div>
-            <div id="t" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">T</div>
-            <div id="g" class="key white" style = "display:flex;justify-content:center;align-items:center;">G</div>
-            <div id="y" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">Y</div>
-            <div id="h" class="key white" style = "display:flex;justify-content:center;align-items:center;">H</div>
-            <div id="u" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">U</div>
-            <div id="j" class="key white" style = "display:flex;justify-content:center;align-items:center;">J</div>
-            <div id="k" class="key white" style = "display:flex;justify-content:center;align-items:center;">K</div>
-            <div id="o" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">O</div>
-            <div id="l" class="key white" style = "display:flex;justify-content:center;align-items:center;">L</div>
-            <div id="p" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
-            <div id=";" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
+            <div id="a" (mousedown)="onKeyMousedown('a')" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
+            <div id="w" (mousedown)="onKeyMousedown('w')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
+            <div id="s" (mousedown)="onKeyMousedown('s')" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
+            <div id="e" (mousedown)="onKeyMousedown('e')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">E</div>
+            <div id="d" (mousedown)="onKeyMousedown('d')" class="key white" style = "display:flex;justify-content:center;align-items:center;">D</div>
+            <div id="f" (mousedown)="onKeyMousedown('f')" class="key white" style = "display:flex;justify-content:center;align-items:center;">F</div>
+            <div id="t" (mousedown)="onKeyMousedown('t')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">T</div>
+            <div id="g" (mousedown)="onKeyMousedown('g')" class="key white" style = "display:flex;justify-content:center;align-items:center;">G</div>
+            <div id="y" (mousedown)="onKeyMousedown('y')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">Y</div>
+            <div id="h" (mousedown)="onKeyMousedown('h')" class="key white" style = "display:flex;justify-content:center;align-items:center;">H</div>
+            <div id="u" (mousedown)="onKeyMousedown('u')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">U</div>
+            <div id="j" (mousedown)="onKeyMousedown('j')" class="key white" style = "display:flex;justify-content:center;align-items:center;">J</div>
+            <div id="k" (mousedown)="onKeyMousedown('k')" class="key white" style = "display:flex;justify-content:center;align-items:center;">K</div>
+            <div id="o" (mousedown)="onKeyMousedown('o')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">O</div>
+            <div id="l" (mousedown)="onKeyMousedown('l')" class="key white" style = "display:flex;justify-content:center;align-items:center;">L</div>
+            <div id="p" (mousedown)="onKeyMousedown('p')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
+            <div id=";" (mousedown)="onKeyMousedown(';')" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
           </div>
     </div>
     <div class="production-container">
