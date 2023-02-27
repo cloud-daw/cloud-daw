@@ -1,4 +1,4 @@
-import { Component, Renderer2, AfterViewInit, Input, OnChanges, SimpleChanges, HostListener } from '@angular/core';
+import { Component, Renderer2, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { style, animate, AnimationBuilder, AnimationFactory, AnimationPlayer } from '@angular/animations';
 
 enum controlStatus {
@@ -7,16 +7,18 @@ enum controlStatus {
   reset = 2,
 }
 
+//! NB: current issue is that slider drag doesn't work after animation runs. need to fix this.
+
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.css'],
 })
 export class SliderComponent implements AfterViewInit, OnChanges {
-  //@Input() bars: number = 32;
+  @Input() bars: number = 32;
   @Input() bpm: number = 120;
-  @Input() controlEvent : number = 2;
-  bars: number = 32;
+  @Input() controlEvent: number = 2;
+  @Output() positionChanged: EventEmitter<number> = new EventEmitter<number>();
   totalTime = ((this.bars * 4) / this.bpm) * 60000
   timeOffset = 0;
   _slider: Element | any;
@@ -35,7 +37,9 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.maxVW = 100 - this.startingPosition;
     console.log('spos');
     console.log(this.startingPosition);
+    console.log(this._slider);
   }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.handleSlider(this.controlEvent)
   }
@@ -72,18 +76,17 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.currStatus = controlStatus.play;
     this.player = this.buildSliderAnim()
     this.player.play();
-    this.player.onDone(() => {
-      this._slider.style.transform = `translate(${this.maxVW}vw, 0%)`
-      this.player?.destroy();
-      this.player = undefined;
-    });
+    // this.player.onDone(() => {
+    //   //this._slider.style.transform = `translate(${this.maxVW}vw, 0%)`
+    //   this.player?.destroy();
+    //   this.player = undefined;
+    // });
   }
 
   pauseSlider() {
     console.log('should pause')
     this.currStatus = controlStatus.pause;
     this.player?.pause();
-    this.player = undefined;
     this.setCurrTransform();
   }
 
@@ -98,8 +101,19 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     const clone = this._slider.cloneNode(true);
     this._slider.parentNode.replaceChild(clone, this._slider);
     this._slider = clone;
-    this.player = this.buildSliderAnim();
+    this.setTransformOnPosition(this.startingPosition)
+    this.reinitListener(); //reinstantiate the mouse down listener
   }
+
+  /**
+   * Listens to new slider for mousedown event
+   */
+  private reinitListener() {
+    this._renderer.listen(this._slider, 'mousedown', (event) => {
+        this.startDrag(event);
+    });
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     console.log('resize');
@@ -110,38 +124,43 @@ export class SliderComponent implements AfterViewInit, OnChanges {
 
   @HostListener('window:mouseup', ['$event'])
   stopDrag(event: MouseEvent) {
-    console.log('register stop drag')
     if (this.isDragging) {
       console.log('drag stop')
       const vwPos = (event.clientX / window.innerWidth) * 100;
       this.setTransformOnPosition(vwPos);
+      this.setCurrTransform()
+      this.positionChanged.emit(vwPos - this.startingPosition);
     }
     this.isDragging = false;
   }
 
   @HostListener('window:mousemove', ['$event'])
   handleDrag(event: MouseEvent) {
-    console.log('register mouse move');
     if (this.isDragging) {
-      console.log('dragging');
-      console.log(event);
-      const vwPos = (event.clientX / window.innerWidth) * 100;
+      const vwPos = (event.clientX / window.innerWidth) * 100
       this.setTransformOnPosition(vwPos);
     }
   }
 
   startDrag(event: MouseEvent) {
     console.log('drag start');
-    this.isDragging = true;
-    this.startDragTransform = this.getCurrTransform()
-    console.log(this.startDragTransform)
-    console.log(event);
+    this.player?.destroy();
+    setTimeout(() => {
+      this.player = undefined;
+    }, 20);
+    if (!this.isDragging) {
+      this.isDragging = true;
+      this.startDragTransform = this.getCurrTransform()
+      this.setCurrTransform();
+      console.log(this.startDragTransform)
+      console.log(event);
+    } 
   }
 
   updateRemainingTime() {
     let currPos = this.getCurrVWPos()
     this.timeOffset = (currPos * (this.totalTime / 100))
-    //console.log('updated time:' + this.timeOffset)
+    console.log('updated time:' + this.timeOffset)
   }
   getAnimTiming() {
     this.updateRemainingTime();

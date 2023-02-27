@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="midi-container">
-            <app-slider [bpm]="tempo" [controlEvent]="controlEvent"></app-slider>
+            <app-slider [bpm]="tempo" [controlEvent]="controlEvent" [bars]="bars" (positionChanged)="handleSliderChange($event)"></app-slider>
             <div class="midi-subContainer" *ngFor="let track of tracks">
                 <app-midi-block
                     [track]="track">

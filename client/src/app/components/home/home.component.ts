@@ -89,6 +89,7 @@ export class HomeComponent {
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
   state = 'curr'
+  bars : number = 32;
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
@@ -142,6 +143,10 @@ export class HomeComponent {
 
   onRecord(event: boolean) {
     this.isRecording = true;
+  }
+
+  handleSliderChange(event: any) {
+    console.log('slider change: ' + event);
   }
 
   /**
