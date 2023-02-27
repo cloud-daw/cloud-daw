@@ -7,7 +7,8 @@ enum controlStatus {
   reset = 2,
 }
 
-//! NB: current issue is that slider drag doesn't work after animation runs. need to fix this.
+//! N.B. : small bug with behavior : drag slider -> hit rewind without having played/pause first, doesn't rewind
+//! But it does if they've been hit at any point so not crucial yet
 
 @Component({
   selector: 'app-slider',
@@ -15,10 +16,11 @@ enum controlStatus {
   styleUrls: ['./slider.component.css'],
 })
 export class SliderComponent implements AfterViewInit, OnChanges {
-  @Input() bars: number = 32;
+  @Input() bars: number = 16;
   @Input() bpm: number = 120;
   @Input() controlEvent: number = 2;
-  @Output() positionChanged: EventEmitter<number> = new EventEmitter<number>();
+  @Output() positionChange: EventEmitter<number> = new EventEmitter<number>();
+  @Output() sPos: EventEmitter<number> = new EventEmitter<number>();
   totalTime = ((this.bars * 4) / this.bpm) * 60000
   timeOffset = 0;
   _slider: Element | any;
@@ -35,9 +37,8 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.startDragTransform = this.getCurrTransform();
     this.startingPosition = this.getCurrVWPos();
     this.maxVW = 100 - this.startingPosition;
-    console.log('spos');
-    console.log(this.startingPosition);
-    console.log(this._slider);
+    this.sPos.emit(this.maxVW);
+    this.player = this.buildSliderAnim();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -68,7 +69,6 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   }
 
   startSlider() {
-    console.log('should start')
     if (this.player) {
       this.player.destroy();
       this.player = undefined;
@@ -76,22 +76,15 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.currStatus = controlStatus.play;
     this.player = this.buildSliderAnim()
     this.player.play();
-    // this.player.onDone(() => {
-    //   //this._slider.style.transform = `translate(${this.maxVW}vw, 0%)`
-    //   this.player?.destroy();
-    //   this.player = undefined;
-    // });
   }
 
   pauseSlider() {
-    console.log('should pause')
     this.currStatus = controlStatus.pause;
     this.player?.pause();
     this.setCurrTransform();
   }
 
   resetSlider() {
-    console.log('should reset');
     this.currStatus = controlStatus.reset;
     if (this.player) {
       this.player.destroy();
@@ -127,9 +120,20 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     if (this.isDragging) {
       console.log('drag stop')
       const vwPos = (event.clientX / window.innerWidth) * 100;
-      this.setTransformOnPosition(vwPos);
+      const diff = vwPos - this.startingPosition;
+      if (diff > 0 && diff <= this.maxVW) {
+        this.setTransformOnPosition(vwPos);
+        this.positionChange.emit(vwPos - this.startingPosition);
+      }
+      else if (diff <= 0) {
+        this.setTransformOnPosition(this.startingPosition);
+        this.positionChange.emit(0);
+      }
+      else {
+        this.setTransformOnPosition(this.maxVW);
+        this.positionChange.emit(this.maxVW);
+      };
       this.setCurrTransform()
-      this.positionChanged.emit(vwPos - this.startingPosition);
     }
     this.isDragging = false;
   }
@@ -137,8 +141,11 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   @HostListener('window:mousemove', ['$event'])
   handleDrag(event: MouseEvent) {
     if (this.isDragging) {
-      const vwPos = (event.clientX / window.innerWidth) * 100
-      this.setTransformOnPosition(vwPos);
+      const vwPos = (event.clientX / window.innerWidth) * 100;
+      const diff = vwPos - this.startingPosition;
+      if (diff > 0 && diff < this.maxVW) this.setTransformOnPosition(vwPos);
+      else if (diff <= 0) this.setTransformOnPosition(this.startingPosition);
+      else this.setTransformOnPosition(this.maxVW);
     }
   }
 

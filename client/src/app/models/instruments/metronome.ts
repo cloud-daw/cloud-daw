@@ -4,22 +4,24 @@ export class Metronome {
     public tempo: number;
     public signature: number | number[];
     private clickerSound: Tone.PluckSynth;
-    public currentMeasure: string;
-    public currentBeat: string;
+    public currentMeasure: number;
+    public currentBeat: number;
     public currentSixteenth: string;
     public isPlaying: boolean;
     private isReset: boolean;
     private transport;
+    private counter : number = 0;
     constructor(tempo: number = Tone.Transport.bpm.value, signature: number | number[] = Tone.Transport.timeSignature) {
         this.transport = Tone.Transport;
         this.tempo = tempo;
         this.signature = signature;
         this.clickerSound = new Tone.PluckSynth().toDestination();
-        this.currentMeasure = '1';
-        this.currentBeat = '1';
+        this.currentMeasure = 1;
+        this.currentBeat = 1;
         this.currentSixteenth = '1';
         this.transport.bpm.value = this.tempo;
-        this.transport.timeSignature = this.signature
+        this.transport.timeSignature = this.signature;
+        this.transport.position = '1:0:0';
         this.isPlaying = false;
         this.isReset = true;
     }
@@ -30,6 +32,7 @@ export class Metronome {
     public Start() {
         if (this.isReset) this.ScheduleMetronome();
         this.isPlaying = true;
+        this.isReset = false;
         this.transport.start();
     }
 
@@ -39,13 +42,14 @@ export class Metronome {
     private ScheduleMetronome() {
         //UI
         this.transport.scheduleRepeat((time) => {
-            this.UpdateTime();
-        }, "16n");
+        }, "16n", this.transport.position);
 
         //Clicker
         this.transport.scheduleRepeat((time) => {
+            ++this.counter;
+            this.UpdateTime();
             this.clickerSound.triggerAttackRelease("C6", 0.1, time);
-        }, "4n");
+        }, "4n", this.transport.position);
         
         this.isReset = false; //now scheduled, no need to redo until another reset
     }
@@ -53,16 +57,16 @@ export class Metronome {
     public Pause() {
         this.isPlaying = false;
         this.transport.pause();
+        this.UpdateTime();
         
     }
 
     public Reset() {
         this.transport.stop();
+        this.counter = 0;
         this.isPlaying = false;
-        this.transport.position = '0:0:0';
-        this.currentMeasure = '1';
-        this.currentBeat = '1';
-        this.currentSixteenth = '1';
+        this.transport.position = '1:0:0';
+        this.UpdateTime();
         this.isReset = true;
     }
 
@@ -74,9 +78,10 @@ export class Metronome {
     /**
      * Public method to call when changing slider
      */
-    public OnPositionChange(measure: string, beat: string, sixteenth: string) {
+    public OnPositionChange(measure: number, beat: number, sixteenth: number) {
         this.MovePosition([measure, beat, sixteenth]);
         this.UpdateTime();
+        this.isReset = true;
     }
 
     /**
@@ -91,20 +96,21 @@ export class Metronome {
      * Updates the time values to display on UI
      */
     private UpdateTime() {
-        let curr = this.GetCurrentTime();
-        this.currentMeasure = curr[0];
-        this.currentBeat = this.ShiftInd(curr[1]);
-        this.currentSixteenth = this.RoundSixteenth(curr[2]);
+        // let curr = this.GetCurrentTime();
+        // this.currentMeasure = curr[0];
+        // this.currentBeat = this.ShiftInd(curr[1]);
+        // this.currentSixteenth = this.RoundSixteenth(curr[2]);
+        this.currentMeasure = Math.floor(this.counter / 4) + 1;
+        this.currentBeat = (this.counter % 4) + 1;
     }
 
     /**
      * Helper moving time slider
      * @param position New position as [bar, beat, sixteenth] to move Transport to
      */
-    private MovePosition(position: string[]) {
-        if (this.isPlaying) this.Pause()
+    private MovePosition(position: number[]) {
+        this.transport.pause();
         this.transport.position = position.join(':');
-        if (this.isPlaying) this.Start()
     }
 
     /**

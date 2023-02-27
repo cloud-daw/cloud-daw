@@ -1,0 +1,9 @@
+<div #outer id="outer"class="absolute w-full h-full bg-transparent flex justify-between">
+    <div *ngFor="let m of griddex" class="flex justify-between">
+        <div *ngIf="m % 4 == 0" class="relative text-md text-gray-100 w-px bg-gray-200 h-full grow shrink select-none">
+            <div class="absolute h-6 -top-6 w-full bg-gray-400"></div>
+            <span class="absolute -top-6 left-1">{{m / 4 + 1}}</span>
+        </div>
+        <div *ngIf="m % 4 != 0" class="w-px bg-gray-500 h-full grow shrink"></div>
+    </div>
+</div>

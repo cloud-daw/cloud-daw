@@ -1,4 +1,4 @@
-import { Component, Output, Input, EventEmitter } from '@angular/core';
+import { Component, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { Metronome } from '../../../models/instruments/metronome';
 import * as Tone from 'tone';
 
@@ -7,7 +7,7 @@ import * as Tone from 'tone';
   templateUrl: './main-controls.component.html',
   styleUrls: ['./main-controls.component.css']
 })
-export class MainControlsComponent {
+export class MainControlsComponent implements OnChanges {
   @Output() play: EventEmitter<boolean> = new EventEmitter();
   @Output() record: EventEmitter<boolean> = new EventEmitter();
   @Output() pause: EventEmitter<boolean> = new EventEmitter();
@@ -15,6 +15,10 @@ export class MainControlsComponent {
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
   @Input() metronome: Metronome = new Metronome();
+  constructor() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes)
+  }
 
   clickPlay() {
     this.play.emit(true);

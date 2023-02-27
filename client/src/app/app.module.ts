@@ -18,6 +18,7 @@ import { MidiTrackComponent } from './components/midi-track/midi-track.component
 import { SliderComponent } from './components/controls/slider/slider/slider.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
+import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     AuthComponent,
     SliderComponent,
     SignUpComponent,
-    MidiBlockComponent
+    MidiBlockComponent,
+    SliderGridComponent
   ],
   imports: [
     BrowserModule,

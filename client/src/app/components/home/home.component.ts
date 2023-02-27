@@ -45,7 +45,9 @@ export class HomeComponent {
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
-    this.metronome = new Metronome(120, 4); //120 bpm at 4/4
+    this.tempo = 120;
+    this.signature = 4;
+    this.metronome = new Metronome(this.tempo, this.signature); //120 bpm at 4/4
     this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
@@ -76,6 +78,9 @@ export class HomeComponent {
   masterVolume: number = 0;
   isPlaying: boolean = false;
   tempo: number = 120; //default
+  bars : number = 16;
+  signature: number = 4;
+  maxVW: number = 0;
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
   synth: MidiInstrument;
   controller: MidiControllerComponent;
@@ -88,8 +93,6 @@ export class HomeComponent {
   recordings: Map<number, Recording>;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
-  state = 'curr'
-  bars : number = 32;
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
@@ -147,6 +150,17 @@ export class HomeComponent {
 
   handleSliderChange(event: any) {
     console.log('slider change: ' + event);
+    const interval = this.bars * this.signature;
+    const nearest = Math.round((interval / this.maxVW) * event);
+    console.log('nearest: ' + nearest)
+    const setBar = Math.floor((nearest / 4)) + 1;
+    const setBeat = (nearest % 4);
+    this.metronome.OnPositionChange(setBar, setBeat, 0);
+  }
+
+  catchSliderStartPos(event: any) {
+    this.maxVW = event;
+    console.log('caught: ' + this.maxVW);
   }
 
   /**
