@@ -11,7 +11,7 @@ import * as Tone from 'tone';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
-import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { MidiTrack } from '../../models/tracks/midi-track';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
 
   
@@ -39,7 +39,7 @@ export class HomeComponent {
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
       myDiv.classList.add("active");
-    }    
+    }   
     this.PlayRelease();
   }
 
@@ -49,9 +49,42 @@ export class HomeComponent {
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
       myDiv.classList.remove("active");
-    }    
+    }
     this.PlayRelease();
   }
+
+  @HostListener('mousedown', ['$event'])
+  handleMousedownEvent(event: MouseEvent) {
+    const clickedDivId = (event.target as HTMLElement).id;
+    if (this.keyboardStatus[clickedDivId] != keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toAttack; //schedules attack
+    const myDiv = document.getElementById(clickedDivId);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }   
+    this.PlayRelease();
+  }
+
+  @HostListener('mouseup', ['$event'])
+  handleMouseupEvent(event: MouseEvent) {
+    const clickedDivId = (event.target as HTMLElement).id;
+    if (this.keyboardStatus[clickedDivId] == keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toRelease; //schedules release
+    const myDiv = document.getElementById(clickedDivId);
+    if (myDiv) {
+      myDiv.classList.remove("active");
+    }   
+    this.PlayRelease();
+  }
+
+  // onDivClick(event: MouseEvent) {
+  //   console.log('Div clicked!');
+  //   // this.keyboardStatus[event.key] = keyStatus.toAttack;
+  //   const clickedDivId = (event.target as HTMLElement).id;
+  //   this.keyboardStatus[clickedDivId] = keyStatus.toAttack;
+  //   //const myDiv = document.getElementById(clickedDivId);
+  //   //myDiv.classList.add("active");
+  //   this.PlayRelease();
+  // }
+
   
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
@@ -221,11 +254,10 @@ export class HomeComponent {
     this.firebaseService.logout()
     this._router.navigateByUrl('/login')
     //this.isLogout.emit()
-  }
+  }  
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('home level changes: ', changes);
   }
 
 }
-

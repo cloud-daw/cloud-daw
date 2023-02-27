@@ -43,6 +43,10 @@
     height: calc(var(--width) * 3);
     width: var(--width);
   }
+
+  .key:hover {
+    cursor: pointer;
+  }
   
   .white {
     --width: 60px;

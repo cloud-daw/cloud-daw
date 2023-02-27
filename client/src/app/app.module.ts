@@ -16,6 +16,8 @@ import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
 
 
@@ -29,6 +31,8 @@ import { MidiBlockComponent } from './components/midi-block/midi-block.component
     HomeComponent,
     AuthComponent,
     SignUpComponent,
+    PasswordResetComponent,
+    EmailVerificationComponent,
     MidiBlockComponent
   ],
   imports: [

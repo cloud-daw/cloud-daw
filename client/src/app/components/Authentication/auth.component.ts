@@ -15,7 +15,6 @@ export class AuthComponent {
     async onSignup(){
         // redirect to sign up page
         this._router.navigateByUrl('/sign-up')
-            
     }
     async onSignin(email:string,password:string){
         await this.firebaseService.signin(email,password)
@@ -25,4 +24,8 @@ export class AuthComponent {
                 })
             .catch (error =>{ this.errorShown = true })
             }
+    async forgotPassword(){
+        // redirect to password reset page
+        this._router.navigateByUrl('/pw-reset')
+    }
 }
