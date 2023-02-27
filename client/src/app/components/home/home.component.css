@@ -117,4 +117,11 @@
     border: 1px solid violet;
 }
 
+.tutorialBtn {
+    position: absolute;
+    width: 70px;
+    height: 40px;
+    left: 85%;
+    background-color: white;
+}
 /* 1F1F1F 4E4E4E 5B5B5B*/

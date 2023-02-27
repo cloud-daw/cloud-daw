@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
-import { globalVariables, MessengerService } from 'src/app/globalVariables';
+import { MessengerService } from 'src/app/globalVariables';
 import { Subscription } from 'rxjs';
 /**
  * Int status of keys for keyboard
@@ -84,15 +84,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
     }
 
-    public isTutorial: boolean = false;
+    public isTutorial: boolean = "true" == localStorage.getItem('isTutorial');
     ngOnInit() {
         this.messageSubscription = this.messengerService.message.subscribe(m => {
-            this.isTutorial = m;
+            
         });
     }
 
     ngOnDestroy() {
         this.messageSubscription.unsubscribe();
+    }
+
+    removeTutorials(){
+        this.messengerService.setMessage(false);
+        localStorage.setItem('isTutorial', "false")
+        this.isTutorial = false;
     }
 
     //status$: Observable<any>;
@@ -226,6 +232,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     onLogout() {
         this.firebaseService.logout()
         this._router.navigateByUrl('/login')
+        this.messengerService.setMessage(false);
         //this.isLogout.emit()
     }
 
@@ -234,4 +241,3 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
 }
-

@@ -27,7 +27,7 @@ export class FirebaseService implements OnInit, OnDestroy{
             if(res.user?.emailVerified){
                 this.isLoggedIn = true
                 localStorage.setItem('user', JSON.stringify(res.user))
-                this.setIsTutorial(false);
+                
             } else {
                 this._router.navigate(['/verifyEmail']);
             }
@@ -38,11 +38,14 @@ export class FirebaseService implements OnInit, OnDestroy{
         .then(res=>{
             this.sendRegistrationEmail(res.user)
             this.setIsTutorial(true);
+            localStorage.setItem('isTutorial', "true")
         })
     }
     logout(){
         this.firebaseAuth.signOut()
         localStorage.removeItem('user')
+        localStorage.setItem('isTutorial', "false")
+        
     }
     passwordReset(email:string){
         this.firebaseAuth.sendPasswordResetEmail(email).then(()=>{

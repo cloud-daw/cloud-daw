@@ -13,6 +13,4 @@ export class MessengerService {
     }
 }
 
-export class globalVariables {
-    public static tutorial: boolean = false;
-}
+export const tutorial:boolean = false;
