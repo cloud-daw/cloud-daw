@@ -17,7 +17,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -44,8 +44,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         storageBucket: environment.firebase.storageBucket,
         messagingSenderId: environment.firebase.messagingSenderId,
         appId: environment.firebase.appId,
-    }),
-    NgbModule
+    })
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],
