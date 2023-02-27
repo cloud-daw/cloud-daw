@@ -7,7 +7,9 @@
         (undo)="onUndo($event)" 
         (rewind)="onRewind($event)" 
         (volume)="onMainVolumeChange($event)"
-        [metronome]="metronome">
+        [metronome]="metronome"
+        [bar]="metronome.currentMeasure"
+        [beat]="metronome.currentBeat">
     </app-main-controls>
     <button class="new-track-button" (click)="newTrack()">+ New Track</button>
     <div class="production-container">

@@ -82,6 +82,7 @@ export class Metronome {
         this.MovePosition([measure, beat, sixteenth]);
         this.UpdateTime();
         this.isReset = true;
+        return (this.currentMeasure, this.currentBeat);
     }
 
     /**

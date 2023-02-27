@@ -15,6 +15,8 @@ export class MainControlsComponent implements OnChanges {
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
   @Input() metronome: Metronome = new Metronome();
+  @Input() bar: number = 1;
+  @Input() beat: number = 1;
   constructor() {}
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes)

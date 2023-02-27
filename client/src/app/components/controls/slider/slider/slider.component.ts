@@ -19,9 +19,11 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   @Input() bars: number = 16;
   @Input() bpm: number = 120;
   @Input() controlEvent: number = 2;
+  //@Input() signature : number = 4;
+  signature : number = 4
   @Output() positionChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() sPos: EventEmitter<number> = new EventEmitter<number>();
-  totalTime = ((this.bars * 4) / this.bpm) * 60000
+  totalTime = (((this.bars * this.signature) / this.bpm) * 60000) - (60000 / this.bpm);
   timeOffset = 0;
   _slider: Element | any;
   factory: AnimationFactory | undefined;
@@ -159,15 +161,16 @@ export class SliderComponent implements AfterViewInit, OnChanges {
       this.isDragging = true;
       this.startDragTransform = this.getCurrTransform()
       this.setCurrTransform();
-      console.log(this.startDragTransform)
-      console.log(event);
     } 
   }
 
   updateRemainingTime() {
-    let currPos = this.getCurrVWPos()
-    this.timeOffset = (currPos * (this.totalTime / 100))
-    console.log('updated time:' + this.timeOffset)
+    const currPos = this.getCurrVWPos()
+    const interval = (this.bars * this.signature) - 1;
+    const distance = currPos - this.startingPosition;
+    const distanceRatio = distance / this.maxVW;
+    const intervalOffset = distanceRatio * interval
+    this.timeOffset = intervalOffset * (60000 / this.bpm)
   }
   getAnimTiming() {
     this.updateRemainingTime();
