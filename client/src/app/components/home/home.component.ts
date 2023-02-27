@@ -1,5 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ViewChild, ViewEncapsulation, SimpleChanges, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, HostListener, SimpleChanges} from '@angular/core';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
