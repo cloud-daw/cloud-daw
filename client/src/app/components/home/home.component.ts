@@ -59,43 +59,40 @@ export class HomeComponent {
     //this.PlayRelease();
   }
 
-  @HostListener('mousedown', ['$event'])
-  handleMousedownEvent(event: MouseEvent) {
-    const clickedDivId = (event.target as HTMLElement).id;
-    //if (this.keyboardStatus[clickedDivId] != keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toAttack; //schedules attack
-    const myDiv = document.getElementById(clickedDivId);
-    if (myDiv) {
-      myDiv.classList.add("active");
-    }   
-    //this.PlayRelease();
-  }
 
-  @HostListener('mouseup', ['$event'])
+  currMousekey : string = '';
+
+  @HostListener('window:mouseup', ['$event'])
   handleMouseupEvent(event: MouseEvent) {
-    const clickedDivId = (event.target as HTMLElement).id;
-    //if (this.keyboardStatus[clickedDivId] == keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toRelease; //schedules release
-    const myDiv = document.getElementById(clickedDivId);
-    if (myDiv) {
-      myDiv.classList.remove("active");
+    if (this.currMousekey != '') {
+      const myDiv = document.getElementById(this.currMousekey);
+      if (myDiv) {
+        myDiv.classList.remove("active");
+      }   
+    }
+    this.synthOnKeyup(this.currMousekey);
+    this.currMousekey = '';
+  }
+
+  onKeyMousedown(key: string) {
+    this.currMousekey = key;
+      const myDiv = document.getElementById(this.currMousekey);
+      if (myDiv) {
+        myDiv.classList.add("active");
     }   
-    //this.PlayRelease();
+    this.synthOnKeydown(key);
   }
 
-  // onDivClick(event: MouseEvent) {
-  //   console.log('Div clicked!');
-  //   // this.keyboardStatus[event.key] = keyStatus.toAttack;
-  //   const clickedDivId = (event.target as HTMLElement).id;
-  //   this.keyboardStatus[clickedDivId] = keyStatus.toAttack;
-  //   //const myDiv = document.getElementById(clickedDivId);
-  //   //myDiv.classList.add("active");
-  //   this.PlayRelease();
-  // }
-
-  onKeyMousedown(event: MouseEvent) {
-    console.log('mousedown');
-    console.log(event);
+  onKeyMouseup(key: string) {
+    if (this.currMousekey != '') {
+      const myDiv = document.getElementById(this.currMousekey);
+      if (myDiv) {
+        myDiv.classList.remove("active");
+      }   
+    }
+    this.synthOnKeyup(this.currMousekey);
+    this.currMousekey = '';
   }
-
   
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
