@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, HostListener, ViewEncapsulation, SimpleChanges, Input } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ViewChild, ViewEncapsulation, SimpleChanges, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -12,6 +12,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { SliderComponent } from '../controls/slider/slider/slider.component';
   
 /**
  * Int status of keys for keyboard
@@ -20,11 +21,16 @@ enum keyStatus {
   notPlaying = 0,
   isPlaying = 1,
 }
+enum controlStatus {
+  play = 0,
+  pause = 1,
+  reset = 2,
+}
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css'],
+  styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css']
 })
 export class HomeComponent {
   @HostListener('document:keydown', ['$event'])
@@ -36,6 +42,7 @@ export class HomeComponent {
   handleKeyupEvent(event: KeyboardEvent) {
     this.synthOnKeyup(event.key)
   }
+
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
@@ -84,7 +91,8 @@ export class HomeComponent {
   keyboardStatus: Record<string, number>;
   state = 'curr'
   public trackIdCounter: number = 0;
-  
+  controlEvent = controlStatus.reset;
+
   newTrack() {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
@@ -116,6 +124,7 @@ export class HomeComponent {
       });
       this.metronome.Start();
     }
+    this.controlEvent = controlStatus.play;
   }
 
   onPause(event : boolean) {
@@ -124,10 +133,12 @@ export class HomeComponent {
     this.isRecording = false;
     this.metronome.Pause();
     console.log(this.currentRecording);
+    this.controlEvent = controlStatus.pause;
   }
 
   onRewind(event : boolean) {
     this.metronome.Reset();
+    this.controlEvent = controlStatus.reset;
   }
 
   onRecord(event: boolean) {
