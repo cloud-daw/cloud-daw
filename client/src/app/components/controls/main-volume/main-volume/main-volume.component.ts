@@ -18,5 +18,13 @@ export class MainVolumeComponent {
     volN -= 51;
     this.volumeChange.emit(volN);
   }
+
+  onVolumeChange(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    let volume = parseInt(inputElement.value, 10);
+    let volN: number = Math.round(Number(volume) * 100.0) / 100.0;
+    volN -= 51;
+    this.volumeChange.emit(volN);
+  }
   
 }

@@ -1,29 +1,46 @@
-/* #container {
-    background-color: #656565;
-} */
+@import '~bootstrap-icons/font/bootstrap-icons.css';
 
 .control-bar-container {
     background-color: #656565;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
 }
 
 .control-bar-header {
     display: flex;
     background-color: #4E4E4E;
-    border: 1px solid blue;
 }
+
 .left-header {
+    display: flex;
+    align-items: center;
     width: 15%;
     /* border: 1px solid yellow; */
 }
+
 .right-header {
+    display: flex;
+    align-items: center;
     width: 15%;
     /* border: 1px solid yellow; */
 }
 .center-header {
     width: 70%;
     margin: auto;
-    border: 1px solid green;
+    align-items: center;
     text-align: center;
+}
+
+.record-status {
+    color: rgb(215, 213, 213);
+    position: absolute;
+    top: 0.9em;
+    margin-left: 0.5em;
+}
+
+.volume-slider {
+    margin-left: 1em;
+    margin-top: 0.25em;
 }
 
 .control-button {
@@ -50,4 +67,25 @@
 
 .currentMeasure {
     color: white;
+}
+
+.control-button svg {
+    fill: rgb(215, 213, 213);
+}
+
+.control-button svg:hover {
+    fill: rgb(162, 162, 162);
+}
+
+#record-button svg {
+    fill: rgb(255, 0, 0);
+}
+
+#record-button svg:hover {
+    fill: rgb(201, 0, 0);
+}
+
+#logout-button {
+    color: rgb(215, 213, 213);
+    margin-left: 5em;
 }

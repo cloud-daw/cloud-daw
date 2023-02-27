@@ -14,6 +14,10 @@ export class MainControlsComponent implements OnChanges {
   @Output() rewind: EventEmitter<boolean> = new EventEmitter();
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
+  @Output() logout: EventEmitter<any> = new EventEmitter();
+  
+  @Input() isRecording: boolean = false;
+
   @Input() metronome: Metronome = new Metronome();
   @Input() bar: number = 1;
   @Input() beat: number = 1;
@@ -45,4 +49,16 @@ export class MainControlsComponent implements OnChanges {
   onVolumeChange(event: number) {
     this.volume.emit(event);
   }
+
+  clickLogout() {
+    this.logout.emit();
+  }
+
+  /**
+   * Changes master node volume level.
+   * @param db The new value for master volume
+   */
+  private adjustMasterVolume(db: number) {
+    Tone.Destination.volume.value = db;
+}
 }

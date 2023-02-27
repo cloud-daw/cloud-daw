@@ -1,11 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
+
 .track-container {
     position: relative;
     background-color: #414141;
     color: white;
-    box-shadow: inset 0 0 15px #272626;
-    padding: 0.5em;
-    /* border: 1px solid yellow; */
-    /* height: 5.5em; */
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    padding: 0.25em;
+    border: 1px solid #585858;
+    height: 6em;
 
 }
 
@@ -19,21 +22,52 @@
     background-color: #5b5b5b;
 }
 
-/* .header {
-    padding: 0.5em;
-} */
+.header {
+    padding-left: 0.5em;
+}
 
+.track-title {
+    font-size: small;
+}
 .track-instrument {
+    font-size: large;
     padding: 0.5em;
 }
 
 .volume-slider {
     transform: scale(0.75);
-    margin-top: -1em;
-    margin-left: -2.25em;
+    margin-top: -0.5em;
+    margin-left: -1em;
+    width: 70%;
+    /* margin-left: -2.25em; */
 }
 
 .delete-track {
     float: right;
     padding-right: 0.5em;
 }
+
+.form-range::-moz-range-track {
+    background-color: #d3d2d2;
+}
+  
+.form-range::-moz-range-thumb {
+    background-color: #00ff62;
+}
+
+.form-range::-moz-range-thumb:hover {
+    cursor: pointer;
+}
+
+.form-range::-webkit-slider-runnable-track {
+    background-color: #d3d2d2;
+}
+  
+.form-range::-webkit-slider-thumb {
+    background-color: #00ff62;
+}
+  
+.form-range::-webkit-slider-thumb:hover {
+    cursor: pointer;
+}
+  

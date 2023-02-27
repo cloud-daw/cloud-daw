@@ -148,6 +148,13 @@ export class HomeComponent {
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
+  public isExpanded = false;
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
+    console.log(this.isExpanded);
+  }
+
   newTrack() {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
@@ -198,7 +205,11 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    this.isRecording = true;
+    if (!this.isRecording) this.isRecording = true;
+    else {
+      this.isRecording = false
+      this.onStopRecord();
+    }
   }
 
   handleSliderChange(event: any) {
