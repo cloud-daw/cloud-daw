@@ -27,7 +27,15 @@
 .center-header {
     width: 70%;
     margin: auto;
+    align-items: center;
     text-align: center;
+}
+
+.record-status {
+    color: rgb(215, 213, 213);
+    position: absolute;
+    top: 0.9em;
+    margin-left: 0.5em;
 }
 
 .volume-slider {

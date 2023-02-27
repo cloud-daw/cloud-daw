@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from '../../models/tracks/midi-track';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
-
   
 /**
  * Int status of keys for keyboard
@@ -85,7 +84,6 @@ export class HomeComponent {
   //   this.PlayRelease();
   // }
 
-  
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
@@ -175,7 +173,11 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    this.isRecording = true;
+    if (!this.isRecording) this.isRecording = true;
+    else {
+      this.isRecording = false
+      this.onStopRecord();
+    }
   }
 
   /**
