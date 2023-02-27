@@ -8,6 +8,7 @@
     left: 25%;
     top: 25%;
     user-select: none;
+    opacity: 0%;
   }
   
   .key {
@@ -78,7 +79,8 @@
 }
 
 .midi-container {
-    width: 80%;
+    width: 75vw;
     height: 100%;
     position: relative;
+    box-sizing: border-box;
 }
