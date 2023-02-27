@@ -2,6 +2,7 @@
     <div class="authContent">
         <div class="logoSpace">
             <p>Logo and stuff go here</p>
+            <p *ngIf="isTutorial">this is stuff</p>
         </div>
         <div class="logInContent">
             <div class="signIn">
@@ -9,6 +10,7 @@
                 <input type="text" #email class="inputField" id="signInEmailInput" placeholder="Email" />
                 <input type="password" #password class="inputField" id="signInPasswordInput" placeholder="Password" />
                 <button (click)="onSignin(email.value,password.value)" class="logInBtn">Sign in</button>
+                <p (click)="forgotPassword()" class="forgotPassword">Forgot Password</p>
             </div>
             <div class="errorLog">
                 <div *ngIf="errorShown">
