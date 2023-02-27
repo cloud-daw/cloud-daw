@@ -3,8 +3,9 @@
     background-color: #414141;
     color: white;
     box-shadow: inset 0 0 15px #272626;
+    padding: 0.5em;
     /* border: 1px solid yellow; */
-    height: 5.5em;
+    /* height: 5.5em; */
 
 }
 
@@ -18,12 +19,12 @@
     background-color: #5b5b5b;
 }
 
-.track-title {
-    padding: 0.25em;
-}
+/* .header {
+    padding: 0.5em;
+} */
 
 .track-instrument {
-    padding: 0.25em;
+    padding: 0.5em;
 }
 
 .volume-slider {
@@ -34,5 +35,5 @@
 
 .delete-track {
     float: right;
-    padding-right: 0.25em;
+    padding-right: 0.5em;
 }

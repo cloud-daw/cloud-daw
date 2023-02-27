@@ -17,8 +17,11 @@ import { HomeComponent } from './components/home/home.component';
 import { MidiTrackComponent } from './components/midi-track/midi-track.component';
 import { SliderComponent } from './components/controls/slider/slider/slider.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
+import { PasswordResetComponent } from './components/password-reset/password-reset.component';
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
 import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +35,10 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
     SliderComponent,
     SignUpComponent,
     MidiBlockComponent,
-    SliderGridComponent
+    SliderGridComponent,
+    PasswordResetComponent,
+    EmailVerificationComponent,
+    MidiBlockComponent
   ],
   imports: [
     BrowserModule,

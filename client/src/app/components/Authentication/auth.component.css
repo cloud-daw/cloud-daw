@@ -55,11 +55,20 @@ input:focus {
     background-color: #22C55E;
     margin: auto;
     margin-top: 20px;
-    width: 40%;
+    width: 50%;
     border-radius: 30px 30px 30px 30px;
 }
 .logInBtn:hover {
     background-color: #4ADE80;
+}
+.forgotPassword {
+    display: block;
+    margin: auto;
+    width: 50%;
+    margin-top: 10px;
+    text-align: center;
+    color:dimgray;
+    font-weight: bold;
 }
 .authHeader{
     display: block;
@@ -82,7 +91,6 @@ input:focus {
     height: 10%;
     color: red;
     font-size: small;
-    /* font-weight: bold; */
     padding: 5px;
 }
 

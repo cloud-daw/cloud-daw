@@ -1,4 +1,5 @@
-import { Component, HostListener, SimpleChanges} from '@angular/core';
+import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
+import { MidiBlockComponent } from '../midi-block/midi-block.component';
   
 /**
  * Int status of keys for keyboard
@@ -32,16 +34,69 @@ enum controlStatus {
   styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css']
 })
 export class HomeComponent {
+  @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
+
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     this.synthOnKeydown(event.key);
+    //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+    const myDiv = document.getElementById(event.key);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }   
+    //this.PlayRelease();
   }
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    this.synthOnKeyup(event.key)
+    this.synthOnKeyup(event.key);
+
+    //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
+    const myDiv = document.getElementById(event.key);
+    if (myDiv) {
+      myDiv.classList.remove("active");
+    }
+    //this.PlayRelease();
   }
 
+  @HostListener('mousedown', ['$event'])
+  handleMousedownEvent(event: MouseEvent) {
+    const clickedDivId = (event.target as HTMLElement).id;
+    //if (this.keyboardStatus[clickedDivId] != keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toAttack; //schedules attack
+    const myDiv = document.getElementById(clickedDivId);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }   
+    //this.PlayRelease();
+  }
+
+  @HostListener('mouseup', ['$event'])
+  handleMouseupEvent(event: MouseEvent) {
+    const clickedDivId = (event.target as HTMLElement).id;
+    //if (this.keyboardStatus[clickedDivId] == keyStatus.isPlaying) this.keyboardStatus[clickedDivId] = keyStatus.toRelease; //schedules release
+    const myDiv = document.getElementById(clickedDivId);
+    if (myDiv) {
+      myDiv.classList.remove("active");
+    }   
+    //this.PlayRelease();
+  }
+
+  // onDivClick(event: MouseEvent) {
+  //   console.log('Div clicked!');
+  //   // this.keyboardStatus[event.key] = keyStatus.toAttack;
+  //   const clickedDivId = (event.target as HTMLElement).id;
+  //   this.keyboardStatus[clickedDivId] = keyStatus.toAttack;
+  //   //const myDiv = document.getElementById(clickedDivId);
+  //   //myDiv.classList.add("active");
+  //   this.PlayRelease();
+  // }
+
+  onKeyMousedown(event: MouseEvent) {
+    console.log('mousedown');
+    console.log(event);
+  }
+
+  
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument("test");
     this.controller = new MidiControllerComponent(this.synth);
@@ -101,6 +156,7 @@ export class HomeComponent {
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
     this.tracks.add(newTrack);
     this.selectedTrack = newTrack;
+    this.updateRecording(this.selectedTrack.id);
   }
 
   synthOnKeydown(key: string) {
@@ -173,6 +229,11 @@ export class HomeComponent {
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.updateRecording(this.selectedTrack.id);
+    this.blockRefs?.forEach((block) => {
+      if (block.track.id == this.selectedTrack.id) {
+        block.updateVisual();
+      }
+    });
     console.log(this.recordings);
   }
 
@@ -242,11 +303,10 @@ export class HomeComponent {
     this.firebaseService.logout();
     this._router.navigateByUrl('/login');
     //this.isLogout.emit()
-  }
+  }  
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('home level changes: ', changes);
   }
 
 }
-
