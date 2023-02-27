@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
-import { tutorial } from 'src/app/globalVariables';
 
 @Component({
     selector: 'auth',
@@ -11,7 +10,6 @@ import { tutorial } from 'src/app/globalVariables';
 
 export class AuthComponent {
     title = 'Log in';
-    isTutorial = tutorial;
     constructor(public firebaseService : FirebaseService, public _router: Router){}
     errorShown = false;
     async onSignup(){
