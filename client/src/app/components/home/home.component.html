@@ -1,60 +1,72 @@
 <div class="body">
     <div class='header'>
         <button class="absolute right-0 w-32 h-10 rounded-bl-md bg-gray-200" (click)="onLogout()">LOGOUT</button>
-        <app-main-controls 
-            (play)="onPlay($event)" 
-            (record)="onRecord($event)" 
-            (pause)="onPause($event)"
-            (undo)="onUndo($event)" 
-            (rewind)="onRewind($event)" 
-            (volume)="onMainVolumeChange($event)"
-            [metronome]="metronome">
-        </app-main-controls>
+        <div class="controlsWTutorial">
+            <app-main-controls (play)="onPlay($event)" (record)="onRecord($event)" (pause)="onPause($event)"
+                (undo)="onUndo($event)" (rewind)="onRewind($event)" (volume)="onMainVolumeChange($event)"
+                [metronome]="metronome">
+            </app-main-controls>
+            <div *ngIf="isTutorial" class="tutorial" id="controlsTutorial">
+                <p> Rewind, Play, Pause and Record </p>
+            </div>
+            <div *ngIf="isTutorial" class="tutorial" id="metronomeTutorial">
+                <p> You can see your metronome values here </p>
+            </div>
+        </div>
     </div>
-    <button class="new-track-button" (click)="newTrack()">+ New Track</button>
+    <!-- <div class="" -->
+    <div class="newTrackWTutorial">
+        <button class="new-track-button" (click)="newTrack()">+ New Track</button>
+        <div *ngIf="isTutorial" class="tutorial" id="newTrackTutorial">
+            <p>Click here to create a new track</p>
+        </div>
+    </div>
     <div class="production-container">
         <div class='tracks-container'>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <!-- <li *ngFor="let item of myMap | keyvalue">
                     Key: {{item.key}}, value: {{item.value}}
                   </li> -->
-                <app-midi-track 
-                    [track]="track"
-                    [tracks]="tracks"
-                    [(selectedTrack)]="selectedTrack" 
-                    (selectedTrackChange)="onSelectedTrackChange($event)"
-                    [isRecording]="isRecording">
+                <app-midi-track [track]="track" [tracks]="tracks" [(selectedTrack)]="selectedTrack"
+                    (selectedTrackChange)="onSelectedTrackChange($event)" [isRecording]="isRecording">
                 </app-midi-track>
+            </div>
+            <div *ngIf="isTutorial" class="tutorial" id="tracksTutorial">
+                <p>You can find all of your tracks here. You can control their volume using the slider</p>
             </div>
         </div>
         <div class="midi-container">
             <div class="midi-subContainer" *ngFor="let track of tracks">
-                <app-midi-block
-                    #blockRef
-                    [track]="track">
+                <app-midi-block #blockRef [track]="track">
                 </app-midi-block>
             </div>
+
         </div>
     </div>
 </div>
 
-<div class="piano">
-    <div id="a" class="key white" style = "display:flex;justify-content:center;align-items:center;" >A</div>
-    <div id="w" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
-    <div id="s" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
-    <div id="e" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">E</div>
-    <div id="d" class="key white" style = "display:flex;justify-content:center;align-items:center;">D</div>
-    <div id="f" class="key white" style = "display:flex;justify-content:center;align-items:center;">F</div>
-    <div id="t" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">T</div>
-    <div id="g" class="key white" style = "display:flex;justify-content:center;align-items:center;">G</div>
-    <div id="y" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">Y</div>
-    <div id="h" class="key white" style = "display:flex;justify-content:center;align-items:center;">H</div>
-    <div id="u" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">U</div>
-    <div id="j" class="key white" style = "display:flex;justify-content:center;align-items:center;">J</div>
-    <div id="k" class="key white" style = "display:flex;justify-content:center;align-items:center;">K</div>
-    <div id="o" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">O</div>
-    <div id="l" class="key white" style = "display:flex;justify-content:center;align-items:center;">L</div>
-    <div id="p" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
-    <div id=";" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
-  </div>
-    
+<div class="pianoWTutorial">
+    <div class="piano">
+        <div id="a" class="key white" style="display:flex;justify-content:center;align-items:center;">A</div>
+        <div id="w" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">W</div>
+        <div id="s" class="key white" style="display:flex;justify-content:center;align-items:center;">S</div>
+        <div id="e" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">E</div>
+        <div id="d" class="key white" style="display:flex;justify-content:center;align-items:center;">D</div>
+        <div id="f" class="key white" style="display:flex;justify-content:center;align-items:center;">F</div>
+        <div id="t" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">T</div>
+        <div id="g" class="key white" style="display:flex;justify-content:center;align-items:center;">G</div>
+        <div id="y" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">Y</div>
+        <div id="h" class="key white" style="display:flex;justify-content:center;align-items:center;">H</div>
+        <div id="u" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">U</div>
+        <div id="j" class="key white" style="display:flex;justify-content:center;align-items:center;">J</div>
+        <div id="k" class="key white" style="display:flex;justify-content:center;align-items:center;">K</div>
+        <div id="o" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">O</div>
+        <div id="l" class="key white" style="display:flex;justify-content:center;align-items:center;">L</div>
+        <div id="p" class="key black" style="display:flex;justify-content:center;align-items:center;color:white">P</div>
+        <div id=";" class="key white" style="display:flex;justify-content:center;align-items:center;">;</div>
+    </div>
+    <div *ngIf="isTutorial" class="tutorial" id="pianoTutorial">
+        <p>The letters on the keys of the piano correspond to a key on your keyboard. Pressing these keys on your
+            keyboard plays the corresponding keys on the piano.</p>
+    </div>
+</div>

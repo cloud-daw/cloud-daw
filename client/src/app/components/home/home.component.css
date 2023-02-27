@@ -8,6 +8,41 @@
     left: 25%;
     top: 25%;
   }
+  .tutorial {
+    color: black;
+    background-color: white;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 3px;
+    display: flex;
+    position: absolute;
+  }
+  #pianoTutorial {
+    left: 40%;
+    top: 60%;
+    width: 30%;
+  }
+  #controlsTutorial {
+    top: 1%;
+    left: 60%;
+    position: absolute;
+    float: right;
+  }
+  #metronomeTutorial {
+    top: 7%;
+    left: 60%;
+    position: absolute;
+    float: right;
+  }
+  #newTrackTutorial {
+    top: 11%;
+    left: 8%;
+  }
+  #tracksTutorial {
+    top:50%;
+    left: 2%;
+    width: 15%;
+  }
   
   .key {
     height: calc(var(--width) * 4);
@@ -81,3 +116,5 @@
     height: 100%;
     border: 1px solid violet;
 }
+
+/* 1F1F1F 4E4E4E 5B5B5B*/

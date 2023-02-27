@@ -1,14 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/';
+import { MessengerService } from '../globalVariables';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FirebaseService {
-
+export class FirebaseService implements OnInit, OnDestroy{
     isLoggedIn = false
-    constructor(public firebaseAuth : AngularFireAuth, public _router: Router) { }
+    constructor(public firebaseAuth : AngularFireAuth, public _router: Router, 
+        public messengerService: MessengerService) { }
+    private messageSubscription: any;
+
+    ngOnInit(): void {
+        this.messageSubscription = this.messengerService.message.subscribe((m: any) => {});
+    }
+    ngOnDestroy(): void {
+        this.messageSubscription.unsubscribe();
+    }
+    
     async signin(email: string, password: string){
         await this.firebaseAuth.signInWithEmailAndPassword(email, password)
         .then(res=>{
@@ -16,6 +27,7 @@ export class FirebaseService {
             if(res.user?.emailVerified){
                 this.isLoggedIn = true
                 localStorage.setItem('user', JSON.stringify(res.user))
+                this.setIsTutorial(false);
             } else {
                 this._router.navigate(['/verifyEmail']);
             }
@@ -25,6 +37,7 @@ export class FirebaseService {
         await this.firebaseAuth.createUserWithEmailAndPassword(email, password)
         .then(res=>{
             this.sendRegistrationEmail(res.user)
+            this.setIsTutorial(true);
         })
     }
     logout(){
@@ -41,5 +54,10 @@ export class FirebaseService {
         user.sendEmailVerification().then((res: any)=>{
             this._router.navigate(['/verifyEmail'])
         })
+    }
+    setIsTutorial(value: boolean) {
+        // All components that are subscribed to the
+        // messenger service receive the update
+        this.messengerService.setMessage(value);
     }
 }
