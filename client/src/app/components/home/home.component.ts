@@ -101,6 +101,13 @@ export class HomeComponent {
 
   public trackIdCounter: number = 0;
 
+  public isExpanded = false;
+
+  toggleExpand() {
+    this.isExpanded = !this.isExpanded;
+    console.log(this.isExpanded);
+  }
+
   newTrack() {
     this.trackIdCounter++;
     let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);

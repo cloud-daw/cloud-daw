@@ -3,21 +3,49 @@
 *, *::before, *::after {
     box-sizing: border-box;
   }
-  
-  .piano {
-    display: flex;
+
+  .piano-controls .expand-piano {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
     position: absolute;
-    left: 25%;
-    top: 25%;
+    padding-inline: 1em;
+    top: 3em;
+    background-color: rgb(62, 62, 62);
+    border-radius: 5px;
+    color: white;
+  }
+
+  .piano-controls .expand-piano:hover {
+    background-color: rgb(84, 84, 84);
+  }
+  
+  .piano-container {
+    border-bottom: 1px solid rgb(48, 48, 48);
+    background-color: rgb(48, 48, 48);
+    width: 100%;
+  }
+
+  .expanded .piano {
+    visibility: visible;
+    height: auto;
+  }
+
+  .piano {
+    width: 40%;
+    visibility: hidden;
+    height: 0em;
+    display: flex;
+    position: relative;
+    margin: auto;
   }
   
   .key {
-    height: calc(var(--width) * 4);
+    height: calc(var(--width) * 3);
     width: var(--width);
   }
   
   .white {
-    --width: 100px;
+    --width: 60px;
     background-color: white;
     border: 1px solid #333;
   }
@@ -31,7 +59,7 @@
   }
   
   .black {
-    --width: 60px;
+    --width: 30px;
     background-color: black;
     margin-left: calc(var(--width) / -2);
     margin-right: calc(var(--width) / -2);
@@ -46,10 +74,9 @@
     position: relative;
     background-color: #1F1F1F;
     width: 100%;
-    height: 100%;
+    height: auto;
     font-family: 'Inter', sans-serif;
 }
-
 
 .new-track-button {
     text-align: center;
@@ -79,7 +106,7 @@
 .tracks-container {
     background-color: #3f3f3f;
     width: 20%;
-    height: 100%;
+    height: auto;
 }
 
 .tracks-subContainer {
@@ -91,10 +118,9 @@
     width: 80%;
     height: 100em;
     margin-top: 2em;
-    overflow-x: scroll;
     /* border: 1px solid pink; */
 }
 
 .midi-subContainer {
-  width: max-content;
+  width: 100%;
 }
