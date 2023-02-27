@@ -1,6 +1,7 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import { MakeKeyDict } from '../../lib/keydict';
+import * as Tone from 'tone'
 
 export class Recording {
     public data: Note[] = [];
@@ -15,8 +16,9 @@ export class Recording {
      * @param key key value e.g. 'C4'
      * @param attack attack time in bars:beats:sixteenths
      */
-    public RecordNote(key: string, attack: string) {
-        this.data.push(new Note(key, attack, ""));
+    public RecordNote(key: string) {
+        let attack = Tone.Transport.position;
+        this.data.push(new Note(key, attack));
     }
 
     /**
@@ -24,9 +26,13 @@ export class Recording {
      * @param key key to add release to e.g. 'C4'
      * @param release release time in bars:beats:sixteenths
      */
-    public AddRelease(key: string, release: string) {
-        for (let i = 0; i < this.data.length; i++) {
-            if (this.data[i].value == key && this.data[i].release == "") this.data[i].release = release;
+    public AddRelease(key: string) {
+        let release = Tone.Transport.position
+        for (let i = this.data.length - 1; i >= 0; i--) {
+            if (this.data[i].value == key && this.data[i].release == "") {
+                this.data[i].release = release;
+                break;
+            }
         }
     }
 

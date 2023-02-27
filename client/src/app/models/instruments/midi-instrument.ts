@@ -16,9 +16,9 @@ export class MidiInstrument {
     private release: number;
     constructor(name: string) {
         this.name = name;
-        this.sound = "something.mp3" //to load for later
-        this.instrument = new Tone.PolySynth(Tone.AMSynth).toDestination();
-        this.keyDict = MakeKeyDict(4);
+        this.sound = "AM PolySynth" //to load for later
+        this.instrument = new Tone.PolySynth().toDestination();
+        this.keyDict = MakeKeyDict(3);
         this.isPlaying = false;
         this.attack = 0;
         this.release = 0.1;
@@ -31,8 +31,8 @@ export class MidiInstrument {
     Play(noteKey : string) : string {
        //code to emit sound
         let key = this.keyDict[noteKey];
-        //this.currentNotes.push(key);
-        this.instrument.triggerAttack(key, Tone.now());
+        let now = Tone.now()
+        this.instrument.triggerAttack(key, now);
         this.isPlaying = true;
         return key;
     }
@@ -43,8 +43,6 @@ export class MidiInstrument {
     Release(releasedKey : string) {
         let key = this.keyDict[releasedKey];
         this.instrument.triggerRelease(key, `+${this.release}`);
-        //let idx = this.currentNotes.indexOf(key);
-        //this.currentNotes.splice(idx, 1);
         return key;
     }
 
@@ -52,7 +50,7 @@ export class MidiInstrument {
         this.instrument.volume.value = db;
     }
 
-    NotePlayback(value: string, duration: string) {
+    NotePlayback(value: string, duration: Tone.Unit.Time) {
         this.instrument.triggerAttackRelease(value, duration);
     }
 

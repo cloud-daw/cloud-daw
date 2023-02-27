@@ -1,6 +1,5 @@
 <div class="body">
     <div class='header'>
-        <button class="absolute right-0 w-32 h-10 rounded-bl-md bg-gray-200" (click)="onLogout()">LOGOUT</button>
         <app-main-controls 
             (play)="onPlay($event)" 
             (record)="onRecord($event)" 
@@ -8,12 +7,40 @@
             (undo)="onUndo($event)" 
             (rewind)="onRewind($event)" 
             (volume)="onMainVolumeChange($event)"
+            (logout)="onLogout()"
+            [isRecording]="isRecording"
             [metronome]="metronome">
         </app-main-controls>
     </div>
-    <button class="new-track-button" (click)="newTrack()">+ New Track</button>
+    <div class="piano-container" [ngClass]="{'expanded': isExpanded}">
+        <div class="piano-controls">
+            <button type="button" class="expand-piano" (click)="toggleExpand()">Show/Hide Piano</button>
+        </div>
+        <div class="piano">
+            <div id="a" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
+            <div id="w" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
+            <div id="s" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
+            <div id="e" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">E</div>
+            <div id="d" class="key white" style = "display:flex;justify-content:center;align-items:center;">D</div>
+            <div id="f" class="key white" style = "display:flex;justify-content:center;align-items:center;">F</div>
+            <div id="t" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">T</div>
+            <div id="g" class="key white" style = "display:flex;justify-content:center;align-items:center;">G</div>
+            <div id="y" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">Y</div>
+            <div id="h" class="key white" style = "display:flex;justify-content:center;align-items:center;">H</div>
+            <div id="u" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">U</div>
+            <div id="j" class="key white" style = "display:flex;justify-content:center;align-items:center;">J</div>
+            <div id="k" class="key white" style = "display:flex;justify-content:center;align-items:center;">K</div>
+            <div id="o" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">O</div>
+            <div id="l" class="key white" style = "display:flex;justify-content:center;align-items:center;">L</div>
+            <div id="p" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
+            <div id=";" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
+          </div>
+    </div>
     <div class="production-container">
         <div class='tracks-container'>
+            <button class="new-track-button" (click)="newTrack()">
+                Add Track
+            </button>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <!-- <li *ngFor="let item of myMap | keyvalue">
                     Key: {{item.key}}, value: {{item.value}}
@@ -28,34 +55,16 @@
             </div>
         </div>
         <div class="midi-container">
-            <div class="midi-subContainer" *ngFor="let track of tracks">
-                <app-midi-block
-                    #blockRef
-                    [track]="track">
-                </app-midi-block>
+            <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
+            <app-slider [bpm]="tempo" [controlEvent]="controlEvent" [bars]="bars" (positionChange)="handleSliderChange($event)" (sPos)="catchSliderStartPos($event)"></app-slider>
+            <div class="midi-subContainer">
+                <div *ngFor="let track of tracks">
+                    <app-midi-block
+                        #blockRef
+                        [track]="track">
+                    </app-midi-block>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="piano">
-    <div id="a" class="key white" style = "display:flex;justify-content:center;align-items:center;" >A</div>
-    <div id="w" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
-    <div id="s" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
-    <div id="e" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">E</div>
-    <div id="d" class="key white" style = "display:flex;justify-content:center;align-items:center;">D</div>
-    <div id="f" class="key white" style = "display:flex;justify-content:center;align-items:center;">F</div>
-    <div id="t" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">T</div>
-    <div id="g" class="key white" style = "display:flex;justify-content:center;align-items:center;">G</div>
-    <div id="y" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">Y</div>
-    <div id="h" class="key white" style = "display:flex;justify-content:center;align-items:center;">H</div>
-    <div id="u" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">U</div>
-    <div id="j" class="key white" style = "display:flex;justify-content:center;align-items:center;">J</div>
-    <div id="k" class="key white" style = "display:flex;justify-content:center;align-items:center;">K</div>
-    <div id="o" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">O</div>
-    <div id="l" class="key white" style = "display:flex;justify-content:center;align-items:center;">L</div>
-    <div id="p" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
-    <div id=";" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
-  </div>
-
-  

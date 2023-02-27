@@ -1,7 +1,7 @@
 <div class="w-full h-8">
     <ng-container class="h-full w-full">
-        <mat-slider min="0" max="57" step="0.1" showTickMarks discrete [displayWith]="formatLabel">
-            <input #volumeLevel matSliderThumb value="51" (input) = "changeVolume(volumeLevel.value)" >
-        </mat-slider>
+        <input type="range" class="form-range" id="volume-slider" min="0" max="100" value="50" 
+            (input)="onVolumeChange($event)"
+        >
     </ng-container>
 </div>

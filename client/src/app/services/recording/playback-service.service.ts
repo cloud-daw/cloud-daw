@@ -8,11 +8,14 @@ import * as Tone from 'tone';
  * @param synth Instrument to play
  */
 export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
-    data.forEach((note) => {
-        Tone.Transport.schedule((time) => {
-            synth.NotePlayback(note.value, MakeDuration(note.attack, note.release));
-        }, note.attack);
-    })
+    let len = data.length;
+    let dur : Tone.Unit.Time;
+    for (let i = 0; i < len; ++i) {
+        dur = makeDuration(data[i].attack, data[i].release)
+        Tone.Transport.scheduleOnce((time) => {
+            synth.NotePlayback(data[i].value, dur);
+        }, data[i].attack);
+    }
 }
 
 /**
@@ -21,12 +24,8 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
  * @param release release of note from recording array
  * @returns a bars:beats:sixteenths length of the note
  */
-function MakeDuration(attack: string, release: string) {
-    let attackMBS = attack.split(':');
-    let releaseMBS = release.split(':');
-    let durationMBS = [0, 0, 0];
-    for (let i = 0; i < 3; i++) {
-        durationMBS[i] = parseInt(releaseMBS[i]) - parseInt(attackMBS[i]);
-    }
-    return durationMBS.join(':');
+function makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
+    let a = Tone.Time(attack).toSeconds();
+    let r = Tone.Time(release).toSeconds();
+    return r - a;
 }
