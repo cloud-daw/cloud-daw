@@ -7,7 +7,7 @@
   .piano-controls .expand-piano {
     font-family: 'Inter', sans-serif;
     font-weight: 300;
-    position: absolute;
+    user-select: none;
     padding-inline: 1em;
     top: 3em;
     background-color: rgb(62, 62, 62);

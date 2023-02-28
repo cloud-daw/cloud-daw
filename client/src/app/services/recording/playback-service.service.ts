@@ -12,7 +12,7 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     let dur : Tone.Unit.Time;
     for (let i = 0; i < len; ++i) {
         dur = makeDuration(data[i].attack, data[i].release)
-        Tone.Transport.scheduleOnce((time) => {
+        Tone.Transport.schedule((time) => {
             synth.NotePlayback(data[i].value, dur);
         }, data[i].attack);
     }
