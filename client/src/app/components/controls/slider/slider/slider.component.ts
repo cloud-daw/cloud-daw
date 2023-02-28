@@ -19,6 +19,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   @Input() bars: number = 16;
   @Input() bpm: number = 120;
   @Input() controlEvent: number = 2;
+  @Input() isRecording: boolean = false;
   //@Input() signature : number = 4;
   signature : number = 4
   @Output() positionChange: EventEmitter<number> = new EventEmitter<number>();
@@ -30,9 +31,18 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   currStatus = this.controlEvent;
   isDragging = false;
   startDragTransform: string = "";
-  startingPosition: number = 0;
+  public startingPosition: number = 0;
   maxVW: number = 100;
   private player: AnimationPlayer | undefined;
+  public recordingStartPos = {
+    pos: 0,
+    left: 0
+  };
+  public recordingEndPos = {
+    pos: 0,
+    left: 0
+  };
+  public sliderWidth = 0;
   constructor(private _animBuilder: AnimationBuilder, private _renderer: Renderer2) { }
   ngAfterViewInit() {
     this._slider = this._renderer.selectRootElement('#slider');
@@ -45,6 +55,19 @@ export class SliderComponent implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.handleSlider(this.controlEvent)
+    if (changes['isRecording']) {
+      if (this.isRecording) {
+        this.recordingStartPos.pos = this.getCurrVWPos();
+        this.recordingStartPos.left = this._slider.getBoundingClientRect().left
+        console.log('started recording at: ', this.recordingStartPos);
+      }
+      else {
+        this.recordingEndPos.pos = this.getCurrVWPos();
+        this.recordingEndPos.left = this._slider.getBoundingClientRect().left + this._slider.getBoundingClientRect().width;
+        this.sliderWidth = this._slider.getBoundingClientRect().width;
+        console.log('ended recording at: ', this.recordingEndPos);
+      }
+    }
   }
   
   buildSliderAnim() {

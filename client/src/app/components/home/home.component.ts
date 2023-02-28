@@ -205,7 +205,10 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    if (!this.isRecording) this.isRecording = true;
+    if (!this.isRecording) {
+      this.isRecording = true;
+      this.onPlay(true);
+    }
     else {
       this.isRecording = false
       this.onStopRecord();
