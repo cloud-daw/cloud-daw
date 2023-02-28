@@ -1,4 +1,3 @@
-import { FormGroup } from '@angular/forms';
 import * as Tone from 'tone';
 import { MakeKeyDict } from '../../lib/keydict';
 
@@ -17,9 +16,9 @@ export class MidiInstrument {
     private release: number;
     constructor(name: string) {
         this.name = name;
-        this.sound = "AM PolySynth" //to load for later
+        this.sound = "Synthesizer" //to load for later
         this.instrument = new Tone.PolySynth().toDestination();
-        this.keyDict = MakeKeyDict(3);
+        this.keyDict = MakeKeyDict(this.currentOctave);
         this.isPlaying = false;
         this.attack = 0;
         this.release = 0.1;
@@ -70,6 +69,16 @@ export class MidiInstrument {
     public changeOctave(newOctave: number) {
         this.currentOctave = newOctave;
         this.keyDict = MakeKeyDict(newOctave);
+    }
+    
+    public increaseOctave() {
+        this.currentOctave = this.currentOctave + 1;
+        this.keyDict = MakeKeyDict(this.currentOctave);
+    }
+
+    public decreaseOctave() {
+        this.currentOctave = this.currentOctave - 1;
+        this.keyDict = MakeKeyDict(this.currentOctave);
     }
 
     public MakeSynthCopy() : Tone.PolySynth {
