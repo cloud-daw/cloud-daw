@@ -8,11 +8,12 @@ export class MidiInstrument {
     public soundpack?: AudioBuffer; //i think this is the right type
     public sound: string;
     public instrument: Tone.PolySynth;
+    public voices: Tone.PolySynth[];
     public isPlaying: boolean;
     public currentOctave: number = 4;
     private keyDict: Record<string, string>;
     private attack: number; //unused for now
-    private release: number;
+    public release: number;
     constructor(name: string) {
         this.name = name;
         this.sound = "Synthesizer" //to load for later
@@ -21,6 +22,7 @@ export class MidiInstrument {
         this.isPlaying = false;
         this.attack = 0;
         this.release = 0.1;
+        this.voices = [this.instrument];
     }
 
     /**
@@ -53,6 +55,22 @@ export class MidiInstrument {
         this.instrument.triggerAttackRelease(value, duration);
     }
 
+    public setVoices(overlaps: number) {
+        this.resetVoices();
+        for (let i = 1; i < overlaps; i++) {
+            this.voices.push(this.MakeSynthCopy());
+        }
+    }
+
+    private resetVoices() {
+        this.voices = [this.instrument];
+    }
+
+    public changeOctave(newOctave: number) {
+        this.currentOctave = newOctave;
+        this.keyDict = MakeKeyDict(newOctave);
+    }
+
     public increaseOctave() {
         this.currentOctave = this.currentOctave + 1;
         this.keyDict = MakeKeyDict(this.currentOctave);
@@ -61,6 +79,10 @@ export class MidiInstrument {
     public decreaseOctave() {
         this.currentOctave = this.currentOctave - 1;
         this.keyDict = MakeKeyDict(this.currentOctave);
+    }
+
+    public MakeSynthCopy() : Tone.PolySynth {
+        return new Tone.PolySynth().toDestination();
     }
 
     // Mute(status: boolean) {

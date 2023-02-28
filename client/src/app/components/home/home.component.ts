@@ -181,6 +181,7 @@ export class HomeComponent {
   onPlay(event: boolean) {
     if (!this.isPlaying) {
       this.isPlaying = true;
+      this.metronome.ClearTransport();
       Array.from(this.recordings.values()).forEach((r: Recording) => {
         SchedulePlayback(r.data, r.synth)
       });
@@ -203,10 +204,8 @@ export class HomeComponent {
   }
 
   onRecord(event: boolean) {
-    if (!this.isRecording) {
-      this.isRecording = true;
-      this.onPlay(true);
-    }
+    if (!this.isRecording) this.isRecording = true;
+    if (!this.isPlaying) this.onPlay(true);
     else {
       this.isRecording = false
       this.onStopRecord();

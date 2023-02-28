@@ -196,7 +196,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     const distance = currPos - this.startingPosition;
     const distanceRatio = distance / this.maxVW;
     const intervalOffset = distanceRatio * interval
-    this.timeOffset = intervalOffset * (60000 / this.bpm) - this.bars
+    this.timeOffset = intervalOffset * (60000 / this.bpm)
   }
   getAnimTiming() {
     this.updateRemainingTime();

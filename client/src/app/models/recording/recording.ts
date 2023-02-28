@@ -27,14 +27,27 @@ export class Recording {
      * @param release release time in bars:beats:sixteenths
      */
     public AddRelease(key: string) {
-        let release = Tone.Transport.position
+        let release = Tone.Transport.position;
         for (let i = this.data.length - 1; i >= 0; i--) {
             if (this.data[i].value == key && this.data[i].release == "") {
                 this.data[i].release = release;
+                this.data[i].duration = this.makeDuration(this.data[i].attack, this.data[i].release)
                 break;
             }
         }
     }
+
+        /**
+         * Calculates time held of note
+         * @param attack attack of note from recording array
+         * @param release release of note from recording array
+         * @returns a bars:beats:sixteenths length of the note
+         */
+        private makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
+            let a = Tone.Time(attack).toSeconds();
+            let r = Tone.Time(release).toSeconds();
+            return r - a;
+        }
 
     /**
      * Deletes note from an array
@@ -66,4 +79,5 @@ export class Recording {
            this.data[index] = newNote;
         }
     }
+
 }

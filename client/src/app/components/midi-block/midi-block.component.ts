@@ -44,17 +44,10 @@ export class MidiBlockComponent {
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
     let max = 0;
-    let min = 100;
-    let currAttack, currRelease;
-    for (let i = 0; i < recording.length; i++) {
-      currAttack = parseInt(recording[i].attack.toString().split(':')[0]);
-      currRelease = parseInt(recording[i].release.toString().split(':')[0]);
-      if (currAttack < min) {
-        min = currAttack;
-      }
-      if (currRelease > max) {
-        max = currRelease;
-      }
+    let min = 1000;
+    if (recording.length > 0) {
+      min = parseInt(recording[0].attack.toString().split(':')[0]);
+      max = parseInt(recording[recording.length-1].release.toString().split(':')[0]);
     }
     max++;
     console.log('min, max', min, max, this.track.midi.data);
@@ -62,16 +55,18 @@ export class MidiBlockComponent {
   }
 
   convertMeasureToPosition(m: number) {
+    console.log(this.vw);
     const interval = this.vw / this.bars;
+    console.log('converting m to p', interval)
     return ((m - 1) * interval);
   }
 
   updateVisual() {
     this.isVisible = 'visible';
     const minmax = this.extractMinMax();
-    this.leftOffset = this.convertMeasureToPosition(minmax[0]) + 1;
+    this.leftOffset = this.convertMeasureToPosition(minmax[0]);
     this.leftOffsetToString = `${this.leftOffset}vw`;
-    let endLeft = this.convertMeasureToPosition(minmax[1])/1.3;
+    let endLeft = this.convertMeasureToPosition(minmax[1]);
     this.blockWidth = `${endLeft - this.leftOffset}vw`;
     console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
