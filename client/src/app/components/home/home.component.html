@@ -60,12 +60,23 @@
         </div>
         <div class="midi-container">
             <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
-            <app-slider [bpm]="tempo" [controlEvent]="controlEvent" [bars]="bars" (positionChange)="handleSliderChange($event)" (sPos)="catchSliderStartPos($event)"></app-slider>
+            <app-slider
+                #sliderRef
+                [bpm]="tempo" 
+                [controlEvent]="controlEvent" 
+                [bars]="bars" 
+                [isRecording]="isRecording"
+                (positionChange)="handleSliderChange($event)" 
+                (sPos)="catchSliderStartPos($event)"
+            >
+            </app-slider>
             <div class="midi-subContainer">
                 <div *ngFor="let track of tracks">
                     <app-midi-block
                         #blockRef
-                        [track]="track">
+                        [track]="track"
+                        [isRecording]="isRecording"
+                    >
                     </app-midi-block>
                 </div>
             </div>

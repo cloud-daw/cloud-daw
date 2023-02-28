@@ -1,6 +1,7 @@
 
 import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
+import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 
 @Component({
@@ -34,7 +35,11 @@ export class MidiTrackComponent {
   }
   
   public deleteTrack() {
-    if (this.tracks.size > 1) this.tracks.delete(this.track);
+    if (this.tracks.size > 1) {
+      this.track.midi = new Recording(this.track.instrument);
+      this.tracks.delete(this.track);
+    }
+
   }
   
   public updateSelectedTrack(track: MidiTrack) {
