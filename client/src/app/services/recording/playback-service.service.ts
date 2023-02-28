@@ -11,21 +11,31 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     let len = data.length;
     let dur : Tone.Unit.Time;
     for (let i = 0; i < len; ++i) {
-        dur = makeDuration(data[i].attack, data[i].release)
         Tone.Transport.schedule((time) => {
-            synth.NotePlayback(data[i].value, dur);
+            synth.NotePlayback(data[i].value, data[i].release);
         }, data[i].attack);
     }
 }
 
-/**
- * Calculates time held of note
- * @param attack attack of note from recording array
- * @param release release of note from recording array
- * @returns a bars:beats:sixteenths length of the note
- */
-function makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
-    let a = Tone.Time(attack).toSeconds();
-    let r = Tone.Time(release).toSeconds();
-    return r - a;
+function manageVoices() {
+
 }
+
+function calculateOverlaps(notes: Note[]) {
+    let latestRelease = 0;
+    for (let i = 0; i < notes.length; i++) {
+        
+    }
+}
+
+// /**
+//  * Calculates time held of note
+//  * @param attack attack of note from recording array
+//  * @param release release of note from recording array
+//  * @returns a bars:beats:sixteenths length of the note
+//  */
+// function makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
+//     let a = Tone.Time(attack).toSeconds();
+//     let r = Tone.Time(release).toSeconds();
+//     return r - a;
+// }

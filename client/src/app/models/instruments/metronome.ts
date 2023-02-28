@@ -50,7 +50,6 @@ export class Metronome {
             this.UpdateTime();
             this.clickerSound.triggerAttackRelease("C6", 0.1, time);
         }, "4n");
-        
         this.isReset = false; //now scheduled, no need to redo until another reset
     }
 
