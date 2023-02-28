@@ -182,6 +182,7 @@ export class HomeComponent {
   onPlay(event: boolean) {
     if (!this.isPlaying) {
       this.isPlaying = true;
+      this.metronome.ClearTransport();
       Array.from(this.recordings.values()).forEach((r: Recording) => {
         SchedulePlayback(r.data, r.synth)
       });

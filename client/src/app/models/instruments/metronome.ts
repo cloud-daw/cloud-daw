@@ -30,26 +30,25 @@ export class Metronome {
      * starts metronome
      */
     public Start() {
-        if (this.isReset) this.ScheduleMetronome();
+        this.ScheduleMetronome();
         this.isPlaying = true;
         this.isReset = false;
         this.transport.start();
     }
 
+    public ClearTransport() {
+        this.transport.cancel();
+    }
     /**
      * Schedules clicks & UI updates along Transport
      */
     private ScheduleMetronome() {
-        //UI
-        this.transport.scheduleRepeat((time) => {
-        }, "16n");
-
         //Clicker
         this.transport.scheduleRepeat((time) => {
             ++this.counter;
             this.UpdateTime();
             this.clickerSound.triggerAttackRelease("C6", 0.1, time);
-        }, "4n");
+        }, "4n", this.transport.position);
         this.isReset = false; //now scheduled, no need to redo until another reset
     }
 
@@ -57,11 +56,11 @@ export class Metronome {
         this.isPlaying = false;
         this.transport.pause();
         this.UpdateTime();
-        
     }
 
     public Reset() {
         this.transport.stop();
+        this.transport.cancel();
         this.counter = 0;
         this.isPlaying = false;
         this.transport.position = '1:0:0';
