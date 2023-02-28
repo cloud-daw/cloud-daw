@@ -37,7 +37,9 @@ export class Metronome {
     }
 
     public ClearTransport() {
+        const currPos = this.transport.position;
         this.transport.cancel();
+        this.transport.position = currPos;
     }
     /**
      * Schedules clicks & UI updates along Transport
