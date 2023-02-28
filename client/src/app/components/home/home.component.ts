@@ -270,10 +270,19 @@ export class HomeComponent {
     console.log(event);
   }
 
+  onIncreaseOctave() {
+    this.selectedTrack.instrument.increaseOctave();
+  }
+
+  onDecreaseOctave() {
+    this.selectedTrack.instrument.decreaseOctave();
+  }
+
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
   }
+  
   /**
    * Changes master node volume level.
    * @param db The new value for master volume
