@@ -71,7 +71,7 @@ export class MidiBlockComponent {
     const minmax = this.extractMinMax();
     this.leftOffset = this.convertMeasureToPosition(minmax[0]) + 1;
     this.leftOffsetToString = `${this.leftOffset}vw`;
-    let endLeft = this.convertMeasureToPosition(minmax[1])/1.4;
+    let endLeft = this.convertMeasureToPosition(minmax[1])/1.3;
     this.blockWidth = `${endLeft - this.leftOffset}vw`;
     console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
