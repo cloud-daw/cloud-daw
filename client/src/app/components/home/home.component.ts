@@ -215,8 +215,8 @@ export class HomeComponent {
   handleSliderChange(event: any) {
     console.log('slider change: ' + event);
     const nearest = event;
-    const setBar = Math.floor((nearest / 4)) + 1;
-    const setBeat = (nearest % 4);
+    const setBar = Math.floor((nearest / 10));
+    const setBeat = (nearest % 10);
     this.metronome.OnPositionChange(setBar, setBeat);
   }
 
