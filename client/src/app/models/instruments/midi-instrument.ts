@@ -13,7 +13,7 @@ export class MidiInstrument {
     public currentOctave: number = 4;
     private keyDict: Record<string, string>;
     private attack: number; //unused for now
-    private release: number;
+    public release: number;
     constructor(name: string) {
         this.name = name;
         this.sound = "Synthesizer" //to load for later
@@ -70,7 +70,7 @@ export class MidiInstrument {
         this.currentOctave = newOctave;
         this.keyDict = MakeKeyDict(newOctave);
     }
-    
+
     public increaseOctave() {
         this.currentOctave = this.currentOctave + 1;
         this.keyDict = MakeKeyDict(this.currentOctave);

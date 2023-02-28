@@ -44,10 +44,8 @@ class SynthAvailability {
 }
 
 export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
-    console.log('in schedule:', synth.name);
-    const overlaps = calculateOverlaps(data);
+    const overlaps = calculateOverlaps(data, synth.release);
     synth.setVoices(overlaps);
-    console.log('setted voices', synth.voices);
     let availableSynths: SynthAvailability[] = [];
     let useSynthIdx = 0;
     for (let i = 0; i < synth.voices.length; i++) {
@@ -55,17 +53,14 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     }
     const times = data.map(note => {
         let s = Tone.Time(note.attack).toSeconds();
-        let e = Tone.Time(note.release).toSeconds();
+        let e = Tone.Time(note.release).toSeconds() + synth.release;
         return {
             start: s,
             end: e,
         }
     });
-    console.log('times: ', times);
     for (let i = 0; i < data.length; i++) {
         useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
-        console.log('idx: ', i);
-        console.log('synthidx: ', useSynthIdx);
         Tone.Transport.schedule((time) => {
             console.log(data[i].value, 'note should play now: ', time);
             synth.voices[useSynthIdx].triggerAttackRelease(data[i].value, data[i].duration, time);
@@ -76,23 +71,18 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
 
 function manageVoices(availableSynths: SynthAvailability[], release: number, attack: number) : number {
     let synthIdx = -1;
-    console.log('relevant release, attack: ', release, attack)
     for (let i = 0; i < availableSynths.length; i++) {
-        console.log('running loop');
         //check for expired synths
         if (availableSynths[i].isAvailable == synthStatus.unavailable && availableSynths[i].releases_at < attack) {
-            console.log('reset release:', availableSynths[i].idx);
             availableSynths[i].isAvailable = synthStatus.available;
             availableSynths[i].releases_at = 0;
         }
         if (availableSynths[i].isAvailable == synthStatus.available && synthIdx < 0) {
-            console.log('synth available');
             availableSynths[i].isAvailable = synthStatus.unavailable;
             availableSynths[i].releases_at = release;
             synthIdx = availableSynths[i].idx;
         }
     }
-    console.log('avail synths: ', availableSynths);
     return synthIdx;
 }
 
@@ -101,7 +91,7 @@ function manageVoices(availableSynths: SynthAvailability[], release: number, att
  * @param notes an array of notes from a recording
  * @returns maximum overlaps between notes in array
  */
-function calculateOverlaps(notes: Note[]) : number {
+function calculateOverlaps(notes: Note[], releaseOffset: number) : number {
     let currOverlap = 0;
     let maxOverlap = 0;
     let synthIdx: number[] = []
@@ -111,10 +101,9 @@ function calculateOverlaps(notes: Note[]) : number {
     let ranges : {time: number, quality: number}[] = [];
     for (let i = 0; i < notes.length; i++) {
         ranges.push({ time: Tone.Time(notes[i].attack).toSeconds(), quality: play.start });
-        ranges.push({ time: Tone.Time(notes[i].release).toSeconds(), quality: play.end });
+        ranges.push({ time: Tone.Time(notes[i].release).toSeconds() + releaseOffset, quality: play.end });
     }
     ranges.sort((a, b) => (a.time - b.time));
-    console.log('ranges: ', ranges);
     for (let i = 0; i < ranges.length; i++) {
         if (ranges[i].quality == play.start) {
             currOverlap++;
@@ -126,7 +115,5 @@ function calculateOverlaps(notes: Note[]) : number {
         }
         maxOverlap = Math.max(maxOverlap, currOverlap);
     }
-    console.log('max overlaps:', maxOverlap);
-    console.log('overlaps in time', synthIdx);
     return maxOverlap;
 }

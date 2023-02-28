@@ -144,5 +144,6 @@
 }
 
 .midi-subContainer {
-  width: 100%;
+  position: absolute;
+  width: auto;
 }
