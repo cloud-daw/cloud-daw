@@ -62,13 +62,13 @@ export class SliderComponent implements AfterViewInit, OnChanges {
       if (this.isRecording) {
         this.recordingStartPos.pos = this.getCurrVWPos();
         this.recordingStartPos.left = this._slider.getBoundingClientRect().left
-        console.log('started recording at: ', this.recordingStartPos);
+        // console.log('started recording at: ', this.recordingStartPos);
       }
       else {
         this.recordingEndPos.pos = this.getCurrVWPos();
         this.recordingEndPos.left = this._slider.getBoundingClientRect().left + this._slider.getBoundingClientRect().width;
         this.sliderWidth = this._slider.getBoundingClientRect().width;
-        console.log('ended recording at: ', this.recordingEndPos);
+        // console.log('ended recording at: ', this.recordingEndPos);
       }
     }
   }
@@ -137,17 +137,17 @@ export class SliderComponent implements AfterViewInit, OnChanges {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    console.log('resize');
+    // console.log('resize');
     this.resetSlider()
     this.startingPosition = this.getCurrVWPos();
-    console.log(this.startingPosition);
+    // console.log(this.startingPosition);
   }
 
   @HostListener('window:mouseup', ['$event'])
   stopDrag(event: MouseEvent) {
     if (this.isDragging) {
       let pos = 0;
-      console.log('drag stop')
+      // console.log('drag stop')
       const vwPos = (event.clientX / window.innerWidth) * 100;
       const diff = vwPos - this.startingPosition;
       if (diff > 0 && diff <= this.maxVW) {
@@ -178,7 +178,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   }
 
   startDrag(event: MouseEvent) {
-    console.log('drag start');
+    // console.log('drag start');
     this.player?.destroy();
     setTimeout(() => {
       this.player = undefined;

@@ -106,14 +106,14 @@ export class Metronome {
      */
     private MovePosition(bar: number, beat: number) {
         this.transport.pause();
-        console.log(bar);
-        console.log(beat);
+        // console.log(bar);
+        // console.log(beat);
         // const ticksPerBeat = Tone.Transport.PPQ / 4; // PPQ is pulses per quarter note
         // const ticksPerMeasure = ticksPerBeat * 4;
         // const tickPosition = ticksPerMeasure * (bar - 1) + (ticksPerBeat * (beat - 1));
         // Set the transport position to the desired tick position
-        console.log('pre:');
-        console.log(this.transport.position)
+        // console.log('pre:');
+        // console.log(this.transport.position)
         //this.transport.position = tickPosition;
         this.transport.position = `${bar}:${beat}:0`
         console.log(this.transport.position);
