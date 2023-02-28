@@ -14,6 +14,9 @@ export class MidiBlockComponent {
   @ViewChild('sliderRef') sliderRef?: ElementRef;
 
   @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  @Input() vw : number = 100;
+  @Input() bars: number = 16;
+  @Input() signature: number = 4;
   @Input() 
     set track(value: MidiTrack) {
       this._track = value;
@@ -27,43 +30,80 @@ export class MidiBlockComponent {
 
   // @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   public isVisible: string = this.track.midi.data.length > 0 ? 'visible' : 'hidden';
-  public blockWidth: string = this.track.midi.data.length + 'px';
 
-  public startPos: any = 0;
-  public endPos: any = 0;
-
+  public blockWidth: string = this.track.midi.data.length + 'em';
+  // public startPos: any = 0;
+  // public endPos: any = 0;
   public leftOffset: number = 0;
-  public rightOffset: number = 0;
+  public leftOffsetToString: string = '';
+  // public rightOffset: number = 0;
+  // public sliderWidth: number = 0;
 
-  public sliderWidth: number = 0;
+  startEnd: number[] = this.extractMinMax(); //as [start, end], start = startEnd[0], end = startEnd[1] as measures
+
+  extractMinMax() : number[] {
+    const recording = this.track.midi.data;
+    let max = 0;
+    let min = 100;
+    let currAttack, currRelease;
+    for (let i = 0; i < recording.length; i++) {
+      currAttack = parseInt(recording[i].attack.toString().split(':')[0]);
+      currRelease = parseInt(recording[i].release.toString().split(':')[0]);
+      if (currAttack < min) {
+        min = currAttack;
+      }
+      if (currRelease > max) {
+        max = currRelease;
+      }
+    }
+    max++;
+    console.log('min, max', min, max, this.track.midi.data);
+    return [min, max];
+  }
+
+  convertMeasureToPosition(m: number) {
+    const interval = this.vw / this.bars;
+    return ((m - 1) * interval);
+  }
 
   updateVisual() {
-    if (this.isRecording) {
-      this.startPos = this.sliderRef?.nativeElement.recordingStartPos.pos;
-      this.leftOffset = this.sliderRef?.nativeElement.recordingStartPos.left;
-      this.blockWidth = this.sliderRef?.nativeElement.sliderWidth;
-      this.isVisible = 'visible';
-    }
-    if (!this.isRecording) {
-      this.endPos = this.sliderRef?.nativeElement.recordingEndPos.pos;
-      this.rightOffset = this.sliderRef?.nativeElement.recordingEndPos.left //+ width of slider;
-      this.blockWidth = this.sliderRef?.nativeElement.sliderWidth;
-      console.log('block left:', this.leftOffset, 'block width:', this.blockWidth);
-    }
-    this.blockWidth = this.track.midi.data.length + 'em';
-    //console.log('Recording stopped... Displaying midi for track', this.track.id, this.track.midi);
+    this.isVisible = 'visible';
+    const minmax = this.extractMinMax();
+    this.leftOffset = this.convertMeasureToPosition(minmax[0]) + 1;
+    this.leftOffsetToString = `${this.leftOffset}vw`;
+    let endLeft = this.convertMeasureToPosition(minmax[1])/1.4;
+    this.blockWidth = `${endLeft - this.leftOffset}vw`;
+    console.log('left offset: ', this.leftOffsetToString);
   }
-  /**
-    const rectangle = document.createElement('div');
-    rectangle.classList.add('midi-block');
-    rectangle.style.left = `${sliderLeft}px`;
-    rectangle.style.width = `${sliderWidth}px`;
-    parentElement.appendChild(rectangle); */
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isRecording']) {
+      if (!this.isRecording) {
         this.updateVisual();
+        console.log('updating visual');
+      }
     }
   }
 
 }
+
+
+    // if (this.isRecording) {
+    //   this.startPos = this.sliderRef?.nativeElement.recordingStartPos.pos;
+    //   this.leftOffset = this.sliderRef?.nativeElement.recordingStartPos.left;
+    //   this.blockWidth = this.sliderRef?.nativeElement.sliderWidth;
+    //   this.isVisible = 'visible';
+    // }
+    // if (!this.isRecording) {
+    //   this.endPos = this.sliderRef?.nativeElement.recordingEndPos.pos;
+    //   this.rightOffset = this.sliderRef?.nativeElement.recordingEndPos.left //+ width of slider;
+    //   this.blockWidth = this.sliderRef?.nativeElement.sliderWidth;
+    //   console.log('block left:', this.leftOffset, 'block width:', this.blockWidth);
+    // }
+    // this.blockWidth = this.track.midi.data.length + 'em';
+    // if (this.isRecording) {
+    //   this.startPos = 
+    // }
+    // if (!this.isRecording) {
+
+    // }

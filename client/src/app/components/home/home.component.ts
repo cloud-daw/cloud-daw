@@ -152,7 +152,6 @@ export class HomeComponent {
 
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
-    console.log(this.isExpanded);
   }
 
   newTrack() {
@@ -195,7 +194,6 @@ export class HomeComponent {
     if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
     this.metronome.Pause();
-    console.log(this.currentRecording);
     this.controlEvent = controlStatus.pause;
   }
 
@@ -234,15 +232,14 @@ export class HomeComponent {
    * Calls @method updateRecording(selectedTrack.id)
    */
   private onStopRecord() {
-    console.log('stopping recording on track: ', this.selectedTrack.id, this.currentRecording.data);
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.updateRecording(this.selectedTrack.id);
-    this.blockRefs?.forEach((block) => {
-      if (block.track.id == this.selectedTrack.id) {
-        block.updateVisual();
-      }
-    });
+    // this.blockRefs?.forEach((block) => {
+    //   if (block.track.id == this.selectedTrack.id) {
+    //     block.updateVisual();
+    //   }
+    // });
     console.log(this.recordings);
   }
 
@@ -265,7 +262,7 @@ export class HomeComponent {
    */
   onSelectedTrackChange(track: MidiTrack) {
     this.updateRecording(this.selectedTrack.id);
-    console.log(this.selectedTrack.title, this.currentRecording.data);
+    console.log(this.selectedTrack.title, this.selectedTrack.midi.data);
   }
 
   onUndo(event: number) {
