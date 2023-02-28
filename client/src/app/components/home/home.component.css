@@ -146,3 +146,8 @@
 .midi-subContainer {
   width: 100%;
 }
+
+.production-container {
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  box-shadow: inset 0px 2px 15px 5px rgba(0, 0, 0, 0.2);
+}

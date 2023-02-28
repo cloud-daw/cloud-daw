@@ -54,23 +54,6 @@ export class MidiBlockComponent {
       return [minAttack, maxRelease];
     }
     return [100, 0];
-    // let max = 0;
-    // let min = 100; 
-    // let currAttack, currRelease;
-
-    // for (let i = 0; i < recording.length; i++) {
-    //   currAttack = parseInt(recording[i].attack.toString().split(':')[0]);
-    //   currRelease = parseInt(recording[i].release.toString().split(':')[0]);
-    //   if (currAttack < min) {
-    //     min = currAttack;
-    //   }
-    //   if (currRelease > max) {
-    //     max = currRelease;
-    //   }
-    // }
-    // max++;
-    // console.log('min, max', min, max, this.track.midi.data);
-    // return [min, max];
   }
 
   convertMeasureToPosition(m: number) {

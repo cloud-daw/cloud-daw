@@ -1,5 +1,10 @@
-
-import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
@@ -7,41 +12,54 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 @Component({
   selector: 'app-midi-track',
   templateUrl: './midi-track.component.html',
-  styleUrls: ['./midi-track.component.css']
+  styleUrls: ['../../../styles.css', './midi-track.component.css'],
 })
-
 export class MidiTrackComponent {
   //child/parent vars
-  @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
-  @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Input() track: MidiTrack = new MidiTrack(
+    'default',
+    0,
+    new MidiInstrument(''),
+    false
+  );
+  @Output() trackChange: EventEmitter<MidiTrack> =
+    new EventEmitter<MidiTrack>();
 
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
-  
+
   @Input()
-    set selectedTrack(track: MidiTrack) {
-      // this.selectedTrackChange.emit(track);
-      this._selectedTrack = track;
-    }
-    get selectedTrack() {
-      return this._selectedTrack;
-    }
-  @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-  
+  set selectedTrack(track: MidiTrack) {
+    // this.selectedTrackChange.emit(track);
+    this._selectedTrack = track;
+  }
+  get selectedTrack() {
+    return this._selectedTrack;
+  }
+  @Output() selectedTrackChange: EventEmitter<MidiTrack> =
+    new EventEmitter<MidiTrack>();
+  private _selectedTrack: MidiTrack = new MidiTrack(
+    '',
+    0,
+    new MidiInstrument(''),
+    false
+  );
+
+  @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
+
   //functions
   public formatLabel(value: number): string {
     return `${value}db`;
   }
-  
+
   public deleteTrack() {
     if (this.tracks.size > 1) {
       this.track.midi = new Recording(this.track.instrument);
+      this.onDelete.emit(this.track.id);
       this.tracks.delete(this.track);
     }
-
   }
-  
+
   public updateSelectedTrack(track: MidiTrack) {
     if (!this.isRecording) {
       this.selectedTrack = track; // set the local `selectedTrack` property

@@ -1,24 +1,27 @@
-import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  Component,
+  HostListener,
+  SimpleChanges,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
+
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
 import { Recording } from '../../models/recording/recording';
-import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
 import { ApiHttpService } from '../../services/http/httpservice.service';
-import * as Tone from 'tone'; 
+import * as Tone from 'tone';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
-import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
-import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
-  
+
 /**
  * Int status of keys for keyboard
  */
-enum keyStatus { 
+enum keyStatus {
   notPlaying = 0,
   isPlaying = 1,
 }
@@ -31,7 +34,7 @@ enum controlStatus {
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css']
+  styleUrls: ['../../../styles.css', './home.component.css', '../midi-track/midi-track.component.css'],
 })
 export class HomeComponent {
   @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
@@ -42,8 +45,8 @@ export class HomeComponent {
     //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
-      myDiv.classList.add("active");
-    }   
+      myDiv.classList.add('active');
+    }
     //this.PlayRelease();
   }
 
@@ -54,21 +57,20 @@ export class HomeComponent {
     //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
-      myDiv.classList.remove("active");
+      myDiv.classList.remove('active');
     }
     //this.PlayRelease();
   }
 
-
-  currMousekey : string = '';
+  currMousekey: string = '';
 
   @HostListener('window:mouseup', ['$event'])
   handleMouseupEvent(event: MouseEvent) {
     if (this.currMousekey != '') {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
-        myDiv.classList.remove("active");
-      }   
+        myDiv.classList.remove('active');
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
@@ -76,10 +78,10 @@ export class HomeComponent {
 
   onKeyMousedown(key: string) {
     this.currMousekey = key;
-      const myDiv = document.getElementById(this.currMousekey);
-      if (myDiv) {
-        myDiv.classList.add("active");
-    }   
+    const myDiv = document.getElementById(this.currMousekey);
+    if (myDiv) {
+      myDiv.classList.add('active');
+    }
     this.synthOnKeydown(key);
   }
 
@@ -87,15 +89,19 @@ export class HomeComponent {
     if (this.currMousekey != '') {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
-        myDiv.classList.remove("active");
-      }   
+        myDiv.classList.remove('active');
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
   }
-  
-  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.synth = new MidiInstrument("test");
+
+  constructor(
+    public firebaseService: FirebaseService,
+    public ApiHttpService: ApiHttpService,
+    public _router: Router
+  ) {
+    this.synth = new MidiInstrument('test');
     this.controller = new MidiControllerComponent(this.synth);
     this.tempo = 120;
     this.signature = 4;
@@ -106,23 +112,23 @@ export class HomeComponent {
     this.currentRecording = new Recording(this.synth);
     this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
-      "a": keyStatus.notPlaying,
-      "w": keyStatus.notPlaying,
-      "s": keyStatus.notPlaying,
-      "e": keyStatus.notPlaying,
-      "d": keyStatus.notPlaying,
-      "f": keyStatus.notPlaying,
-      "t": keyStatus.notPlaying,
-      "g": keyStatus.notPlaying,
-      "y": keyStatus.notPlaying,
-      "h": keyStatus.notPlaying,
-      "u": keyStatus.notPlaying,
-      "j": keyStatus.notPlaying,
-      "k": keyStatus.notPlaying,
-      "o": keyStatus.notPlaying,
-      "l": keyStatus.notPlaying,
-      "p": keyStatus.notPlaying,
-      ";": keyStatus.notPlaying,
+      a: keyStatus.notPlaying,
+      w: keyStatus.notPlaying,
+      s: keyStatus.notPlaying,
+      e: keyStatus.notPlaying,
+      d: keyStatus.notPlaying,
+      f: keyStatus.notPlaying,
+      t: keyStatus.notPlaying,
+      g: keyStatus.notPlaying,
+      y: keyStatus.notPlaying,
+      h: keyStatus.notPlaying,
+      u: keyStatus.notPlaying,
+      j: keyStatus.notPlaying,
+      k: keyStatus.notPlaying,
+      o: keyStatus.notPlaying,
+      l: keyStatus.notPlaying,
+      p: keyStatus.notPlaying,
+      ';': keyStatus.notPlaying,
     };
     Tone.start();
   }
@@ -130,7 +136,7 @@ export class HomeComponent {
   masterVolume: number = 0;
   isPlaying: boolean = false;
   tempo: number = 120; //default
-  bars : number = 16;
+  bars: number = 16;
   signature: number = 4;
   maxVW: number = 0;
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
@@ -156,7 +162,12 @@ export class HomeComponent {
 
   newTrack() {
     this.trackIdCounter++;
-    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
+    let newTrack = new MidiTrack(
+      `Track ${this.trackIdCounter}`,
+      this.trackIdCounter,
+      this.synth,
+      true
+    );
     this.tracks.add(newTrack);
     this.selectedTrack = newTrack;
     this.updateRecording(this.selectedTrack.id);
@@ -172,9 +183,9 @@ export class HomeComponent {
 
   synthOnKeyup(key: string) {
     if (this.keyboardStatus[key] == keyStatus.isPlaying) {
-        this.keyboardStatus[key] = keyStatus.notPlaying;
-        let note = this.synth.Release(key);
-        if (this.isRecording) this.currentRecording.AddRelease(note);
+      this.keyboardStatus[key] = keyStatus.notPlaying;
+      let note = this.synth.Release(key);
+      if (this.isRecording) this.currentRecording.AddRelease(note);
     }
   }
 
@@ -182,14 +193,14 @@ export class HomeComponent {
     if (!this.isPlaying) {
       this.isPlaying = true;
       Array.from(this.recordings.values()).forEach((r: Recording) => {
-        SchedulePlayback(r.data, r.synth)
+        SchedulePlayback(r.data, r.synth);
       });
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
   }
 
-  onPause(event : boolean) {
+  onPause(event: boolean) {
     this.isPlaying = false;
     if (this.isRecording) this.onStopRecord();
     this.isRecording = false;
@@ -197,7 +208,7 @@ export class HomeComponent {
     this.controlEvent = controlStatus.pause;
   }
 
-  onRewind(event : boolean) {
+  onRewind(event: boolean) {
     this.metronome.Reset();
     this.controlEvent = controlStatus.reset;
   }
@@ -206,9 +217,8 @@ export class HomeComponent {
     if (!this.isRecording) {
       this.isRecording = true;
       this.onPlay(true);
-    }
-    else {
-      this.isRecording = false
+    } else {
+      this.isRecording = false;
       this.onStopRecord();
     }
   }
@@ -216,8 +226,8 @@ export class HomeComponent {
   handleSliderChange(event: any) {
     console.log('slider change: ' + event);
     const nearest = event;
-    const setBar = Math.floor((nearest / 10));
-    const setBeat = (nearest % 10);
+    const setBar = Math.floor(nearest / 10);
+    const setBeat = nearest % 10;
     this.metronome.OnPositionChange(setBar, setBeat);
   }
 
@@ -227,7 +237,7 @@ export class HomeComponent {
   }
 
   /**
-   * Called when recording is stopped. 
+   * Called when recording is stopped.
    * Updates the recordings map with key: selectedTrackid and value: currentRecording
    * Calls @method updateRecording(selectedTrack.id)
    */
@@ -252,9 +262,13 @@ export class HomeComponent {
     let recordingAtId = this.recordings.has(id)
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
-    this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
+    this.currentRecording =
+      recordingAtId || new Recording(this.selectedTrack.instrument);
   }
 
+  onDeleteTrack(trackId: number) {
+    this.recordings.delete(trackId);
+  }
   /**
    * @param track: might not be needed? idk angular sucks
    * Runs every time a different track is selected.
@@ -282,7 +296,7 @@ export class HomeComponent {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
   }
-  
+
   /**
    * Changes master node volume level.
    * @param db The new value for master volume
@@ -314,14 +328,13 @@ export class HomeComponent {
   //   }
   // }
 
-  onLogout(){
+  onLogout() {
     this.firebaseService.logout();
     this._router.navigateByUrl('/login');
     //this.isLogout.emit()
-  }  
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('home level changes: ', changes);
   }
-
 }

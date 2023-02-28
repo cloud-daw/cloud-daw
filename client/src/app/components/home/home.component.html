@@ -54,7 +54,9 @@
                     [tracks]="tracks"
                     [(selectedTrack)]="selectedTrack" 
                     (selectedTrackChange)="onSelectedTrackChange($event)"
-                    [isRecording]="isRecording">
+                    [isRecording]="isRecording"
+                    (onDelete)="onDeleteTrack($event)"
+                >
                 </app-midi-track>
             </div>
         </div>

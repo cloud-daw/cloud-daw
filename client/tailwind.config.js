@@ -11,7 +11,7 @@ module.exports = {
         trackColorDefault: '',
         trackColorSelected: '',
         trackColorHover: '',
-        limeGreen: '#00ff62',
+        'limeGreen': '#00ff62',
         'gridLineColor': '#303030',
         'measureLineColor': '#646464',
         pianoBg: '#303030',
