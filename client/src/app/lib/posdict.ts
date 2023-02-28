@@ -1,23 +1,55 @@
-export function getPositionDictOnBarsBeats(vw: number, bars: number, signature: number) { 
-    let posDict :{[key: string]: number} = {};
-    let key : string;
-    for (let i = 0; i < bars; i++) {
-        for (let j = 0; j < signature; j++) {
-            key = (i + j).toString();
-            posDict[key] = (vw / (i + j));
-        }
+export class PositionDict {
+    vw: number;
+    vwOffset: number;
+    bars: number;
+    signature: number;
+    interval: number;
+    posDictOnBB: { [key: number]: number };
+    posDictOnVWPos: { [key: number]: number };
+    constructor(vw: number, vwOffset: number, bars: number, signature: number) {
+        this.vw = vw;
+        this.bars = bars;
+        this.vwOffset = vwOffset;
+        this.signature = signature;
+        this.interval = this.bars * this.signature;
+        this.posDictOnBB = this.GetPositionDictOnBarsBeats();
+        this.posDictOnVWPos = this.GetPositionDictOnVWPos();
     }
-    return posDict;
-}
-
-export function getPositionDictOnVWPos(vw: number, bars: number, signature: number) {
-    let posDict :{[key: number]: string} = {};
-    let key : number;
-    for (let i = 0; i < bars; i++) {
-        for (let j = 0; j < signature; j++) {
-            key = (vw / (i + j));
-            posDict[key] = (i + j).toString();
+    GetPositionDictOnBarsBeats() { 
+        let posDict :{[key: number]: number} = {};
+        let key : number;
+        for (let i = 1; i <= this.bars; i++) {
+            for (let j = 1; j <= this.signature; j++) {
+                key = ((i * 10) + j);
+                posDict[key] = (((i - 1) * this.signature) + (j - 1)) * (this.vw / this.interval) + this.vwOffset;
+            }
         }
+        return posDict;
     }
-    return posDict;
+    GetPositionDictOnVWPos() {
+        let posDict: { [key: number]: number } = {};
+        let key: number;
+        for (let i = 1; i <= this.bars; i++) {
+            for (let j = 1; j <= this.signature; j++) {
+                key = (((i - 1) * this.signature) + (j - 1)) * (this.vw / this.interval) + this.vwOffset;
+                posDict[key] = ((i * 10) + j);
+            }
+        }
+        return posDict;
+    }
+    GetNearestBarsBeatsOnVWPos(vwPos: number) : number {
+        let closestDistance = 1000;
+        let closestBarsBeats = 0;
+        let currDistance;
+        let keyNum;
+        for (let key in this.posDictOnVWPos) {
+            keyNum = parseInt(key);
+            currDistance = Math.abs(vwPos - keyNum);
+            if (currDistance < closestDistance) {
+                closestDistance = currDistance;
+                closestBarsBeats = this.posDictOnVWPos[key];
+            }
+        }
+        return closestBarsBeats;
+    }
 }

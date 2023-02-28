@@ -1,5 +1,6 @@
 import { Component, Renderer2, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { style, animate, AnimationBuilder, AnimationFactory, AnimationPlayer } from '@angular/animations';
+import { PositionDict } from 'src/app/lib/posdict';
 
 enum controlStatus {
   play = 0,
@@ -32,6 +33,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   startDragTransform: string = "";
   startingPosition: number = 0;
   maxVW: number = 100;
+  posDict: PositionDict | any;
   private player: AnimationPlayer | undefined;
   constructor(private _animBuilder: AnimationBuilder, private _renderer: Renderer2) { }
   ngAfterViewInit() {
@@ -40,7 +42,8 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.startingPosition = this.getCurrVWPos();
     this.maxVW = 100 - this.startingPosition;
     this.sPos.emit(this.maxVW);
-    this.player = this.buildSliderAnim();
+    this.posDict = new PositionDict(this.maxVW, this.startingPosition, this.bars, this.signature);
+    this.setTransformOnPosition(this.startingPosition) //offset by 0.02 to make it look a little cleaner
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -96,7 +99,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     const clone = this._slider.cloneNode(true);
     this._slider.parentNode.replaceChild(clone, this._slider);
     this._slider = clone;
-    this.setTransformOnPosition(this.startingPosition)
+    this.setTransformOnPosition(this.startingPosition) //offset by 0.02 to make it look a little cleaner
     this.reinitListener(); //reinstantiate the mouse down listener
   }
 
@@ -120,22 +123,22 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   @HostListener('window:mouseup', ['$event'])
   stopDrag(event: MouseEvent) {
     if (this.isDragging) {
+      let pos = 0;
       console.log('drag stop')
       const vwPos = (event.clientX / window.innerWidth) * 100;
       const diff = vwPos - this.startingPosition;
       if (diff > 0 && diff <= this.maxVW) {
-        this.setTransformOnPosition(vwPos);
-        this.positionChange.emit(vwPos - this.startingPosition);
+        pos = this.posDict?.GetNearestBarsBeatsOnVWPos(vwPos)
       }
       else if (diff <= 0) {
-        this.setTransformOnPosition(this.startingPosition);
-        this.positionChange.emit(0);
+        pos = this.posDict?.GetNearestBarsBeatsOnVWPos(this.startingPosition)
       }
       else {
-        this.setTransformOnPosition(this.maxVW);
-        this.positionChange.emit(this.maxVW);
+        pos = this.posDict?.GetNearestBarsBeatsOnVWPos(this.maxVW + this.startingPosition)
       };
-      this.setCurrTransform()
+      this.positionChange.emit(pos);
+      const snappedPos = this.posDict?.posDictOnBB[pos];
+      this.setTransformOnPosition(snappedPos)
     }
     this.isDragging = false;
   }
@@ -170,7 +173,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     const distance = currPos - this.startingPosition;
     const distanceRatio = distance / this.maxVW;
     const intervalOffset = distanceRatio * interval
-    this.timeOffset = intervalOffset * (60000 / this.bpm)
+    this.timeOffset = intervalOffset * (60000 / this.bpm) - this.bars
   }
   getAnimTiming() {
     this.updateRemainingTime();
@@ -187,5 +190,8 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   }
   setTransformOnPosition(vwPosition: number) {
     this._slider.style.transform = `translate(${vwPosition - this.startingPosition}vw, 0%)`
+  }
+  setTransformOnNearestPosition(vwPosition: number) {
+
   }
 }
