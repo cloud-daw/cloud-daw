@@ -45,17 +45,21 @@ export class MidiBlockComponent {
     const recording = this.track.midi.data;
     let max = 0;
     let min = 1000;
-    let currAttack, currRelease;
-    for (let i = 0; i < recording.length; i++) {
-      currAttack = parseInt(recording[i].attack.toString().split(':')[0]);
-      currRelease = parseInt(recording[i].release.toString().split(':')[0]);
-      if (currAttack < min) {
-        min = currAttack;
-      }
-      if (currRelease > max) {
-        max = currRelease;
-      }
+    if (recording.length > 0) {
+      min = parseInt(recording[0].attack.toString().split(':')[0]);
+      max = parseInt(recording[recording.length-1].release.toString().split(':')[0]);
     }
+    // let currAttack, currRelease;
+    // for (let i = 0; i < recording.length; i++) {
+    //   currAttack = parseInt(recording[i].attack.toString().split(':')[0]);
+    //   currRelease = parseInt(recording[i].release.toString().split(':')[0]);
+    //   if (currAttack < min) {
+    //     min = currAttack;
+    //   }
+    //   if (currRelease > max) {
+    //     max = currRelease;
+    //   }
+    // }
     max++;
     console.log('min, max', min, max, this.track.midi.data);
     return [min, max];
