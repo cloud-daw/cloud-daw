@@ -73,7 +73,7 @@ export class MidiBlockComponent {
     this.leftOffsetToString = `${this.leftOffset}vw`;
     let endLeft = this.convertMeasureToPosition(minmax[1])/1.4;
     this.blockWidth = `${endLeft - this.leftOffset}vw`;
-    console.log('left offset: ', this.leftOffsetToString);
+    console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
 
   ngOnChanges(changes: SimpleChanges) {
