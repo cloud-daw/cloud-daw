@@ -42,14 +42,14 @@ export class Metronome {
     private ScheduleMetronome() {
         //UI
         this.transport.scheduleRepeat((time) => {
-        }, "16n", this.transport.position);
+        }, "16n");
 
         //Clicker
         this.transport.scheduleRepeat((time) => {
             ++this.counter;
             this.UpdateTime();
             this.clickerSound.triggerAttackRelease("C6", 0.1, time);
-        }, "4n", this.transport.position);
+        }, "4n");
         
         this.isReset = false; //now scheduled, no need to redo until another reset
     }
@@ -78,10 +78,9 @@ export class Metronome {
     /**
      * Public method to call when changing slider
      */
-    public OnPositionChange(measure: number, beat: number, sixteenth: number) {
-        this.MovePosition([measure, beat, sixteenth]);
+    public OnPositionChange(measure: number, beat: number) {
+        this.MovePosition(measure, beat);
         this.UpdateTime();
-        this.isReset = true;
         return (this.currentMeasure, this.currentBeat);
     }
 
@@ -97,10 +96,6 @@ export class Metronome {
      * Updates the time values to display on UI
      */
     private UpdateTime() {
-        // let curr = this.GetCurrentTime();
-        // this.currentMeasure = curr[0];
-        // this.currentBeat = this.ShiftInd(curr[1]);
-        // this.currentSixteenth = this.RoundSixteenth(curr[2]);
         this.currentMeasure = Math.floor(this.counter / 4) + 1;
         this.currentBeat = (this.counter % 4) + 1;
     }
@@ -109,9 +104,19 @@ export class Metronome {
      * Helper moving time slider
      * @param position New position as [bar, beat, sixteenth] to move Transport to
      */
-    private MovePosition(position: number[]) {
+    private MovePosition(bar: number, beat: number) {
         this.transport.pause();
-        this.transport.position = position.join(':');
+        console.log(bar);
+        console.log(beat);
+        // const ticksPerBeat = Tone.Transport.PPQ / 4; // PPQ is pulses per quarter note
+        // const ticksPerMeasure = ticksPerBeat * 4;
+        // const tickPosition = ticksPerMeasure * (bar - 1) + (ticksPerBeat * (beat - 1));
+        // Set the transport position to the desired tick position
+        console.log('pre:');
+        console.log(this.transport.position)
+        //this.transport.position = tickPosition;
+        this.transport.position = `${bar}:${beat}:0`
+        console.log(this.transport.position);
     }
 
     /**
