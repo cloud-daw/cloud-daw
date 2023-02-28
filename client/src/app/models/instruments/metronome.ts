@@ -78,8 +78,8 @@ export class Metronome {
     /**
      * Public method to call when changing slider
      */
-    public OnPositionChange(measure: number, beat: number, sixteenth: number) {
-        this.MovePosition([measure, beat, sixteenth]);
+    public OnPositionChange(measure: number, beat: number) {
+        this.MovePosition(measure, beat);
         this.UpdateTime();
         this.isReset = true;
         return (this.currentMeasure, this.currentBeat);
@@ -109,9 +109,14 @@ export class Metronome {
      * Helper moving time slider
      * @param position New position as [bar, beat, sixteenth] to move Transport to
      */
-    private MovePosition(position: number[]) {
-        this.transport.pause();
-        this.transport.position = position.join(':');
+    private MovePosition(bar: number, beat: number) {
+        this.transport.stop();
+        const ticksPerBeat = Tone.Transport.PPQ / 4; // PPQ is pulses per quarter note
+        const ticksPerMeasure = ticksPerBeat * 4;
+        const tickPosition = ticksPerMeasure * (bar - 1) + (ticksPerBeat * (beat - 1));
+
+    // Set the transport position to the desired tick position
+        this.transport.position = tickPosition;
     }
 
     /**

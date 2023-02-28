@@ -214,12 +214,10 @@ export class HomeComponent {
 
   handleSliderChange(event: any) {
     console.log('slider change: ' + event);
-    const interval = this.bars * this.signature;
-    const nearest = Math.round((interval / this.maxVW) * event);
-    console.log('nearest: ' + nearest)
+    const nearest = event;
     const setBar = Math.floor((nearest / 4)) + 1;
     const setBeat = (nearest % 4);
-    this.metronome.OnPositionChange(setBar, setBeat, 0);
+    this.metronome.OnPositionChange(setBar, setBeat);
   }
 
   catchSliderStartPos(event: any) {
