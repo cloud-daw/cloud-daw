@@ -7,7 +7,7 @@ import { MidiTrackComponent } from '../midi-track/midi-track.component';
 @Component({
   selector: 'app-midi-block',
   templateUrl: './midi-block.component.html',
-  styleUrls: ['./midi-block.component.css']
+  styleUrls: ['../../../styles.css', './midi-block.component.css']
 })
 export class MidiBlockComponent {
   @ViewChild(MidiTrackComponent, { read: ElementRef }) trackComponentRef?: ElementRef;
@@ -30,14 +30,17 @@ export class MidiBlockComponent {
 
   // @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   public isVisible: string = this.track.midi.data.length > 0 ? 'visible' : 'hidden';
-
   public blockWidth: string = this.track.midi.data.length + 'em';
+
+  public isSelected: boolean = this.track == this.selectedTrack ? true : false;
   // public startPos: any = 0;
   // public endPos: any = 0;
   public leftOffset: number = 0;
   public leftOffsetToString: string = '';
   // public rightOffset: number = 0;
   // public sliderWidth: number = 0;
+
+
 
   startEnd: number[] = this.extractMinMax(); //as [start, end], start = startEnd[0], end = startEnd[1] as measures
 
@@ -81,7 +84,7 @@ export class MidiBlockComponent {
     this.leftOffset = this.convertMeasureToPosition(minmax[0]) + 1;
     this.leftOffsetToString = `${this.leftOffset}vw`;
     let endLeft = this.convertMeasureToPosition(minmax[1])/1.4;
-    this.blockWidth = `${endLeft - this.leftOffset}vw`;
+    this.blockWidth = `${endLeft - this.leftOffset}vw`; 
     console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
 
@@ -90,6 +93,18 @@ export class MidiBlockComponent {
       if (!this.isRecording) {
         console.log('updating visual');
         this.updateVisual();
+      }
+    }
+
+    if (changes['selectedTrack']) {
+      //console.log('???A??AF??FA?FA');
+      if (this.track == this.selectedTrack) {
+        this.isSelected = true;
+        //console.log(this.track.title, '(*********@* it is selected **@*******', this.isSelected);
+
+      } else {
+        this.isSelected = false;
+        //console.log(this.track.title, '(*********@* it is unselected **@*******', this.isSelected);
       }
     }
   }

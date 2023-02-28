@@ -4,3 +4,7 @@
     height: 100%;
     background-color: blue;
 }
+
+.recording #slider {
+    background-color: rgb(255, 68, 68);
+}

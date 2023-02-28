@@ -5,8 +5,8 @@
     height: 6em;
     display: flex;
     align-items: center;
-    border-top: 0.5px solid rgb(48, 48, 48);
-    border-bottom: 0.5px solid rgb(48, 48, 48);
+    border-top: 0.5px solid var(--tw-color-gridLineColor);
+    border-bottom: 0.5px solid var(--tw-color-gridLineColor);
 }
 
 .block {
@@ -14,8 +14,12 @@
     left: 0;
     height: 5.7em;
     margin-left: -0.65em;
-    transform: translateX(calc((5 - 1) * 100% / 16 * 1000px));
+    /* transform: translateX(calc((5 - 1) * 100% / 16 * 1000px)); */
     background-color: #00ff62;
     opacity: 90%;
     border-radius: 5px;
+}
+
+.selected .block {
+    background-color: #b1ffcc;
 }
