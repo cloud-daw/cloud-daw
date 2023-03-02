@@ -14,9 +14,9 @@ export class MidiInstrument {
     private keyDict: Record<string, string>;
     private attack: number; //unused for now
     public release: number;
-    constructor(name: string) {
+    constructor(name: string, sound: string = "Synthesizer") {
         this.name = name;
-        this.sound = "Synthesizer" //to load for later
+        this.sound = sound //to load for later
         this.instrument = new Tone.PolySynth().toDestination();
         this.keyDict = MakeKeyDict(this.currentOctave);
         this.isPlaying = false;

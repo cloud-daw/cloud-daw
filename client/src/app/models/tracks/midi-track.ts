@@ -10,12 +10,12 @@ export class MidiTrack {
     selected: boolean;
     effects: string[] = [];
     midi: Recording = new Recording(new MidiInstrument(''));
-    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects?: string[]) {
+    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects: string[] = []) {
         this.title = title;
         this.id = id;
         this.instrument = instrument;
         this.selected = selected;
-        if (effects) this.effects = effects;
+        this.effects = effects;
     }
 
     /**

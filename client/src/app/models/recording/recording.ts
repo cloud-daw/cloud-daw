@@ -4,11 +4,11 @@ import { MakeKeyDict } from '../../lib/keydict';
 import * as Tone from 'tone'
 
 export class Recording {
-    public data: Note[] = [];
+    public data: Note[];
     public synth: MidiInstrument;
-    constructor(synth: MidiInstrument, data?: Note[]) {
+    constructor(synth: MidiInstrument, data: Note[] = []) {
         this.synth = synth;
-        if (data) this.data = data;
+        this.data = data;
     }
 
     /**
