@@ -16,3 +16,7 @@
     opacity: 90%;
     border-radius: 5px;
 }
+
+.selected .block {
+    background-color: #b1ffcc;
+}

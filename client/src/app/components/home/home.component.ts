@@ -162,6 +162,10 @@ export class HomeComponent {
     this.updateRecording(this.selectedTrack.id);
   }
 
+  onDeleteTrack(trackId: number) {
+    this.recordings.delete(trackId);
+  }
+
   synthOnKeydown(key: string) {
     if (this.keyboardStatus[key] != keyStatus.isPlaying) {
       this.keyboardStatus[key] = keyStatus.isPlaying;

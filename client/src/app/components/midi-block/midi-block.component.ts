@@ -28,6 +28,7 @@ export class MidiBlockComponent {
 
   @Input() isRecording: boolean = false;
 
+  public isSelected: boolean = this.track == this.selectedTrack ? true : false;
   // @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   public isVisible: string = this.track.midi.data.length > 0 ? 'visible' : 'hidden';
 
@@ -77,6 +78,11 @@ export class MidiBlockComponent {
         this.updateVisual();
         console.log('updating visual');
       }
+    }
+    if (changes['selectedTrack']) {
+      if (this.track == this.selectedTrack) this.isSelected = true;
+      else this.isSelected = false;
+      console.log('selected track: ', this.selectedTrack, this.isSelected);
     }
   }
 

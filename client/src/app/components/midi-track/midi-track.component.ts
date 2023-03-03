@@ -28,6 +28,8 @@ export class MidiTrackComponent {
     }
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+
+  @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
   
   //functions
   public formatLabel(value: number): string {
@@ -37,6 +39,7 @@ export class MidiTrackComponent {
   public deleteTrack() {
     if (this.tracks.size > 1) {
       this.track.midi = new Recording(this.track.instrument);
+      this.onDelete.emit(this.track.id);
       this.tracks.delete(this.track);
     }
 

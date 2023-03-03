@@ -53,6 +53,7 @@
                     [track]="track"
                     [tracks]="tracks"
                     [(selectedTrack)]="selectedTrack" 
+                    (onDelete)="onDeleteTrack($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
                     [isRecording]="isRecording">
                 </app-midi-track>
@@ -75,6 +76,7 @@
                     <app-midi-block
                         #blockRef
                         [track]="track"
+                        [selectedTrack]="selectedTrack"
                         [isRecording]="isRecording"
                         [vw]="maxVW"
                     >
