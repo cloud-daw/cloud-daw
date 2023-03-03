@@ -28,8 +28,8 @@ export interface TrackInfo {
 
 
 export interface ProjectInfo {
-    project_id: string;
-    project_name: string;
+    id: string;
+    name: string;
     user: string;
     master_volume: number;
     tracks: TrackInfo[];

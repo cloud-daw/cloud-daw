@@ -1,6 +1,7 @@
 import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import { Recording } from '../recording/recording';
+import { Note } from '../recording/note';
 
 export class MidiTrack {
     title: string;
@@ -24,6 +25,10 @@ export class MidiTrack {
      */
     public ChangeVolume(db: number) {
         this.instrument.AdjustVolume(db);
+    }
+
+    public setRecording(notes: Note[]) {
+        this.midi = new Recording(this.instrument, notes);
     }
 
     // public MuteTrack(status: boolean) {

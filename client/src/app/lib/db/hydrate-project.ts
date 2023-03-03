@@ -1,12 +1,12 @@
-import { TrackInfo, ProjectInfo, InstrumentInfo } from '../../models/db/project-info'
+import { NoteInfo, EffectInfo, TrackInfo, ProjectInfo, InstrumentInfo } from '../../models/db/project-info'
 import { MidiInstrument } from '../../models/instruments/midi-instrument'
 import { MidiTrack } from '../../models/tracks/midi-track'
-import { Recording } from '../../models/recording/recording'
+import { Project } from '../../models/project'
 import { Note } from '../../models/recording/note'
-import * as Tone from 'tone';
 
 export function HydrateProjectFromDB(project: ProjectInfo) {
-    
+    let tracks = makeAllTracks(project.tracks)
+    return new Project(project.id, project.name, project.tempo, project.signature, tracks);
 }
 
 function makeAllTracks(info: TrackInfo[]) : MidiTrack[] {
@@ -19,9 +19,34 @@ function makeAllTracks(info: TrackInfo[]) : MidiTrack[] {
 }
 
 function makeTrack(info: TrackInfo): MidiTrack {
-    return new MidiTrack(info.title, info.id, makeInstrumentFromInfo(info.instrument), false);
+    let track = new MidiTrack(info.title, info.id, makeInstrumentFromInfo(info.instrument), false, makeAllEffects(info.effects));
+    track.setRecording(makeRecordingFromInfo(info.notes));
+    return track;
+}
+
+
+//. effects will need to be constructed once we get there
+
+function makeAllEffects(info: EffectInfo[]): string[] {
+    let effects: string[] = [];
+    for (let i = 0; i < info.length; i++) {
+        effects.push(makeEffect(info[i]));
+    }
+    return effects;
+}
+
+function makeEffect(info: EffectInfo): string {
+    return info.effect;
 }
 
 function makeInstrumentFromInfo(info: InstrumentInfo): MidiInstrument {
     return new MidiInstrument(info.name)
+}
+
+function makeRecordingFromInfo(info: NoteInfo[]): Note[] {
+    let notes : Note[] = []
+    for (let i = 0; i < info.length; i++) {
+        notes.push(new Note(info[i].value, info[i].attack, info[i].release, info[i].duration));
+    }
+    return notes;
 }
