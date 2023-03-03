@@ -42,9 +42,14 @@
     </div>
     <div class="production-container">
         <div class='tracks-container'>
-            <button class="new-track-button" (click)="newTrack()">
+            <button class="new-track-button" (click)="promptSelectInstrument()">
                 Add Track
             </button>
+            <app-select-instrument
+            (createTrack)="newTrack($event)"
+            [isPrompted]="showSelectInstrument"
+            >
+            </app-select-instrument>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <!-- <li *ngFor="let item of myMap | keyvalue">
                     Key: {{item.key}}, value: {{item.value}}
@@ -52,7 +57,7 @@
                 <app-midi-track 
                     [track]="track"
                     [tracks]="tracks"
-                    [(selectedTrack)]="selectedTrack" 
+                    [(selectedTrack)]="selectedTrack"
                     (onDelete)="onDeleteTrack($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
                     [isRecording]="isRecording">

@@ -3,6 +3,7 @@ import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import * as Tone from 'tone';
 
 @Component({
   selector: 'app-midi-track',
@@ -14,6 +15,7 @@ export class MidiTrackComponent {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Input() synth: any;
 
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;

@@ -3,6 +3,7 @@ import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
+import * as Tone from 'tone';
 
 @Component({
   selector: 'app-midi-block',
@@ -12,8 +13,9 @@ import { MidiTrackComponent } from '../midi-track/midi-track.component';
 export class MidiBlockComponent {
   @ViewChild(MidiTrackComponent, { read: ElementRef }) trackComponentRef?: ElementRef;
   @ViewChild('sliderRef') sliderRef?: ElementRef;
+  @Input() synth: any;
 
-  @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument('', Tone.AMSynth), false);
   @Input() vw : number = 100;
   @Input() bars: number = 16;
   @Input() signature: number = 4;
@@ -24,7 +26,7 @@ export class MidiBlockComponent {
     get track(): MidiTrack {
       return this._track;
     }
-  private _track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
+  private _track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument('', Tone.AMSynth), false);
 
   @Input() isRecording: boolean = false;
 

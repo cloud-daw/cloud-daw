@@ -14,6 +14,7 @@ import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
+
   
 /**
  * Int status of keys for keyboard
@@ -95,7 +96,7 @@ export class HomeComponent {
   }
   
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.synth = new MidiInstrument("test");
+    this.synth = new MidiInstrument('');
     this.controller = new MidiControllerComponent(this.synth);
     this.tempo = 120;
     this.signature = 4;
@@ -103,7 +104,7 @@ export class HomeComponent {
     this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
-    this.currentRecording = new Recording(this.synth);
+    this.currentRecording = new Recording(this.selectedTrack.instrument);
     this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
       "a": keyStatus.notPlaying,
@@ -149,17 +150,24 @@ export class HomeComponent {
   controlEvent = controlStatus.reset;
 
   public isExpanded = false;
+  public showSelectInstrument = false;
 
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
   }
 
-  newTrack() {
+  promptSelectInstrument() {
+    this.showSelectInstrument = !this.showSelectInstrument;
+  }
+
+  newTrack(instrument: MidiInstrument) {
     this.trackIdCounter++;
-    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
+    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+    console.log('new track created with instrument: ' + instrument.name);
     this.tracks.add(newTrack);
     this.selectedTrack = newTrack;
     this.updateRecording(this.selectedTrack.id);
+    this.showSelectInstrument = false;
   }
 
   onDeleteTrack(trackId: number) {
@@ -169,7 +177,7 @@ export class HomeComponent {
   synthOnKeydown(key: string) {
     if (this.keyboardStatus[key] != keyStatus.isPlaying) {
       this.keyboardStatus[key] = keyStatus.isPlaying;
-      let note = this.synth.Play(key);
+      let note = this.selectedTrack.instrument.Play(key);
       if (this.isRecording) this.currentRecording.RecordNote(note);
     }
   }
@@ -177,7 +185,7 @@ export class HomeComponent {
   synthOnKeyup(key: string) {
     if (this.keyboardStatus[key] == keyStatus.isPlaying) {
         this.keyboardStatus[key] = keyStatus.notPlaying;
-        let note = this.synth.Release(key);
+        let note = this.selectedTrack.instrument.Release(key);
         if (this.isRecording) this.currentRecording.AddRelease(note);
     }
   }

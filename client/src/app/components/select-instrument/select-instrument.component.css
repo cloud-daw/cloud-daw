@@ -1,0 +1,33 @@
+.container {
+    background-color: #717171;
+    height: 0em;
+    display: flex;
+    box-shadow: inset 0px 0px 15px 5px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    visibility: hidden;
+}
+
+.show .container {
+    height: auto;
+    visibility: visible;
+}
+
+.content {
+    padding: 1em;
+}
+
+.instrument {
+    background-color:#525252;
+    border-radius: 3px;
+    margin: 0.25em 0.25em 0.25em 0.25em;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.instrument:hover {
+    background-color: #919191;
+    cursor: pointer;
+}
+

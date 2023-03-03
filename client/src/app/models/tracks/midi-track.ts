@@ -9,7 +9,7 @@ export class MidiTrack {
     instrument: MidiInstrument;
     selected: boolean;
     effects: string[] = [];
-    midi: Recording = new Recording(new MidiInstrument(''));
+    midi: Recording = new Recording(new MidiInstrument('', Tone.AMSynth));
     constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects?: string[]) {
         this.title = title;
         this.id = id;

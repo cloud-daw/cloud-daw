@@ -21,6 +21,7 @@ import { PasswordResetComponent } from './components/password-reset/password-res
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
 import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
+import { SelectInstrumentComponent } from './components/select-instrument/select-instrument.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
     SliderGridComponent,
     PasswordResetComponent,
     EmailVerificationComponent,
-    MidiBlockComponent
+    MidiBlockComponent,
+    SelectInstrumentComponent
   ],
   imports: [
     BrowserModule,

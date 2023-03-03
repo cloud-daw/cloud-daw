@@ -14,10 +14,12 @@ export class MidiInstrument {
     private keyDict: Record<string, string>;
     private attack: number; //unused for now
     public release: number;
-    constructor(name: string) {
-        this.name = name;
-        this.sound = "Synthesizer" //to load for later
-        this.instrument = new Tone.PolySynth().toDestination();
+    public synth: any;
+    constructor(name: string, synth?: any) {
+        this.name = name != '' ? name : 'Default Synth';
+        this.sound = "" //to load for later
+        this.synth = synth ?? {}
+        this.instrument = new Tone.PolySynth(this.synth).toDestination();
         this.keyDict = MakeKeyDict(this.currentOctave);
         this.isPlaying = false;
         this.attack = 0;
