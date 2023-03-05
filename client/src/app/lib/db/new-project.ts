@@ -5,5 +5,5 @@ import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 
 export function MakeNewProject(user: string, title: string = 'New Project') {
     let id = uuidv4()
-    return new Project(id, title, 120, 4, [new MidiTrack('Track 0', 0, new MidiInstrument('Synth'), true)])
+    return new Project(id, title, user, 120, 4, [new MidiTrack('Track 0', 0, new MidiInstrument('Synth'), true)])
 }

@@ -16,6 +16,8 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
 import { MakeNewProject } from 'src/app/lib/db/new-project';
+import { HydrateProjectFromDB } from 'src/app/lib/db/hydrate-project';
+import { InfoizeProject } from 'src/app/lib/db/infoize-project';
   
 /**
  * Int status of keys for keyboard
@@ -99,6 +101,7 @@ export class HomeComponent {
   project: Project;
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.project = MakeNewProject('local user');
+    this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
     this.controller = new MidiControllerComponent(this.synth);
     this.tempo = this.project.tempo;
@@ -203,6 +206,11 @@ export class HomeComponent {
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
+    console.log('project on play', this.project);
+    let info = InfoizeProject(this.project);
+    console.log('project Info on conv', info);
+    let reproj = HydrateProjectFromDB(info);
+    console.log('project hydrated on conv', reproj);
   }
 
   onPause(event : boolean) {
@@ -267,6 +275,7 @@ export class HomeComponent {
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
+    this.project.updateTrackRecordingAtId(id, this.currentRecording)
   }
 
   /**
@@ -293,6 +302,7 @@ export class HomeComponent {
   }
 
   onMainVolumeChange(event: number) {
+    console.log('volume changed', event);
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
   }
@@ -303,6 +313,7 @@ export class HomeComponent {
    */
   private adjustMasterVolume(db: number) {
     Tone.Destination.volume.value = db;
+    this.project.masterVolume = db;
   }
 
   // /**

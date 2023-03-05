@@ -27,6 +27,10 @@ export class MidiTrack {
         this.instrument.AdjustVolume(db);
     }
 
+    updateRecording(newNotes: Note[]) {
+        this.midi.data = newNotes;
+    }
+
     public setRecording(notes: Note[]) {
         this.midi = new Recording(this.instrument, notes);
     }
