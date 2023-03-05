@@ -5,10 +5,10 @@ export class Project {
     public id: string;
     public name: string;
     public tempo: number;
-    public signature: number | number[];
+    public signature: number;
     public tracks: MidiTrack[];
     public metronome: Metronome;
-    constructor(id: string, name: string = "New Project", tempo: number = 120, signature: number | number[] = 4, tracks: MidiTrack[] = []) {
+    constructor(id: string, name: string = "New Project", tempo: number = 120, signature: number = 4, tracks: MidiTrack[] = []) {
         this.id = id;
         this.name = name;
         this.tempo = tempo;

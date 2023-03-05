@@ -2,6 +2,7 @@ import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from 
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
+import {Project} from '../../models/project'
 import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
@@ -14,6 +15,7 @@ import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
+import { MakeNewProject } from 'src/app/lib/db/new-project';
   
 /**
  * Int status of keys for keyboard
@@ -93,14 +95,16 @@ export class HomeComponent {
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
   }
-  
+  isNew: boolean = false;
+  project: Project;
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.synth = new MidiInstrument("test");
+    this.project = MakeNewProject('local user');
+    this.synth = this.project.tracks[0].instrument;
     this.controller = new MidiControllerComponent(this.synth);
-    this.tempo = 120;
-    this.signature = 4;
-    this.metronome = new Metronome(this.tempo, this.signature); //120 bpm at 4/4
-    this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
+    this.tempo = this.project.tempo;
+    this.signature = this.project.signature;
+    this.metronome = this.project.metronome;
+    this.selectedTrack = this.project.tracks[0]
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.synth);

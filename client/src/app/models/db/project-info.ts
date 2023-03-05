@@ -34,5 +34,5 @@ export interface ProjectInfo {
     master_volume: number;
     tracks: TrackInfo[];
     tempo: number;
-    signature: number | number[];
+    signature: number;
 }
