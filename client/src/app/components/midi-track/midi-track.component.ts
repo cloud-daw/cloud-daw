@@ -3,6 +3,7 @@ import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import * as Tone from 'tone';
 
 @Component({
   selector: 'app-midi-track',
@@ -14,6 +15,7 @@ export class MidiTrackComponent {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Input() synth: any;
 
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
@@ -28,6 +30,8 @@ export class MidiTrackComponent {
     }
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+
+  @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
   
   //functions
   public formatLabel(value: number): string {
@@ -37,6 +41,7 @@ export class MidiTrackComponent {
   public deleteTrack() {
     if (this.tracks.size > 1) {
       this.track.midi = new Recording(this.track.instrument);
+      this.onDelete.emit(this.track.id);
       this.tracks.delete(this.track);
     }
 

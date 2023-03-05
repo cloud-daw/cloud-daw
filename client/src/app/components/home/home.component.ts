@@ -107,7 +107,7 @@ export class HomeComponent {
     this.selectedTrack = this.project.tracks[0]
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
-    this.currentRecording = new Recording(this.synth);
+    this.currentRecording = new Recording(this.selectedTrack.instrument);
     this.recordings = new Map<number, Recording>();
     this.keyboardStatus = {
       "a": keyStatus.notPlaying,
@@ -153,23 +153,34 @@ export class HomeComponent {
   controlEvent = controlStatus.reset;
 
   public isExpanded = false;
+  public showSelectInstrument = false;
 
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
   }
 
-  newTrack() {
+  promptSelectInstrument() {
+    this.showSelectInstrument = !this.showSelectInstrument;
+  }
+
+  newTrack(instrument: MidiInstrument) {
     this.trackIdCounter++;
-    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, this.synth, true);
+    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+    console.log('new track created with instrument: ' + instrument.name);
     this.tracks.add(newTrack);
     this.selectedTrack = newTrack;
     this.updateRecording(this.selectedTrack.id);
+    this.showSelectInstrument = false;
+  }
+
+  onDeleteTrack(trackId: number) {
+    this.recordings.delete(trackId);
   }
 
   synthOnKeydown(key: string) {
     if (this.keyboardStatus[key] != keyStatus.isPlaying) {
       this.keyboardStatus[key] = keyStatus.isPlaying;
-      let note = this.synth.Play(key);
+      let note = this.selectedTrack.instrument.Play(key);
       if (this.isRecording) this.currentRecording.RecordNote(note);
     }
   }
@@ -177,7 +188,7 @@ export class HomeComponent {
   synthOnKeyup(key: string) {
     if (this.keyboardStatus[key] == keyStatus.isPlaying) {
         this.keyboardStatus[key] = keyStatus.notPlaying;
-        let note = this.synth.Release(key);
+        let note = this.selectedTrack.instrument.Release(key);
         if (this.isRecording) this.currentRecording.AddRelease(note);
     }
   }
