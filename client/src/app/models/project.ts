@@ -5,16 +5,16 @@ import { Recording } from './recording/recording';
 export class Project {
     public id: string;
     public name: string;
-    public user: string;
+    public email: string;
     public tempo: number;
     public signature: number;
     public tracks: MidiTrack[];
     public metronome: Metronome;
     public masterVolume: number;
-    constructor(id: string, name: string = "New Project", user: string = "this user", tempo: number = 120, signature: number = 4, tracks: MidiTrack[] = [], masterVolume: number = 0) {
+    constructor(id: string, name: string = "New Project", email: string = "nulluser", tempo: number = 120, signature: number = 4, tracks: MidiTrack[] = [], masterVolume: number = 0) {
         this.id = id;
         this.name = name;
-        this.user = user;
+        this.email = email;
         this.tempo = tempo;
         this.signature = signature;
         this.tracks = tracks;

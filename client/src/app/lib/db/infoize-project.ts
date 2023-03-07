@@ -50,7 +50,7 @@ export interface ProjectInfo {
 
 export function InfoizeProject(project: Project) : ProjectInfo {
     let tracks: TrackInfo[] = makeAllTrackInfo(project.tracks);
-    return { id: project.id, name: project.name, user: project.user, master_volume: project.masterVolume, tracks: tracks, tempo: project.tempo, signature: project.signature };
+    return { id: project.id, name: project.name, email: project.email, master_volume: project.masterVolume, tracks: tracks, tempo: project.tempo, signature: project.signature };
 }
 
 function makeAllTrackInfo(tracks: MidiTrack[]): TrackInfo[] {
@@ -65,7 +65,7 @@ function makeTrackInfo(track: MidiTrack): TrackInfo {
     let instrumentI: InstrumentInfo = makeInfoFromInstrument(track.instrument);
     let notesI: NoteInfo[] = makeInfoFromRecording(track.midi.data)
     let effectsI: EffectInfo[] = makeAllEffectInfo(track.effects);
-    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, volume: 0, isMute: false, isSolo: false, effects: effectsI};
+    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
 }
 
 

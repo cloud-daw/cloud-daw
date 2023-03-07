@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
-//import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
 import { environment } from './environments/environment';
@@ -55,7 +55,8 @@ import { SelectInstrumentComponent } from './components/select-instrument/select
         storageBucket: environment.firebase.storageBucket,
         messagingSenderId: environment.firebase.messagingSenderId,
         appId: environment.firebase.appId,
-    })
+    }),
+    AngularFireDatabaseModule,
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],

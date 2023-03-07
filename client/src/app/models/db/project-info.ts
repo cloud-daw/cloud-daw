@@ -30,7 +30,7 @@ export interface TrackInfo {
 export interface ProjectInfo {
     id: string;
     name: string;
-    user: string;
+    email: string;
     master_volume: number;
     tracks: TrackInfo[];
     tempo: number;

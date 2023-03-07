@@ -47,7 +47,7 @@ export class HomeComponent {
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
       myDiv.classList.add("active");
-    }   
+    }
     //this.PlayRelease();
   }
 
@@ -64,7 +64,7 @@ export class HomeComponent {
   }
 
 
-  currMousekey : string = '';
+  currMousekey: string = '';
 
   @HostListener('window:mouseup', ['$event'])
   handleMouseupEvent(event: MouseEvent) {
@@ -72,7 +72,7 @@ export class HomeComponent {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
         myDiv.classList.remove("active");
-      }   
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
@@ -80,10 +80,10 @@ export class HomeComponent {
 
   onKeyMousedown(key: string) {
     this.currMousekey = key;
-      const myDiv = document.getElementById(this.currMousekey);
-      if (myDiv) {
-        myDiv.classList.add("active");
-    }   
+    const myDiv = document.getElementById(this.currMousekey);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }
     this.synthOnKeydown(key);
   }
 
@@ -92,7 +92,7 @@ export class HomeComponent {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
         myDiv.classList.remove("active");
-      }   
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
@@ -100,7 +100,7 @@ export class HomeComponent {
   isNew: boolean = false;
   project: Project;
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.project = MakeNewProject('local user');
+    this.project = MakeNewProject(JSON.parse(localStorage.getItem('user') || "").email);
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
     this.controller = new MidiControllerComponent(this.synth);
@@ -211,6 +211,7 @@ export class HomeComponent {
     console.log('project Info on conv', info);
     let reproj = HydrateProjectFromDB(info);
     console.log('project hydrated on conv', reproj);
+    console.log('are same', this.project == reproj);
   }
 
   onPause(event : boolean) {
@@ -219,6 +220,7 @@ export class HomeComponent {
     this.isRecording = false;
     this.metronome.Pause();
     this.controlEvent = controlStatus.pause;
+    this.firebaseService.saveProject(InfoizeProject(this.project))
   }
 
   onRewind(event : boolean) {
