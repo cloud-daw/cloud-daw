@@ -14,6 +14,8 @@ export class MainControlsComponent implements OnChanges {
   @Output() rewind: EventEmitter<boolean> = new EventEmitter();
   @Output() undo: EventEmitter<number> = new EventEmitter();
   @Output() volume: EventEmitter<number> = new EventEmitter();
+  @Output() tutorial: EventEmitter<any> = new EventEmitter();
+  @Output() tutorialNext: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
   
   @Input() isRecording: boolean = false;
@@ -52,6 +54,12 @@ export class MainControlsComponent implements OnChanges {
 
   clickLogout() {
     this.logout.emit();
+  }
+  clickTutorial() {
+    this.tutorial.emit();
+  }
+  clickTutorialNext() {
+    this.tutorialNext.emit();
   }
 
   /**

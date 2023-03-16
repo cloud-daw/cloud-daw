@@ -1,11 +1,11 @@
 <div class="control-bar-container">
     <div class="control-bar-header">
         <div class="left-header">
-            <div class="volume-slider">
+            <div class="volume-slider" id="volume">
                 <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
             </div>
         </div>
-        <div class="center-header">
+        <div class="center-header" id="center-main-controls">
             <!-- <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> UNDO BUTTON
             </button> -->
             <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
@@ -32,7 +32,9 @@
             <span class="record-status" *ngIf="isRecording">Recording...</span>
         </div>
         <div class="right-header">
-            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>
+            
+            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickTutorial()"> Tutorials</button>
+            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>   
         </div>
     </div>
     <div class="tempo-control-container">
