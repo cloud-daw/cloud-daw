@@ -9,6 +9,7 @@ import * as Tone from 'tone';
   templateUrl: './midi-notes-container.component.html',
   styleUrls: ['./midi-notes-container.component.css']
 })
+
 export class MidiNotesContainerComponent {
   
   @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
@@ -57,12 +58,7 @@ export class MidiNotesContainerComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     this.updateVisual();
-    if (changes['isRecording']) {
-      if (!this.isRecording) {
-        this.updateVisual();
-        //console.log('updating visual');
-      }
-    }
+
     if (changes['selectedTrack']) {
       if (this.track == this.selectedTrack) this.isSelected = true;
       else this.isSelected = false;
