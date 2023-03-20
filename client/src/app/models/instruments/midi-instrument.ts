@@ -1,4 +1,5 @@
 import * as Tone from 'tone';
+import { SynthOptions } from 'tone';
 import { MakeKeyDict } from '../../lib/keydict';
 
 //monophonic (poly requires refactor) instrument class
@@ -15,10 +16,10 @@ export class MidiInstrument {
     private attack: number; //unused for now
     public release: number;
     public synth: any;
-    constructor(name: string, synth?: any) {
+    constructor(name: string, synth?: any, type?: string) {
         this.name = name != '' ? name : 'Default Synth';
         this.sound = "" //to load for later
-        this.synth = synth ?? {}
+        this.synth = synth ?? {};
         this.instrument = new Tone.PolySynth(this.synth).toDestination();
         this.keyDict = MakeKeyDict(this.currentOctave);
         this.isPlaying = false;

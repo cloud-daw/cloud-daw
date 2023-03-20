@@ -3,7 +3,6 @@ import { first } from 'rxjs/operators';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import {Project} from '../../models/project'
-import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
@@ -162,7 +161,6 @@ export class HomeComponent {
   maxVW: number = 0;
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
   synth!: MidiInstrument;
-  controller!: MidiControllerComponent;
   metronome!: Metronome;
   selectedTrack!: MidiTrack;
   // tracks: Set<MidiTrack>;
@@ -181,7 +179,6 @@ export class HomeComponent {
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
-    this.controller = new MidiControllerComponent(this.synth);
     this.tempo = this.project.tempo;
     this.signature = this.project.signature;
     this.metronome = this.project.metronome;
