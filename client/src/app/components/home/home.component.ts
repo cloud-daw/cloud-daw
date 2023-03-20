@@ -304,7 +304,7 @@ export class HomeComponent {
     //     block.updateVisual();
     //   }
     // });
-    console.log(this.recordings);
+    //(this.recordings);
   }
 
   /**

@@ -49,7 +49,7 @@ export class MidiTrackComponent {
       this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
       this.track.selected = true;
     }
-    console.log(this.selectedTrack.title, this.selectedTrack.instrument.synth)
+    //console.log(this.selectedTrack.title, this.selectedTrack.instrument.synth)
   }
 
   changeTrackTitle(title: string) {

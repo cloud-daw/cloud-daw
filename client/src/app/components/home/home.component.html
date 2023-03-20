@@ -78,16 +78,14 @@
             </app-slider>
 
             <div class="midi-subContainer">
-                <div class='notes-container' *ngFor="let track of tracks">
-                    <div *ngFor="let data of track.midi.data">
-                        <app-midi-note
-                            [track]="track"
-                            [vw]="maxVW"
-                            [data]="data"
-                            [isRecording]="isRecording"
-                        >
-                        </app-midi-note>
-                    </div>
+                <div *ngFor="let track of tracks">
+                    <app-midi-notes-container
+                        [track]="track"
+                        [vw]="maxVW"
+                        [isRecording]="isRecording"
+                    >
+                        
+                    </app-midi-notes-container>
                 </div>
             </div>
         </div>

@@ -17,8 +17,6 @@ export class MidiNoteComponent {
   @Input() bars: number = 16;
   @Input() isRecording: boolean = false;
 
-  public isVisible: string = this.track.midi.data.length > 0 ? 'visible' : 'hidden';
-
   public width: number = this.convertDurationToWidth(this.data.duration);
   public widthCSS: string = `${this.width}vw`;
 
@@ -35,6 +33,7 @@ export class MidiNoteComponent {
     const normedBar = 16 * (bar - 1);
     const normedBeat = 4 * beat;
     const bbsSum = normedBar + normedBeat + sixteenth
+    console.log('final BBS return value should be', bbsSum * bbsInterval);
     return bbsSum * bbsInterval; //as VW
   }
 
@@ -51,13 +50,17 @@ export class MidiNoteComponent {
     this.widthCSS = `${this.width}vw`;
     this.left = start;
     this.leftCSS = `${this.left}vw`;
+    console.log('left', this.left, 'width', this.width);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isRecording']) {
+      if (this.data) {
+        // console.log('recording data??', this.data, this.data.attack.toString().split(':'));
+      }
       if (this.data && !this.isRecording) {
-        console.log('displaying notes for :', this.track.id, this.width, this.left);
         this.updateDisplay();
+        console.log('displaying notes for :', this.track.id, this.widthCSS, this.leftCSS);
       }
     }
   }
