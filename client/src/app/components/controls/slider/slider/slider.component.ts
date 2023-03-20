@@ -53,7 +53,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.maxVW = 100 - this.startingPosition;
     this.sPos.emit(this.maxVW);
     this.posDict = new PositionDict(this.maxVW, this.startingPosition, this.bars, this.signature);
-    this.setTransformOnPosition(this.startingPosition) //offset by 0.02 to make it look a little cleaner
+    this.setTransformOnPosition(this.startingPosition)
   }
 
   ngOnChanges(changes: SimpleChanges): void {

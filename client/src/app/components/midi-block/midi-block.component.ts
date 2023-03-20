@@ -64,6 +64,18 @@ export class MidiBlockComponent {
     return ((m - 1) * interval);
   }
 
+  convertBBSToPosition(position: string) {
+    let strPosArr: string[] = position.split(':')
+    const bar = parseInt(strPosArr[0])
+    const beat = parseInt(strPosArr[1])
+    const sixteenth = parseFloat(strPosArr[2])
+    const bbsInterval = this.vw / (this.bars * 16)
+    const normedBar = 16 * (bar - 1);
+    const normedBeat = 4 * beat;
+    const bbsSum = normedBar + normedBeat + sixteenth
+    return bbsSum * bbsInterval; //as VW
+  }
+
   updateVisual() {
     this.isVisible = 'visible';
     const minmax = this.extractMinMax();
