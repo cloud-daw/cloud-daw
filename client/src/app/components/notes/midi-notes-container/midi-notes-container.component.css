@@ -1,3 +1,11 @@
-.container {
+.notes-container {
     position: relative;
+    color: white;
+    /* width: 100%; */
+    height: 6em;
+    border-top: 0.5px solid rgb(48, 48, 48);
+    border-bottom: 0.5px solid rgb(48, 48, 48);
+    /* box-sizing: content-box; */
+    border: 0.1px solid red;
+    display: flex;
 }

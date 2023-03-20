@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { MidiNoteComponent } from '../midi-note/midi-note.component';
 import * as Tone from 'tone';
 
 @Component({

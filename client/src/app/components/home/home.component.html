@@ -76,21 +76,18 @@
                 (sPos)="catchSliderStartPos($event)"
             >
             </app-slider>
+
             <div class="midi-subContainer">
-                <div *ngFor="let track of tracks">
-                    <app-midi-notes-container
-                        [track]="track"
-                        [selectedTrack]="selectedTrack"
-                        [isRecording]="isRecording"
-                        [vw]="maxVW"
-                        *ngFor="let data of track.midi.data"
-                    >
+                <div class='notes-container' *ngFor="let track of tracks">
+                    <div *ngFor="let data of track.midi.data">
                         <app-midi-note
+                            [track]="track"
                             [vw]="maxVW"
                             [data]="data"
+                            [isRecording]="isRecording"
                         >
                         </app-midi-note>
-                    </app-midi-notes-container>
+                    </div>
                 </div>
             </div>
         </div>

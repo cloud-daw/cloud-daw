@@ -1,4 +1,9 @@
-.container {
-    color: white;
+.note-block {
     position: absolute;
+    background-color: #00ff62;
+    width: 1em;
+    left: 0;
+    height: 2em;
+    border-radius: 5px;
 }
+

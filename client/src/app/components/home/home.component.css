@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
 
+
+  .noteynote {
+    color: white;
+    background-color: red;
+  }
 *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -146,4 +151,16 @@
 .midi-subContainer {
   position: absolute;
   width: auto;
+}
+
+.notes-container {
+  position: relative;
+  color: white;
+  width: 100%;
+  height: 6em;
+  border-top: 0.5px solid rgb(48, 48, 48);
+  border-bottom: 0.5px solid rgb(48, 48, 48);
+  /* box-sizing: content-box; */
+  border: 0.1px solid red;
+  display: flex;
 }
