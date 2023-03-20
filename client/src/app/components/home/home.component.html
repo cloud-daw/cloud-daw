@@ -70,7 +70,7 @@
                 #sliderRef
                 [bpm]="tempo" 
                 [controlEvent]="controlEvent" 
-                [bars]="bars" 
+                [bars]="bars"
                 [isRecording]="isRecording"
                 (positionChange)="handleSliderChange($event)" 
                 (sPos)="catchSliderStartPos($event)"
@@ -78,14 +78,23 @@
             </app-slider>
             <div class="midi-subContainer">
                 <div *ngFor="let track of tracks">
-                    <app-midi-block
-                        #blockRef
+                    <app-midi-notes-container
                         [track]="track"
                         [selectedTrack]="selectedTrack"
                         [isRecording]="isRecording"
                         [vw]="maxVW"
+                        *ngFor="let data of track.midi.data"
                     >
-                    </app-midi-block>
+                        <app-midi-note
+                            [track]="track"
+                            [selectedTrack]="selectedTrack"
+                            [isRecording]="isRecording"
+                            [vw]="maxVW"
+                            [data]="data"
+                        >
+                            im a note pls kill me
+                        </app-midi-note>
+                    </app-midi-notes-container>
                 </div>
             </div>
         </div>
