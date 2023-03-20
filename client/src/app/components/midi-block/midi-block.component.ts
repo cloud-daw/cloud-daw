@@ -53,14 +53,11 @@ export class MidiBlockComponent {
       max = parseInt(recording[recording.length-1].release.toString().split(':')[0]);
     }
     max++;
-    //console.log('min, max', min, max, this.track.midi.data);
     return [min, max];
   }
 
   convertMeasureToPosition(m: number) {
-    //console.log(this.vw);
     const interval = this.vw / this.bars;
-    //console.log('converting m to p', interval)
     return ((m - 1) * interval);
   }
 
@@ -88,20 +85,17 @@ export class MidiBlockComponent {
     this.leftOffsetToString = `${this.leftOffset}vw`;
     let endLeft = this.convertMeasureToPosition(minmax[1]);
     this.blockWidth = `${endLeft - this.leftOffset}vw`;
-    //console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isRecording']) {
       if (!this.isRecording) {
         this.updateVisual();
-        //console.log('updating visual');
       }
     }
     if (changes['selectedTrack']) {
       if (this.track == this.selectedTrack) this.isSelected = true;
       else this.isSelected = false;
-      ////console.log('selected track: ', this.selectedTrack, this.isSelected);
     }
   }
 

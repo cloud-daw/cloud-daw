@@ -12,7 +12,6 @@ export class SliderGridComponent implements OnChanges {
   griddex: number[] = [];
   constructor() {}
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     this.griddex = [];
     const slices = this.bars * this.signature + 1;
     for (let i = 0; i < slices; i++) {

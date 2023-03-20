@@ -6,7 +6,6 @@ import {Project} from '../../models/project'
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
-import { ApiHttpService } from '../../services/http/httpservice.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
@@ -102,7 +101,7 @@ export class HomeComponent {
 
   projectKey: string = "";
   loading: boolean = true;
-  constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
+  constructor(public firebaseService: FirebaseService, public _router: Router) {
     const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
     this.project = MakeNewProject(sessionEmail);
     firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
@@ -130,7 +129,7 @@ export class HomeComponent {
         })
       },
       complete: () => {
-        console.log('done')
+        console.log('Project Loaded!')
       }
     });
     this.keyboardStatus = {
@@ -211,7 +210,6 @@ export class HomeComponent {
   newTrack(instrument: MidiInstrument) {
     this.trackIdCounter++;
     const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
-    console.log('new track created with instrument: ' + instrument.name);
     this.tracks.add(newTrack);
     this.project.addTrack(newTrack);
     this.selectedTrack = newTrack;
@@ -250,12 +248,6 @@ export class HomeComponent {
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
-    // console.log('project on play', this.project);
-    // let info = InfoizeProject(this.project);
-    // console.log('project Info on conv', info);
-    // let reproj = HydrateProjectFromInfo(info);
-    // console.log('project hydrated on conv', reproj);
-    // console.log('are same', this.project == reproj);
   }
 
   onPause(event : boolean) {
@@ -283,7 +275,6 @@ export class HomeComponent {
   }
 
   handleSliderChange(event: any) {
-    console.log('slider change: ' + event);
     const nearest = event;
     const setBar = Math.floor((nearest / 10));
     const setBeat = (nearest % 10);
@@ -292,7 +283,6 @@ export class HomeComponent {
 
   catchSliderStartPos(event: any) {
     this.maxVW = event;
-    console.log('caught: ' + this.maxVW);
   }
 
   /**
@@ -332,12 +322,10 @@ export class HomeComponent {
    */
   onSelectedTrackChange(track: MidiTrack) {
     this.updateRecording(this.selectedTrack.id);
-    console.log(this.selectedTrack.title, this.selectedTrack.midi.data);
   }
 
   onUndo(event: number) {
     console.log('undo clicked');
-    console.log(event);
   }
 
   onIncreaseOctave() {
@@ -351,7 +339,6 @@ export class HomeComponent {
   }
 
   onMainVolumeChange(event: number) {
-    console.log('volume changed', event);
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
   }

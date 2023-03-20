@@ -62,7 +62,6 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     for (let i = 0; i < data.length; i++) {
         useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
         Tone.Transport.schedule((time) => {
-            console.log(data[i].value, 'note should play now: ', time);
             synth.voices[useSynthIdx].triggerAttackRelease(data[i].value, data[i].duration, time);
         }, data[i].attack);
     }

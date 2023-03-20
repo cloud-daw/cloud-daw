@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { GetAllSynthKeywords, GetSynthByKeyword } from 'src/app/lib/dicts/synthdict';
 
@@ -20,11 +20,4 @@ export class SelectInstrumentComponent {
   createTrackWithInstrument(instrument: string) {
     this.createTrack.emit(GetSynthByKeyword(instrument));
   }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['isPrompted']) {
-      console.log('KDMDMSS', this.isPrompted);
-    }
-  }
-
 }
