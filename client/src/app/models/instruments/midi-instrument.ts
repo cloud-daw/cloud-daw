@@ -85,7 +85,7 @@ export class MidiInstrument {
     }
 
     public MakeSynthCopy() : Tone.PolySynth {
-        return new Tone.PolySynth().toDestination();
+        return new Tone.PolySynth(this.synth).toDestination();
     }
 
     // Mute(status: boolean) {
