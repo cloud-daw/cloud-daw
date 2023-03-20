@@ -37,4 +37,13 @@ export class Project {
         this.tracks.push(track)
         //no emitter b/c it is handled in update recording, which runs when new track created
     }
+
+    deleteTrack(id: number) {
+        for (let i = 0; i < this.tracks.length; i++) {
+            if (id == this.tracks[i].id) {
+                this.tracks.splice(i, 1)
+                this.updateEmitter.emit()
+            }
+        }
+    }
 }
