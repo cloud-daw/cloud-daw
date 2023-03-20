@@ -188,7 +188,7 @@ export class HomeComponent {
     this.selectedTrack = this.project.tracks[0]
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
-    this.currentRecording = new Recording(this.selectedTrack.instrument);
+    this.currentRecording = this.project.tracks[0].midi;
     this.recordings = new Map<number, Recording>();
     for (let i = 0; i < this.project.tracks.length; i++) {
       this.tracks.add(this.project.tracks[i]);
