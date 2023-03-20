@@ -9,7 +9,6 @@ class Instrument {
   static MonoSynth: MidiInstrument = new MidiInstrument('MonoSynth', Tone.MonoSynth);
 }
 
-
 @Component({
   selector: 'app-select-instrument',
   templateUrl: './select-instrument.component.html',

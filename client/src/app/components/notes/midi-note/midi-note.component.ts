@@ -110,7 +110,18 @@ export class MidiNoteComponent {
     A6   : 82,
     'A#6': 83,
     B6   : 84,
-    C7   : 85
+    C7   : 85,
+    'C#7': 86,
+    D7   : 87,
+    'D#7': 88,
+    E7   : 89,
+    F7   : 90,
+    'F#7': 91,
+    G7   : 92,
+    'G#7': 93,
+    A7   : 94,
+    'A#7': 95,
+    B7   : 96,
   };
 
   convertBBSToPosition(position: Tone.Unit.Time) {
@@ -142,15 +153,18 @@ export class MidiNoteComponent {
     const end: number = this.convertBBSToPosition(this.data.release);
     const width = this.calculateWidth(start, end);
     const getNoteValue = Math.abs(100-this.notesDict[this.data.value]);
-    this.setDimensions(width, start, getNoteValue);
+    const modifier = 1;
+    const topOffset = getNoteValue * modifier;
 
-    console.log('left', start, 'width', width, 100-getNoteValue);
+    this.setDimensions(width, start, topOffset);
+
+    console.log('left', start, 'width', width, getNoteValue);
   }
 
   setDimensions(width: number, left: number, top: number) {
     this.widthCSS = `${width}vw`;
     this.leftCSS = `${left}vw`;
-    this.topCSS = `${Math.abs(100-top)}%`;
+    this.topCSS = `${Math.abs(top)}%`;
   }
 
   ngOnChanges(changes: SimpleChanges) {
