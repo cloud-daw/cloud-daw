@@ -20,11 +20,12 @@ export class MidiNotesContainerComponent {
   @Input() isRecording: boolean = false;
 
   public visibility = 'hidden';
-  public left = 0;
   public leftCSS = '';
   public widthCSS = '';
 
   public isSelected = false;
+
+  public maxWidth = 0;
 
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
@@ -46,19 +47,24 @@ export class MidiNotesContainerComponent {
     return ((m - 1) * interval);
   }
 
-  updateVisual() {
-    this.visibility = 'visible';
+  computeDimensions() {
     const minmax = this.extractMinMax();
-    this.left = this.convertMeasureToPosition(minmax[0]);
-    this.leftCSS = `${this.left}vw`;
+    const left = this.convertMeasureToPosition(minmax[0]);
     const endLeft = this.convertMeasureToPosition(minmax[1]);
-    this.widthCSS = `${endLeft - this.left}vw`;
+    const width = endLeft - left;
+    this.maxWidth = Math.max(this.maxWidth, width);
+    if (width >= this.maxWidth) this.updateVisual(left, endLeft, width);
+  }
+  
+  updateVisual(left: number, endLeft: number, width: number) {
+    this.visibility = 'visible';
+    this.leftCSS = `${left}vw`;
+    this.widthCSS = `${width}vw`;
     //console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.updateVisual();
-
+    this.computeDimensions();
     if (changes['selectedTrack']) {
       if (this.track == this.selectedTrack) this.isSelected = true;
       else this.isSelected = false;
