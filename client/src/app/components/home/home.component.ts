@@ -2,7 +2,6 @@ import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from 
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import { MidiControllerComponent } from '../midi-controller/midi-controller.component';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
@@ -44,7 +43,7 @@ export class HomeComponent {
     const myDiv = document.getElementById(event.key);
     if (myDiv) {
       myDiv.classList.add("active");
-    }   
+    }
     //this.PlayRelease();
   }
 
@@ -97,7 +96,6 @@ export class HomeComponent {
   
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     this.synth = new MidiInstrument('');
-    this.controller = new MidiControllerComponent(this.synth);
     this.tempo = 120;
     this.signature = 4;
     this.metronome = new Metronome(this.tempo, this.signature); //120 bpm at 4/4
@@ -136,7 +134,6 @@ export class HomeComponent {
   maxVW: number = 0;
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
   synth: MidiInstrument;
-  controller: MidiControllerComponent;
   metronome: Metronome;
   selectedTrack: MidiTrack;
   // tracks: Set<MidiTrack>;
