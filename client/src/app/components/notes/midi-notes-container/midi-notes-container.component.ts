@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiNoteComponent } from '../midi-note/midi-note.component';
@@ -12,7 +12,17 @@ import * as Tone from 'tone';
 
 export class MidiNotesContainerComponent {
   
-  @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  @Input()
+    set selectedTrack(track: MidiTrack) {
+      // this.selectedTrackChange.emit(track);
+      this._selectedTrack = track;
+    }
+    get selectedTrack() {
+      return this._selectedTrack;
+    }
+  @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  
   @Input() vw : number = 100;
   @Input() bars: number = 16;
   @Input() signature: number = 4;
@@ -26,6 +36,14 @@ export class MidiNotesContainerComponent {
   public isSelected = false;
 
   public maxWidth = 0;
+
+  public updateSelectedTrack(track: MidiTrack) {
+    if (!this.isRecording) {
+      this.selectedTrack = track; // set the local `selectedTrack` property
+      this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
+      this.track.selected = true;
+    }
+  }
 
   extractMinMax() : number[] {
     const recording = this.track.midi.data;

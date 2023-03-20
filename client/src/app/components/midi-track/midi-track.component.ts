@@ -18,16 +18,17 @@ export class MidiTrackComponent {
   @Input() synth: any;
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
-  @Input()
-    set selectedTrack(track: MidiTrack) {
-      // this.selectedTrackChange.emit(track);
-      this._selectedTrack = track;
-    }
-    get selectedTrack() {
-      return this._selectedTrack;
-    }
-  @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-  private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
+  // @Input()
+  //   set selectedTrack(track: MidiTrack) {
+  //     // this.selectedTrackChange.emit(track);
+  //     this._selectedTrack = track;
+  //   }
+  //   get selectedTrack() {
+  //     return this._selectedTrack;
+  //   }
+  // @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  // private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
   
   //functions
@@ -43,26 +44,26 @@ export class MidiTrackComponent {
     }
   }
   
-  public updateSelectedTrack(track: MidiTrack) {
-    if (!this.isRecording) {
-      this.selectedTrack = track; // set the local `selectedTrack` property
-      this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
-      this.track.selected = true;
-    }
-  }
+  // public updateSelectedTrack(track: MidiTrack) {
+  //   if (!this.isRecording) {
+  //     this.selectedTrack = track; // set the local `selectedTrack` property
+  //     this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
+  //     this.track.selected = true;
+  //   }
+  // }
 
   changeTrackTitle(title: string) {
     this.track.title = title;
     this.trackChange.emit(this.track);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['selectedTrack']) {
-      if (this.track != this.selectedTrack) {
-        this.track.selected = false;
-      }
-    }
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes['selectedTrack']) {
+  //     if (this.track != this.selectedTrack) {
+  //       this.track.selected = false;
+  //     }
+  //   }
+  // }
 }
 
 /**

@@ -56,10 +56,11 @@
                 <app-midi-track 
                     [track]="track"
                     [tracks]="tracks"
-                    [(selectedTrack)]="selectedTrack"
+                    [selectedTrack]="selectedTrack"
                     (onDelete)="onDeleteTrack($event)"
-                    (selectedTrackChange)="onSelectedTrackChange($event)"
-                    [isRecording]="isRecording">
+                    [isRecording]="isRecording"
+                    (click)="setSelectedTrack(track)"
+                >
                 </app-midi-track>
             </div>
         </div>
@@ -83,7 +84,8 @@
                             [track]="track"
                             [vw]="maxVW"
                             [isRecording]="isRecording"
-                            [selectedTrack]="selectedTrack"
+                            [(selectedTrack)]="selectedTrack"
+                            (click)="setSelectedTrack(track)"
                         />
                     </div>
                 </div>

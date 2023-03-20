@@ -208,18 +208,30 @@ export class HomeComponent {
   }
 
   newTrack(instrument: MidiInstrument) {
-    this.trackIdCounter++;
-    const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
-    this.tracks.add(newTrack);
-    this.project.addTrack(newTrack);
-    this.selectedTrack = newTrack;
-    this.updateRecording(this.selectedTrack.id);
-    this.showSelectInstrument = false;
+    if (!this.isRecording) {
+      this.trackIdCounter++;
+      const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+      this.tracks.add(newTrack);
+      this.project.addTrack(newTrack);
+      this.setSelectedTrack(newTrack);
+      this.showSelectInstrument = false;
+    }
   }
 
   onDeleteTrack(trackId: number) {
     this.recordings.delete(trackId);
     this.project.deleteTrack(trackId);
+  }
+
+  setSelectedTrack(track: MidiTrack) {
+    if (!this.isRecording) {
+      const temp = this.selectedTrack;
+      temp.selected = false;
+      this.selectedTrack = track;
+      this.selectedTrack.selected = true;
+      this.setRecordingToTrack(this.selectedTrack.id);
+      console.log(`Selected track: ${this.selectedTrack.title}`, track.title);
+    }
   }
 
   synthOnKeydown(key: string) {
@@ -288,18 +300,12 @@ export class HomeComponent {
   /**
    * Called when recording is stopped. 
    * Updates the recordings map with key: selectedTrackid and value: currentRecording
-   * Calls @method updateRecording(selectedTrack.id)
+   * Calls @method setRecordingToTrack(selectedTrack.id)
    */
   private onStopRecord() {
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
-    this.updateRecording(this.selectedTrack.id);
-    // this.blockRefs?.forEach((block) => {
-    //   if (block.track.id == this.selectedTrack.id) {
-    //     block.updateVisual();
-    //   }
-    // });
-    //(this.recordings);
+    this.setRecordingToTrack(this.selectedTrack.id);
   }
 
   /**
@@ -307,22 +313,15 @@ export class HomeComponent {
    * updates currentRecording value to currently stored recording data at @param id
    * If the selected track has no recording data, create a new empty recording with the track's current instrument
    */
-  private updateRecording(id: number) {
-    let recordingAtId = this.recordings.has(id)
+  private setRecordingToTrack(id: number) {
+    const recordingAtId = this.recordings.has(id)
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
     this.project.updateTrackRecordingAtId(id, this.currentRecording)
   }
 
-  /**
-   * @param track: might not be needed? idk angular sucks
-   * Runs every time a different track is selected.
-   * Calls @method updateRecording() with the currently selected track.
-   */
-  onSelectedTrackChange(track: MidiTrack) {
-    this.updateRecording(this.selectedTrack.id);
-  }
+  
 
   onUndo(event: number) {
     console.log('undo clicked');
