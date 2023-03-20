@@ -64,8 +64,8 @@ export class MidiBlockComponent {
     return ((m - 1) * interval);
   }
 
-  convertBBSToPosition(position: string) {
-    let strPosArr: string[] = position.split(':')
+  convertBBSToPosition(position: Tone.Unit.Time) {
+    let strPosArr: string[] = position.toString().split(':')
     const bar = parseInt(strPosArr[0])
     const beat = parseInt(strPosArr[1])
     const sixteenth = parseFloat(strPosArr[2])
@@ -74,6 +74,11 @@ export class MidiBlockComponent {
     const normedBeat = 4 * beat;
     const bbsSum = normedBar + normedBeat + sixteenth
     return bbsSum * bbsInterval; //as VW
+  }
+
+  convertDurationToWidth(duration: Tone.Unit.Time) {
+    const interval = this.vw / this.bars;
+    return (parseFloat(duration.toString()) * interval)
   }
 
   updateVisual() {
