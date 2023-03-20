@@ -1,13 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
-import * as Tone from 'tone';
+import { GetAllSynthKeywords, GetSynthByKeyword } from 'src/app/lib/dicts/synthdict';
 
-class Instrument {
-  static Default: MidiInstrument = new MidiInstrument('Default');
-  static AMSynth: MidiInstrument = new MidiInstrument('AMSynth', Tone.AMSynth);
-  static FMSynth: MidiInstrument = new MidiInstrument('FMSynth', Tone.FMSynth);
-  static MonoSynth: MidiInstrument = new MidiInstrument('MonoSynth', Tone.MonoSynth);
-}
+
 
 
 @Component({
@@ -21,16 +16,10 @@ export class SelectInstrumentComponent {
   @Input() isPrompted: boolean = true;
   @Output() createTrack: EventEmitter<MidiInstrument> = new EventEmitter<MidiInstrument>();
 
-  public instruments: MidiInstrument[] = 
-    [
-      Instrument.Default,
-      Instrument.AMSynth,
-      Instrument.FMSynth,
-      Instrument.MonoSynth
-    ]
+  public instruments = GetAllSynthKeywords();
 
-  createTrackWithInstrument(instrument: MidiInstrument) {
-    this.createTrack.emit(instrument);
+  createTrackWithInstrument(instrument: string) {
+    this.createTrack.emit(GetSynthByKeyword(instrument));
   }
 
   ngOnChanges(changes: SimpleChanges) {
