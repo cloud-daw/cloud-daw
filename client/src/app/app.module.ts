@@ -21,6 +21,8 @@ import { EmailVerificationComponent } from './components/email-verification/emai
 import { MidiBlockComponent } from './components/midi-block/midi-block.component';
 import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
 import { SelectInstrumentComponent } from './components/select-instrument/select-instrument.component';
+import { MidiNotesContainerComponent } from './components/notes/midi-notes-container/midi-notes-container.component';
+import { MidiNoteComponent } from './components/notes/midi-note/midi-note.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { SelectInstrumentComponent } from './components/select-instrument/select
     PasswordResetComponent,
     EmailVerificationComponent,
     MidiBlockComponent,
-    SelectInstrumentComponent
+    SelectInstrumentComponent,
+    MidiNotesContainerComponent,
+    MidiNoteComponent
   ],
   imports: [
     BrowserModule,
