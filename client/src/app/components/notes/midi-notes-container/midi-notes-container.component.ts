@@ -51,16 +51,16 @@ export class MidiNotesContainerComponent {
     const minmax = this.extractMinMax();
     const left = this.convertMeasureToPosition(minmax[0]);
     const endLeft = this.convertMeasureToPosition(minmax[1]);
-    const width = endLeft - left;
+    const width = endLeft;
     this.maxWidth = Math.max(this.maxWidth, width);
-    if (width >= this.maxWidth) this.updateVisual(left, endLeft, width);
+    if (width >= this.maxWidth) this.updateVisual(left, width);
   }
-  
-  updateVisual(left: number, endLeft: number, width: number) {
+
+  updateVisual(left: number, width: number) {
     this.visibility = 'visible';
     this.leftCSS = `${left}vw`;
     this.widthCSS = `${width}vw`;
-    //console.log('left offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
+    //console.log('let offset: ', this.leftOffsetToString, 'endLeft: ', endLeft, 'width:', this.blockWidth);
   }
 
   ngOnChanges(changes: SimpleChanges) {
