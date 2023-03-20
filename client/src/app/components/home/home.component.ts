@@ -215,6 +215,7 @@ export class HomeComponent {
 
   onDeleteTrack(trackId: number) {
     this.recordings.delete(trackId);
+    this.project.deleteTrack(trackId);
   }
 
   synthOnKeydown(key: string) {

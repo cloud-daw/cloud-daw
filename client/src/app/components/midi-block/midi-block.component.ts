@@ -84,7 +84,7 @@ export class MidiBlockComponent {
     if (changes['selectedTrack']) {
       if (this.track == this.selectedTrack) this.isSelected = true;
       else this.isSelected = false;
-      console.log('selected track: ', this.selectedTrack, this.isSelected);
+      //console.log('selected track: ', this.selectedTrack, this.isSelected);
     }
   }
 

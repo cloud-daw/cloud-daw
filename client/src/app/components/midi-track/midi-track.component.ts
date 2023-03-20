@@ -16,10 +16,8 @@ export class MidiTrackComponent {
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   @Input() synth: any;
-
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
-  
   @Input()
     set selectedTrack(track: MidiTrack) {
       // this.selectedTrackChange.emit(track);
@@ -30,7 +28,6 @@ export class MidiTrackComponent {
     }
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
-
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
   
   //functions
@@ -44,7 +41,6 @@ export class MidiTrackComponent {
       this.onDelete.emit(this.track.id);
       this.tracks.delete(this.track);
     }
-
   }
   
   public updateSelectedTrack(track: MidiTrack) {
@@ -53,6 +49,7 @@ export class MidiTrackComponent {
       this.selectedTrackChange.emit(track); // emit the `trackSelected` event with this component as the argument
       this.track.selected = true;
     }
+    console.log(this.selectedTrack.title, this.selectedTrack.instrument.instrument)
   }
 
   changeTrackTitle(title: string) {
