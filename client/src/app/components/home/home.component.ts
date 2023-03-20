@@ -265,7 +265,8 @@ export class HomeComponent {
     //this.firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
   }
 
-  onRewind(event : boolean) {
+  onRewind(event: boolean) {
+    this.onPause(event);
     this.metronome.Reset();
     this.controlEvent = controlStatus.reset;
   }
