@@ -16,8 +16,9 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
 import { MakeNewProject } from 'src/app/lib/db/new-project';
-import { HydrateProjectFromDB } from 'src/app/lib/db/hydrate-project';
+import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';
+import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
   
 /**
  * Int status of keys for keyboard
@@ -99,19 +100,38 @@ export class HomeComponent {
   }
   isNew: boolean = false;
   project: Project;
+
+  projectKey: string = "";
+  loading: boolean = true;
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.project = MakeNewProject(JSON.parse(localStorage.getItem('user') || "").email);
-    this.masterVolume = this.project.masterVolume;
-    this.synth = this.project.tracks[0].instrument;
-    this.controller = new MidiControllerComponent(this.synth);
-    this.tempo = this.project.tempo;
-    this.signature = this.project.signature;
-    this.metronome = this.project.metronome;
-    this.selectedTrack = this.project.tracks[0]
-    this.tracks = new Set<MidiTrack>();
-    this.tracks.add(this.selectedTrack);
-    this.currentRecording = new Recording(this.selectedTrack.instrument);
-    this.recordings = new Map<number, Recording>();
+    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+    this.project = MakeNewProject(sessionEmail);
+    firebaseService.getProjectByEmail(sessionEmail).subscribe({
+      next: res => {
+        console.log('res gpbe', res)
+        if (res.length > 0) {
+          const resProjectInfo = MakeInfoFromDbRes(res[0])
+          this.project = HydrateProjectFromInfo(resProjectInfo)
+          this.projectKey = res[0].key;
+          console.log('loaded proj', this.project)
+        }
+        else {
+          firebaseService.initProject(InfoizeProject(this.project));
+        }
+        this.initVars()
+        this.project.updateEmitter.subscribe(() => {
+          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+        })
+      },
+      error: err => {
+        console.log('err gpbe', err)
+        this.project = MakeNewProject(sessionEmail);
+        this.initVars()
+      },
+      complete: () => {
+        console.log('done')
+      }
+    });
     this.keyboardStatus = {
       "a": keyStatus.notPlaying,
       "w": keyStatus.notPlaying,
@@ -141,15 +161,15 @@ export class HomeComponent {
   signature: number = 4;
   maxVW: number = 0;
   timeoutValue: number = (60 / this.tempo) * 1000; //in ms
-  synth: MidiInstrument;
-  controller: MidiControllerComponent;
-  metronome: Metronome;
-  selectedTrack: MidiTrack;
+  synth!: MidiInstrument;
+  controller!: MidiControllerComponent;
+  metronome!: Metronome;
+  selectedTrack!: MidiTrack;
   // tracks: Set<MidiTrack>;
-  tracks: Set<MidiTrack>;
+  tracks!: Set<MidiTrack>;
   metronomeOn: boolean = true;
-  currentRecording: Recording;
-  recordings: Map<number, Recording>;
+  currentRecording!: Recording;
+  recordings!: Map<number, Recording>;
   isRecording: boolean = false;
   keyboardStatus: Record<string, number>;
   public trackIdCounter: number = 0;
@@ -157,6 +177,25 @@ export class HomeComponent {
 
   public isExpanded = false;
   public showSelectInstrument = false;
+
+  initVars() {
+    this.masterVolume = this.project.masterVolume;
+    this.synth = this.project.tracks[0].instrument;
+    this.controller = new MidiControllerComponent(this.synth);
+    this.tempo = this.project.tempo;
+    this.signature = this.project.signature;
+    this.metronome = this.project.metronome;
+    this.selectedTrack = this.project.tracks[0]
+    this.tracks = new Set<MidiTrack>();
+    this.tracks.add(this.selectedTrack);
+    this.currentRecording = new Recording(this.selectedTrack.instrument);
+    this.recordings = new Map<number, Recording>();
+    for (let i = 0; i < this.project.tracks.length; i++) {
+      this.tracks.add(this.project.tracks[i]);
+      this.recordings.set(this.project.tracks[i].id, this.project.tracks[i].midi);
+    }
+    this.loading = false;
+  }
 
   toggleExpand() {
     this.isExpanded = !this.isExpanded;
@@ -168,9 +207,10 @@ export class HomeComponent {
 
   newTrack(instrument: MidiInstrument) {
     this.trackIdCounter++;
-    let newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+    const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
     console.log('new track created with instrument: ' + instrument.name);
     this.tracks.add(newTrack);
+    this.project.addTrack(newTrack);
     this.selectedTrack = newTrack;
     this.updateRecording(this.selectedTrack.id);
     this.showSelectInstrument = false;
@@ -206,12 +246,12 @@ export class HomeComponent {
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
-    console.log('project on play', this.project);
-    let info = InfoizeProject(this.project);
-    console.log('project Info on conv', info);
-    let reproj = HydrateProjectFromDB(info);
-    console.log('project hydrated on conv', reproj);
-    console.log('are same', this.project == reproj);
+    // console.log('project on play', this.project);
+    // let info = InfoizeProject(this.project);
+    // console.log('project Info on conv', info);
+    // let reproj = HydrateProjectFromInfo(info);
+    // console.log('project hydrated on conv', reproj);
+    // console.log('are same', this.project == reproj);
   }
 
   onPause(event : boolean) {
@@ -220,7 +260,7 @@ export class HomeComponent {
     this.isRecording = false;
     this.metronome.Pause();
     this.controlEvent = controlStatus.pause;
-    this.firebaseService.saveProject(InfoizeProject(this.project))
+    //this.firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
   }
 
   onRewind(event : boolean) {

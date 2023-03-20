@@ -50,8 +50,6 @@ export class FirebaseService {
         })
     }
 
-
-
     getProjectByEmail(email: string): Observable<any> {
         return this.projectsRef.snapshotChanges()
             .pipe(
@@ -63,11 +61,12 @@ export class FirebaseService {
     }
 
     initProject(project: ProjectInfo) {
-        console.log('in save service', project);
+        console.log('in init service', project);
         this.projectsRef.push(project);
     }
 
-    saveProject(updatedProject: ProjectInfo) {
+    saveProject(key: string, updatedProject: ProjectInfo) {
         console.log('in save project');
+        this.projectsRef.update(key, updatedProject);
     }
 }
