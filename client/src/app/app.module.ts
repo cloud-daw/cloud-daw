@@ -23,6 +23,7 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
 import { SelectInstrumentComponent } from './components/select-instrument/select-instrument.component';
 import { MidiNotesContainerComponent } from './components/notes/midi-notes-container/midi-notes-container.component';
 import { MidiNoteComponent } from './components/notes/midi-note/midi-note.component';
+import { MidiEditorComponent } from './components/midi-editor/midi-editor.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { MidiNoteComponent } from './components/notes/midi-note/midi-note.compon
     MidiBlockComponent,
     SelectInstrumentComponent,
     MidiNotesContainerComponent,
-    MidiNoteComponent
+    MidiNoteComponent,
+    MidiEditorComponent
   ],
   imports: [
     BrowserModule,
