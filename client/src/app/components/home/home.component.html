@@ -1,4 +1,4 @@
-<div class="body">
+<div *ngIf="!loading" class="body">
     <div class='header'>
         <app-main-controls 
             (play)="onPlay($event)" 
@@ -91,3 +91,4 @@
         </div>
     </div>
 </div>
+<div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

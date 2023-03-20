@@ -4,7 +4,7 @@ import { MidiTrack } from '../../models/tracks/midi-track'
 import { Project } from '../../models/project'
 import { Note } from '../../models/recording/note'
 
-export function HydrateProjectFromDB(project: ProjectInfo) : Project {
+export function HydrateProjectFromInfo(project: ProjectInfo) : Project {
     let tracks = makeAllTracks(project.tracks)
     return new Project(project.id, project.name, project.email, project.tempo, project.signature, tracks, project.master_volume);
 }
