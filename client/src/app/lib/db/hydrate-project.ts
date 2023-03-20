@@ -3,6 +3,7 @@ import { MidiInstrument } from '../../models/instruments/midi-instrument'
 import { MidiTrack } from '../../models/tracks/midi-track'
 import { Project } from '../../models/project'
 import { Note } from '../../models/recording/note'
+import { GetSynthByKeyword } from '../dicts/synthdict'
 
 export function HydrateProjectFromInfo(project: ProjectInfo) : Project {
     let tracks = makeAllTracks(project.tracks)
@@ -40,7 +41,7 @@ function makeEffect(info: EffectInfo): string {
 }
 
 function makeInstrumentFromInfo(info: InstrumentInfo): MidiInstrument {
-    return new MidiInstrument(info.name)
+    return GetSynthByKeyword(info.name)
 }
 
 function makeRecordingFromInfo(info: NoteInfo[]): Note[] {

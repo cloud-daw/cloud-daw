@@ -1,6 +1,6 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
-import { MakeKeyDict } from '../../lib/keydict';
+import { MakeKeyDict } from '../../lib/dicts/keydict';
 import * as Tone from 'tone'
 
 export class Recording {

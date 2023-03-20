@@ -1,6 +1,6 @@
 import { Component, Renderer2, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { style, animate, AnimationBuilder, AnimationFactory, AnimationPlayer } from '@angular/animations';
-import { PositionDict } from 'src/app/lib/posdict';
+import { PositionDict } from 'src/app/lib/dicts/posdict';
 
 enum controlStatus {
   play = 0,

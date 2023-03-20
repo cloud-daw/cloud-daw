@@ -1,6 +1,6 @@
 import * as Tone from 'tone';
 import { SynthOptions } from 'tone';
-import { MakeKeyDict } from '../../lib/keydict';
+import { MakeKeyDict } from '../../lib/dicts/keydict';
 
 //monophonic (poly requires refactor) instrument class
 
@@ -89,7 +89,7 @@ export class MidiInstrument {
     }
 
     public MakeSynthCopy() : Tone.PolySynth {
-        return new Tone.PolySynth().toDestination();
+        return new Tone.PolySynth(this.synth).toDestination();
     }
 
     // Mute(status: boolean) {

@@ -107,7 +107,6 @@ export class HomeComponent {
     this.project = MakeNewProject(sessionEmail);
     firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
       next: res => {
-        console.log('res gpbe', res)
         if (res.length > 0) {
           const resProjectInfo = MakeInfoFromDbRes(res[0])
           this.project = HydrateProjectFromInfo(resProjectInfo)
@@ -126,6 +125,9 @@ export class HomeComponent {
         console.log('err gpbe', err)
         this.project = MakeNewProject(sessionEmail);
         this.initVars()
+        this.project.updateEmitter.subscribe(() => {
+          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+        })
       },
       complete: () => {
         console.log('done')
