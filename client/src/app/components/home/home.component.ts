@@ -190,7 +190,6 @@ export class HomeComponent {
     this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.selectedTrack.instrument);
     this.recordings = new Map<number, Recording>();
-    let maxId = 0;
     for (let i = 0; i < this.project.tracks.length; i++) {
       this.tracks.add(this.project.tracks[i]);
       this.recordings.set(this.project.tracks[i].id, this.project.tracks[i].midi);
