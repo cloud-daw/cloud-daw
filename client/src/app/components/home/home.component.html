@@ -86,13 +86,9 @@
                         *ngFor="let data of track.midi.data"
                     >
                         <app-midi-note
-                            [track]="track"
-                            [selectedTrack]="selectedTrack"
-                            [isRecording]="isRecording"
                             [vw]="maxVW"
                             [data]="data"
                         >
-                            im a note pls kill me
                         </app-midi-note>
                     </app-midi-notes-container>
                 </div>
