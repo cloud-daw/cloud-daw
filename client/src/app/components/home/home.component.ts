@@ -178,6 +178,8 @@ export class HomeComponent {
   public isExpanded = false;
   public showSelectInstrument = false;
 
+  public octave = 4;
+
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -340,10 +342,12 @@ export class HomeComponent {
 
   onIncreaseOctave() {
     this.selectedTrack.instrument.increaseOctave();
+    if (this. octave < 7) this.octave++;
   }
 
   onDecreaseOctave() {
     this.selectedTrack.instrument.decreaseOctave();
+    if (this. octave > 0) this.octave--;
   }
 
   onMainVolumeChange(event: number) {

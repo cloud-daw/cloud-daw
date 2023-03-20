@@ -4,7 +4,6 @@ import { GetAllSynthKeywords, GetSynthByKeyword } from 'src/app/lib/dicts/synthd
 
 
 
-
 @Component({
   selector: 'app-select-instrument',
   templateUrl: './select-instrument.component.html',

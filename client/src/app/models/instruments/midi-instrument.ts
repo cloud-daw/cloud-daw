@@ -75,13 +75,17 @@ export class MidiInstrument {
     }
 
     public increaseOctave() {
-        this.currentOctave = this.currentOctave + 1;
-        this.keyDict = MakeKeyDict(this.currentOctave);
+        if (this.currentOctave < 7) {
+            this.currentOctave = this.currentOctave + 1;
+            this.keyDict = MakeKeyDict(this.currentOctave);
+        }
     }
 
     public decreaseOctave() {
-        this.currentOctave = this.currentOctave - 1;
-        this.keyDict = MakeKeyDict(this.currentOctave);
+        if (this.currentOctave > 0) {
+            this.currentOctave = this.currentOctave - 1;
+            this.keyDict = MakeKeyDict(this.currentOctave);
+        }
     }
 
     public MakeSynthCopy() : Tone.PolySynth {
