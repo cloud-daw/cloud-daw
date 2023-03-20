@@ -79,13 +79,14 @@
 
             <div class="midi-subContainer">
                 <div *ngFor="let track of tracks">
-                    <app-midi-notes-container
-                        [track]="track"
-                        [vw]="maxVW"
-                        [isRecording]="isRecording"
-                    >
-                        
-                    </app-midi-notes-container>
+                    <div class="midi-note-section">
+                        <app-midi-notes-container
+                            [track]="track"
+                            [vw]="maxVW"
+                            [isRecording]="isRecording"
+                            [selectedTrack]="selectedTrack"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

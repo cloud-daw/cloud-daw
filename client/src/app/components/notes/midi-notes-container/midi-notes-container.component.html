@@ -1,11 +1,13 @@
-<div class="notes-container">
-    <div *ngFor="let data of track.midi.data">
-        <app-midi-note
-            [track]="track"
-            [vw]="vw"
-            [data]="data"
-            [isRecording]="isRecording"
-        >
-        </app-midi-note>
+<div class="container" [ngClass]="{'selected' : isSelected}">
+    <div class="notes-container" [ngStyle]="{'width': widthCSS}">
+        <div *ngFor="let data of track.midi.data">
+            <app-midi-note
+                [track]="track"
+                [vw]="vw"
+                [data]="data"
+                [isRecording]="isRecording"
+            >
+            </app-midi-note>
+        </div>
     </div>
 </div>

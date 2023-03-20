@@ -43,9 +43,15 @@ export class MidiNoteComponent {
     return (parseFloat(duration.toString()) * interval)
   }
 
+  private calculateWidth(start: number, end: number) {
+    return end - start;
+  }
+
   updateDisplay() {
     const start: number = this.convertBBSToPosition(this.data.attack);
-    const width: number = this.convertDurationToWidth(this.data.duration);
+    const end: number = this.convertBBSToPosition(this.data.release);
+    // const width: number = this.convertDurationToWidth(this.data.duration);
+    const width = this.calculateWidth(start, end);
     this.width = width;
     this.widthCSS = `${this.width}vw`;
     this.left = start;
@@ -54,6 +60,7 @@ export class MidiNoteComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.updateDisplay();
     if (changes['isRecording']) {
       if (this.data) {
         // console.log('recording data??', this.data, this.data.attack.toString().split(':'));

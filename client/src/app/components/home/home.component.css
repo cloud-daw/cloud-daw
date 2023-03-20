@@ -164,3 +164,11 @@
   border: 0.1px solid red;
   display: flex;
 }
+
+.midi-note-section {
+  position: relative;
+  /* border: 0.1px solid blue; */
+  height: 6em;
+  width: auto;
+  display: flex;
+}
