@@ -1,5 +1,5 @@
 import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
-import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import {Project} from '../../models/project'
@@ -106,7 +106,7 @@ export class HomeComponent {
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
     const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
     this.project = MakeNewProject(sessionEmail);
-    firebaseService.getProjectByEmail(sessionEmail).subscribe({
+    firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
       next: res => {
         console.log('res gpbe', res)
         if (res.length > 0) {
@@ -190,10 +190,13 @@ export class HomeComponent {
     this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.selectedTrack.instrument);
     this.recordings = new Map<number, Recording>();
+    let maxId = 0;
     for (let i = 0; i < this.project.tracks.length; i++) {
       this.tracks.add(this.project.tracks[i]);
       this.recordings.set(this.project.tracks[i].id, this.project.tracks[i].midi);
+      this.trackIdCounter = Math.max(this.trackIdCounter, this.project.tracks[i].id)
     }
+    this.trackIdCounter++;
     this.loading = false;
   }
 
