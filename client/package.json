@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^15.0.0",
     "@angular/platform-browser-dynamic": "^15.0.0",
     "@angular/router": "^15.0.0",
+    "@types/uuid": "^9.0.1",
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "firebase": "^9.16.0",
@@ -30,6 +31,7 @@
     "rxjs": "~7.5.0",
     "tone": "^14.7.77",
     "tslib": "^2.3.0",
+    "uuid": "^9.0.0",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {

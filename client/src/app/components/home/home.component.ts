@@ -2,6 +2,7 @@ import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from 
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
+import {Project} from '../../models/project'
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
@@ -13,7 +14,9 @@ import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
 import { MidiBlockComponent } from '../midi-block/midi-block.component';
-
+import { MakeNewProject } from 'src/app/lib/db/new-project';
+import { HydrateProjectFromDB } from 'src/app/lib/db/hydrate-project';
+import { InfoizeProject } from 'src/app/lib/db/infoize-project';
   
 /**
  * Int status of keys for keyboard
@@ -60,7 +63,7 @@ export class HomeComponent {
   }
 
 
-  currMousekey : string = '';
+  currMousekey: string = '';
 
   @HostListener('window:mouseup', ['$event'])
   handleMouseupEvent(event: MouseEvent) {
@@ -68,7 +71,7 @@ export class HomeComponent {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
         myDiv.classList.remove("active");
-      }   
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
@@ -76,10 +79,10 @@ export class HomeComponent {
 
   onKeyMousedown(key: string) {
     this.currMousekey = key;
-      const myDiv = document.getElementById(this.currMousekey);
-      if (myDiv) {
-        myDiv.classList.add("active");
-    }   
+    const myDiv = document.getElementById(this.currMousekey);
+    if (myDiv) {
+      myDiv.classList.add("active");
+    }
     this.synthOnKeydown(key);
   }
 
@@ -88,18 +91,21 @@ export class HomeComponent {
       const myDiv = document.getElementById(this.currMousekey);
       if (myDiv) {
         myDiv.classList.remove("active");
-      }   
+      }
     }
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
   }
-  
+  isNew: boolean = false;
+  project: Project;
   constructor(public firebaseService: FirebaseService, public ApiHttpService: ApiHttpService, public _router: Router) {
-    this.synth = new MidiInstrument('');
-    this.tempo = 120;
-    this.signature = 4;
-    this.metronome = new Metronome(this.tempo, this.signature); //120 bpm at 4/4
-    this.selectedTrack = new MidiTrack('Track 0', 0, this.synth, true);
+    this.project = MakeNewProject(JSON.parse(localStorage.getItem('user') || "").email);
+    this.masterVolume = this.project.masterVolume;
+    this.synth = this.project.tracks[0].instrument;
+    this.tempo = this.project.tempo;
+    this.signature = this.project.signature;
+    this.metronome = this.project.metronome;
+    this.selectedTrack = this.project.tracks[0]
     this.tracks = new Set<MidiTrack>();
     this.tracks.add(this.selectedTrack);
     this.currentRecording = new Recording(this.selectedTrack.instrument);
@@ -197,6 +203,12 @@ export class HomeComponent {
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
+    console.log('project on play', this.project);
+    let info = InfoizeProject(this.project);
+    console.log('project Info on conv', info);
+    let reproj = HydrateProjectFromDB(info);
+    console.log('project hydrated on conv', reproj);
+    console.log('are same', this.project == reproj);
   }
 
   onPause(event : boolean) {
@@ -205,6 +217,7 @@ export class HomeComponent {
     this.isRecording = false;
     this.metronome.Pause();
     this.controlEvent = controlStatus.pause;
+    this.firebaseService.saveProject(InfoizeProject(this.project))
   }
 
   onRewind(event : boolean) {
@@ -261,6 +274,7 @@ export class HomeComponent {
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
+    this.project.updateTrackRecordingAtId(id, this.currentRecording)
   }
 
   /**
@@ -287,6 +301,7 @@ export class HomeComponent {
   }
 
   onMainVolumeChange(event: number) {
+    console.log('volume changed', event);
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
   }
@@ -297,6 +312,7 @@ export class HomeComponent {
    */
   private adjustMasterVolume(db: number) {
     Tone.Destination.volume.value = db;
+    this.project.masterVolume = db;
   }
 
   // /**

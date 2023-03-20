@@ -1,6 +1,7 @@
 import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import { Recording } from '../recording/recording';
+import { Note } from '../recording/note';
 
 // Define a clip interface to hold information about each MIDI clip
 export interface Clip {
@@ -8,11 +9,11 @@ export interface Clip {
     name: string;
     start: number;
     end: number;
-    notes: Note[];
+    notes: _Note[];
 }
   
 // Define a note interface to hold information about each MIDI note
-export interface Note {
+export interface _Note {
     pitch: number;
     velocity: number;
     startTime: number;
@@ -29,12 +30,12 @@ export class MidiTrack {
     effects: string[] = [];
     midi: Recording = new Recording(new MidiInstrument(''));
     clips: Clip[] = [];
-    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects?: string[]) {
+    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects: string[] = []) {
         this.title = title;
         this.id = id;
         this.instrument = instrument;
         this.selected = selected;
-        if (effects) this.effects = effects;
+        this.effects = effects;
     }
 
     /**
@@ -43,6 +44,14 @@ export class MidiTrack {
      */
     public ChangeVolume(db: number) {
         this.instrument.AdjustVolume(db);
+    }
+
+    updateRecording(newNotes: Note[]) {
+        this.midi.data = newNotes;
+    }
+
+    public setRecording(notes: Note[]) {
+        this.midi = new Recording(this.instrument, notes);
     }
 
     // public MuteTrack(status: boolean) {
