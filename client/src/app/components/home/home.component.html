@@ -92,5 +92,11 @@
             </div>
         </div>
     </div>
+    <div class="midi-editor-container">
+        <app-midi-editor
+            [track]="selectedTrack"
+        >
+        </app-midi-editor>
+    </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

@@ -33,7 +33,7 @@ enum controlStatus {
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css', '../midi-track/midi-track.component.css']
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
