@@ -59,7 +59,9 @@
                     [(selectedTrack)]="selectedTrack"
                     (onDelete)="onDeleteTrack($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
-                    [isRecording]="isRecording">
+                    [isRecording]="isRecording"
+                    (click)="setSelectedTrack(track)"
+                >
                 </app-midi-track>
             </div>
         </div>
@@ -84,11 +86,24 @@
                             [vw]="maxVW"
                             [isRecording]="isRecording"
                             [selectedTrack]="selectedTrack"
+                            [blockMode]="blockMode"
+                            (click)="setSelectedTrack(track)"
+                            (dblClick)="openEditor()"
                         />
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="midi-editor-container">
+        <app-midi-editor
+            [track]="selectedTrack"
+            [vw]="maxVW"
+            [isRecording]="isRecording"
+            [(midi)]="selectedTrack.midi.data"
+            *ngIf="showEditor"
+        >
+        </app-midi-editor>
     </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

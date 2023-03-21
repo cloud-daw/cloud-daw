@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
-import { SliderComponent } from '../controls/slider/slider/slider.component';
+import { SliderComponent } from '../../../controls/slider/slider/slider.component';
 import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import * as Tone from 'tone';
 

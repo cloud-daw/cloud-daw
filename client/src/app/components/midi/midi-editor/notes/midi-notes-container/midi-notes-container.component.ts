@@ -3,6 +3,7 @@ import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiNoteComponent } from '../midi-note/midi-note.component';
 import * as Tone from 'tone';
+import { BlockMode } from 'src/app/components/home/home.component';
 
 @Component({
   selector: 'app-midi-notes-container',
@@ -18,6 +19,7 @@ export class MidiNotesContainerComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
+  @Input() blockMode: BlockMode = BlockMode.Block;
 
   public visibility = 'hidden';
   public leftCSS = '';
@@ -26,6 +28,7 @@ export class MidiNotesContainerComponent {
   public isSelected = false;
 
   public maxWidth = 0;
+  public editModeEnabled: boolean = this.blockMode == BlockMode.Editor ? true : false;
 
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
