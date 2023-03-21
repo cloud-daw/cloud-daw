@@ -12,24 +12,36 @@
     border-bottom: 0.5px solid rgb(48, 48, 48);
     /* box-sizing: content-box; */
     border: 0.1px solid rgb(0, 0, 0);
-    background-color: rgb(255, 0, 85);
-    opacity: 0.8;
+    background-color: rgb(255, 0, 34);
+    opacity: 0.9;
     border-radius: 5px;
     display: flex;
 }
 
 .selected .notes-container {
-    background-color: rgb(255, 99, 154);
+    background-color: rgb(255, 72, 96);
 }
 
 .notes-container:hover {
     cursor: pointer;
-    background-color: rgb(255, 55, 122);
+    background-color: rgb(255, 72, 96);
+}
+
+.selected .notes-container:hover {
+    cursor: pointer;
+    background-color: rgb(255, 72, 96);
 }
 
 .edit-notes-container {
+    position: absolute;
+    color: rgb(255, 255, 255);
+    height: 22em;
+    left: 0;
+    border-top: 0.5px solid rgb(48, 48, 48);
+    border-bottom: 0.5px solid rgb(48, 48, 48);
+    border: 0.1px solid rgb(0, 0, 0);
+    background-color: rgb(50, 50, 50);
     opacity: 0.9;
-    background-color:rgb(53, 53, 53);
-    height: 23em;
-    border: 1px solid red;
+    border-radius: 5px;
+    display: flex;
 }

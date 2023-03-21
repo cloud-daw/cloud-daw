@@ -1,5 +1,7 @@
 <div class="container">
-    <div class="header"></div>
+    <div class="header">
+        <button (click)="onCloseEditor()">x</button>
+    </div>
     <div class="content">
         <app-midi-notes-container
             [track]="track"

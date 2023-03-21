@@ -4,6 +4,10 @@ import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import * as Tone from 'tone';
 
+interface NotesDict {
+  [note: string]: number;
+}
+
 @Component({
   selector: 'app-midi-note',
   templateUrl: './midi-note.component.html',
@@ -20,6 +24,7 @@ export class MidiNoteComponent {
   @Input() vw: number = 0;
   @Input() bars: number = 16;
   @Input() isRecording: boolean = false;
+  @Input() noteColor: string = '';
 
   public widthCSS: string = `0vw`;
   public leftCSS: string = `0vw`;
@@ -123,6 +128,40 @@ export class MidiNoteComponent {
     'A#7': 95,
     B7   : 96,
   };
+
+  //Start (TEMP GPT SOLUTION)
+  notesDict2: NotesDict = {};
+
+  notePositions: NotesDict = {
+    C: 0,
+    'C#': 1,
+    D: 2,
+    'D#': 3,
+    E: 4,
+    F: 5,
+    'F#': 6,
+    G: 7,
+    'G#': 8,
+    A: 9,
+    'A#': 10,
+    B: 11
+  };
+
+  containerHeight = 6; // in em
+  containerTop = 0; // in pixels
+  noteHeight = this.containerHeight / 28; // each octave has 4 white keys and 3 black keys (total 7), so 6em/28 = 0.214em
+
+  populateNotePos() {
+    for (let octave = 0; octave <= 7; octave++) {
+      for (const note in this.notePositions) {
+        const noteName = note + octave.toString();
+        const position = (7 - octave) * 4 + this.notePositions[note]; // calculate the position from the top of the container
+        const top = (position * this.noteHeight).toFixed(3); // calculate the top value in em with 3 decimal places
+        this.notesDict[noteName] = this.containerTop + parseFloat(top); // add the note and its position to the dictionary
+      }
+    }
+  }
+  //End (TEMP GPT SOLUTION)
 
   convertBBSToPosition(position: Tone.Unit.Time) {
     if (!position) return 0;

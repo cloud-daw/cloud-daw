@@ -307,16 +307,16 @@ export class HomeComponent {
   }
 
   public editMode: boolean = false;
-  
+
   openEditor() {
     this.blockMode = BlockMode.Editor;
     this.showEditor = true;
     console.log('opening editor', this.showEditor);
   }
 
-  closeEditor() {
+  closeEditor(bool: boolean) {
     this.blockMode = BlockMode.Block;
-    this.showEditor = false;
+    this.showEditor = bool;
   }
 
   /**

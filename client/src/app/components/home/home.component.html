@@ -101,6 +101,7 @@
             [vw]="maxVW"
             [isRecording]="isRecording"
             [(midi)]="selectedTrack.midi.data"
+            (closeEditor)="closeEditor($event)"
             *ngIf="showEditor"
         >
         </app-midi-editor>

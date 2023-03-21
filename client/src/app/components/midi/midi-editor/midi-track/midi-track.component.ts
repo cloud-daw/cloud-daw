@@ -47,15 +47,17 @@ export class MidiTrackComponent {
   }
   
   public deleteTrack() {
-    if (this.tracks.size > 1) {
+    if (this.tracks.size > 1 && !this.isRecording) {
       this.track.midi = new Recording(this.track.instrument);
-      const it = this.tracks.values();
-      //get first entry:
-      const first = it.next();
-      const firstTrack = first.value;
-      firstTrack.selected = true;
-      this.selectedTrack = firstTrack;
-      this.selectedTrackChange.emit(firstTrack);
+      if (this.selectedTrack == this.track) {
+        const it = this.tracks.values();
+        //get first entry:
+        const first = it.next();
+        const firstTrack = first.value;
+        firstTrack.selected = true;
+        this.selectedTrack = firstTrack;
+        this.selectedTrackChange.emit(firstTrack);
+      }
       this.onDelete.emit(this.track.id);
       this.tracks.delete(this.track);
     }
@@ -72,6 +74,16 @@ export class MidiTrackComponent {
   changeTrackTitle(title: string) {
     this.track.title = title;
     this.trackChange.emit(this.track);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedTrack']) {
+      if (this.track != this.selectedTrack) {
+        this.track.selected = false;
+      } else {
+        this.track.selected = true;
+      }
+    }
   }
 
 }

@@ -26,7 +26,13 @@ export class MidiEditorComponent {
     }
     private _midi: Note[] = [];
     @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
+
+    @Output() closeEditor: EventEmitter<boolean> = new EventEmitter<boolean>();
   
   public blockMode: BlockMode = BlockMode.Editor;
   public showEditor: boolean = true;
+
+  onCloseEditor() {
+    this.closeEditor.emit(false);
+  }
 }

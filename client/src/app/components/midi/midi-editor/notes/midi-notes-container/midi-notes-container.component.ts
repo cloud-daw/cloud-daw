@@ -29,6 +29,8 @@ export class MidiNotesContainerComponent {
 
   public maxWidth = 0;
 
+  public noteColor = this.editMode ? '#00ff62' : 'white';
+
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
     let max = 0;
@@ -71,6 +73,9 @@ export class MidiNotesContainerComponent {
       if (this.track == this.selectedTrack) this.isSelected = true;
       else this.isSelected = false;
       ////console.log('selected track: ', this.selectedTrack, this.isSelected);
+    }
+    if (changes['editMode']) {
+      this.noteColor = this.editMode ? '#00ff62' : 'white';
     }
   }
 }
