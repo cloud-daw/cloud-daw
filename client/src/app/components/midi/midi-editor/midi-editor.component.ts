@@ -1,6 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
+import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+
+// export class DisplayMode {
+//   static Edit = true;
+//   static Block = false;
+// }
 
 @Component({
   selector: 'app-midi-editor',
@@ -9,6 +15,22 @@ import { MidiTrack } from 'src/app/models/tracks/midi-track';
 })
 export class MidiEditorComponent {
 
-  @Input() track = new MidiTrack('', 0, new MidiInstrument(''), false)
+  @Input() vw : number = 100;
+  @Input() bars: number = 16;
+  @Input() signature: number = 4;
+  @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
+  @Input() isRecording: boolean = false;
+
+  @Input() 
+    set midi(data: Note[]) {
+      this._midi = data;
+    }
+    get midi() {
+      return this._midi;
+    }
+    private _midi: Note[] = [];
+    @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
+
+  public mode: boolean = true;
 
 }

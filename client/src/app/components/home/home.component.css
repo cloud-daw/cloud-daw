@@ -103,11 +103,20 @@
   }
   
 .body {
-    position: relative;
-    background-color: #1F1F1F;
-    width: 100%;
-    height: auto;
-    font-family: 'Inter', sans-serif;
+  position: relative;
+  background-color: #1F1F1F;
+  height: auto;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.midi-editor-container {
+  /* display: block;
+  top: 19%;
+  position: absolute;
+  border: 1px solid rgb(255, 0, 183); */
+  width: 100%;
 }
 
 .new-track-button {

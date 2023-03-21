@@ -1,1 +1,11 @@
-<p>midi-editor works!</p>
+<div class="container">
+    <div class="header"></div>
+    <div class="content">
+        <app-midi-notes-container
+            [track]="track"
+            [vw]="vw"
+            [isRecording]="isRecording"
+            [mode] = "mode"
+        />
+    </div>
+</div>

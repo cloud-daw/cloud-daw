@@ -84,8 +84,9 @@
                             [track]="track"
                             [vw]="maxVW"
                             [isRecording]="isRecording"
-                            [(selectedTrack)]="selectedTrack"
+                            [mode] = "mode"
                             (click)="setSelectedTrack(track)"
+                            (dblclick)="openMidiEditor()"
                         />
                     </div>
                 </div>
@@ -95,6 +96,10 @@
     <div class="midi-editor-container">
         <app-midi-editor
             [track]="selectedTrack"
+            [vw]="maxVW"
+            [isRecording]="isRecording"
+            [(midi)]="selectedTrack.midi.data"
+            *ngIf="showEditor"
         >
         </app-midi-editor>
     </div>

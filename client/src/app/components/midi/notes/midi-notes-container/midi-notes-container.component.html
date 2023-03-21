@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'selected' : isSelected}">
+<div class="container" [ngClass]="{'selected' : isSelected, 'editMode' : mode}">
     <div class="notes-container" [ngStyle]="{'width': widthCSS}">
         <div *ngFor="let data of track.midi.data">
             <app-midi-note

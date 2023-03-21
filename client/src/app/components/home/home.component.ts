@@ -173,10 +173,14 @@ export class HomeComponent {
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
-  public isExpanded = false;
-  public showSelectInstrument = false;
+  public isExpanded: boolean = false;
+  public showSelectInstrument: boolean = false;
 
-  public octave = 4;
+  public octave: number = 4;
+
+  public showEditor: boolean = false;
+
+  public mode: boolean = false;
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
@@ -232,6 +236,25 @@ export class HomeComponent {
       console.log(`Selected track: ${this.selectedTrack.title}`, track.title);
     }
   }
+
+  /**
+   * Set the selected track if midi block is clicked once. 
+   */
+  // setSelectedTrackFromBlock(track: MidiTrack) {
+  //   if (!this.isRecording) {
+  //     this.isSingleClick = true;
+  //     setTimeout(()=>{
+  //       if(this.isSingleClick) {
+  //         const temp = this.selectedTrack;
+  //         temp.selected = false;
+  //         this.selectedTrack = track;
+  //         this.selectedTrack.selected = true;
+  //         this.setRecordingToTrack(this.selectedTrack.id);
+  //         console.log(`Selected track: ${this.selectedTrack.title}`, track.title);
+  //       }
+  //     }, 250)
+  //   }
+  // }
 
   synthOnKeydown(key: string) {
     if (this.keyboardStatus[key] != keyStatus.isPlaying) {
@@ -348,6 +371,17 @@ export class HomeComponent {
   private adjustMasterVolume(db: number) {
     Tone.Destination.volume.value = db;
     this.project.masterVolume = db;
+  }
+
+  
+
+  openMidiEditor() {
+    this.showEditor = true;
+    console.log('open dit?', this.showEditor);
+  }
+
+  closeMidiEditor() {
+    this.showEditor = false;
   }
 
   // /**
