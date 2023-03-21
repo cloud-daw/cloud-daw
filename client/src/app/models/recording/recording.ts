@@ -46,7 +46,7 @@ export class Recording {
         private makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
             let a = Tone.Time(attack).toSeconds();
             let r = Tone.Time(release).toSeconds();
-            return r - a;
+            return (r - a) + this.synth.release;
         }
 
     /**

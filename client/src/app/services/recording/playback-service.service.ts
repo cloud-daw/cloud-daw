@@ -44,7 +44,8 @@ class SynthAvailability {
 }
 
 export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
-    const overlaps = calculateOverlaps(data, synth.release);
+    const release = synth.release;
+    const overlaps = calculateOverlaps(data, release);
     synth.setVoices(overlaps);
     let availableSynths: SynthAvailability[] = [];
     let useSynthIdx = 0;
@@ -61,7 +62,7 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     });
     for (let i = 0; i < data.length; i++) {
         useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
-        Tone.Transport.schedule((time) => {
+        Tone.Transport.scheduleOnce((time) => {
             synth.voices[useSynthIdx].triggerAttackRelease(data[i].value, data[i].duration, time);
         }, data[i].attack);
     }
