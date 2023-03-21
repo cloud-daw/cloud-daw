@@ -71,6 +71,7 @@ export class MidiInstrument {
         else {
             this.setSamplerVoices(overlaps);
         }
+        this.NormalizeVolume();
     }
 
     private setPolyVoices(overlaps: number) {
@@ -87,6 +88,13 @@ export class MidiInstrument {
 
     private resetVoices() {
         this.voices = [this.instrument];
+    }
+
+    public NormalizeVolume() {
+        const volume = this.instrument.volume.value;
+        for (let i = 0; i < this.voices.length; i++) {
+            this.voices[i].volume.value = volume;
+        }
     }
 
     public changeOctave(newOctave: number) {

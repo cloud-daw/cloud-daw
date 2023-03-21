@@ -134,7 +134,7 @@ export class MidiNoteComponent {
     const normedBar = 16 * (bar - 1);
     const normedBeat = 4 * beat;
     const bbsSum = normedBar + normedBeat + sixteenth;
-    console.log('final BBS return value should be', bbsSum * bbsInterval);
+    //console.log('final BBS return value should be', bbsSum * bbsInterval);
     return bbsSum * bbsInterval; //as VW
   }
 
@@ -157,8 +157,6 @@ export class MidiNoteComponent {
     const topOffset = getNoteValue * modifier;
 
     this.setDimensions(width, start, topOffset);
-
-    console.log('left', start, 'width', width, getNoteValue);
   }
 
   setDimensions(width: number, left: number, top: number) {
@@ -175,12 +173,6 @@ export class MidiNoteComponent {
       }
       if (this.data && !this.isRecording) {
         this.updateDisplay();
-        console.log(
-          'displaying notes for :',
-          this.track.id,
-          this.widthCSS,
-          this.leftCSS
-        );
       }
     }
   }

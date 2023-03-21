@@ -24,18 +24,21 @@ export interface _Note {
 export class MidiTrack {
     title: string;
     id: number;
-    volume: number = -12;
+    volume: number;
     instrument: MidiInstrument;
     selected: boolean;
     effects: string[] = [];
     midi: Recording = new Recording(new MidiInstrument(''));
     clips: Clip[] = [];
-    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, effects: string[] = []) {
+    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, volume: number = 0, effects: string[] = []) {
         this.title = title;
         this.id = id;
         this.instrument = instrument;
         this.selected = selected;
         this.effects = effects;
+        this.volume = volume;
+        this.ChangeVolume(this.volume);
+        console.log('inst created', instrument.instrument.volume.value)
     }
 
     /**
@@ -43,7 +46,9 @@ export class MidiTrack {
      * @param db New dB level for track
      */
     public ChangeVolume(db: number) {
+        this.volume = db;
         this.instrument.AdjustVolume(db);
+        this.instrument.NormalizeVolume();
     }
 
     public updateRecording(newNotes: Note[]) {

@@ -29,10 +29,21 @@ export class MidiTrackComponent {
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
-  
   //functions
   public formatLabel(value: number): string {
     return `${value}db`;
+  }
+
+  volumeLevel: number = this.track.volume + 56;
+
+  onVolumeChange(event: any) {
+    const inputElement = event.target as HTMLInputElement;
+    let volume = parseInt(inputElement.value, 10);
+    let volN: number = Math.round(Number(volume) * 100.0) / 100.0;
+    volN -= 56;
+    this.track.ChangeVolume(volN);
+    this.volumeLevel = this.track.volume + 56;
+    console.log('updating volume', volN, this.track.instrument.instrument.volume.value)
   }
   
   public deleteTrack() {
@@ -62,6 +73,7 @@ export class MidiTrackComponent {
         this.track.selected = false;
       }
     }
+    this.volumeLevel = this.track.volume + 56;
   }
 }
 

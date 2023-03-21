@@ -34,6 +34,7 @@ export function GetAllSynthKeywords(): string[] {
 
 //only drums for now
 function LoadSampler(sample: string): Tone.Sampler {
+    let loaded = false;
     const sampler = new Tone.Sampler({
         urls: {
             'C4': 'kick/kick.mp3',
@@ -53,12 +54,9 @@ function LoadSampler(sample: string): Tone.Sampler {
         baseUrl: `../../../../assets/audio/${sample}/`,
         onload: () => {
             console.log('done loading');
+            loaded = true;
+
         }
     });
-    let loadCounter = 0;
-    while (!sampler.loaded && loadCounter < 10000) {
-        console.log('loading....')
-        loadCounter++;
-    }
     return sampler;
 }

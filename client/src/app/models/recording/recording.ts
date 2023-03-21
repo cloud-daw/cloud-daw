@@ -1,6 +1,5 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
-import { MakeKeyDict } from '../../lib/dicts/keydict';
 import * as Tone from 'tone'
 
 enum play {
