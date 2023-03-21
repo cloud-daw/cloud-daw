@@ -243,7 +243,8 @@ export class HomeComponent {
       this.isPlaying = true;
       this.metronome.ClearTransport();
       Array.from(this.recordings.values()).forEach((r: Recording) => {
-        SchedulePlayback(r.data, r.synth)
+        SchedulePlayback(r);
+        console.log('recording', r)
       });
       this.metronome.Start();
     }

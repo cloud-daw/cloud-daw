@@ -1,5 +1,6 @@
 import { Note } from '../../models/recording/note';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'
+import { Recording } from '../../models/recording/recording';
 import * as Tone from 'tone';
 
 
@@ -43,9 +44,12 @@ class SynthAvailability {
 
 }
 
-export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
+export function SchedulePlayback(recording: Recording) {
+    const data = recording.data;
+    const synth = recording.synth;
     const release = synth.release;
-    const overlaps = calculateOverlaps(data, release);
+    //const overlaps = calculateOverlaps(data, release);
+    const overlaps = recording.maxOverlaps;
     synth.setVoices(overlaps);
     let availableSynths: SynthAvailability[] = [];
     let useSynthIdx = 0;

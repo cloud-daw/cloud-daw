@@ -48,6 +48,7 @@ export class MidiTrack {
 
     public updateRecording(newNotes: Note[]) {
         this.midi.data = newNotes;
+        this.midi.UpdateOverlaps();
     }
 
     public setRecording(notes: Note[]) {

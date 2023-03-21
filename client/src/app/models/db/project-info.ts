@@ -20,6 +20,7 @@ export interface TrackInfo {
     id: number;
     instrument: InstrumentInfo;
     notes: NoteInfo[];
+    overlaps: number;
     volume: number;
     isMute: boolean;
     isSolo: boolean;

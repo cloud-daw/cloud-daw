@@ -18,7 +18,7 @@ function makeTrackInfo(track: any): TrackInfo {
     const recording = track.notes ? track.notes : []
     let notesI: NoteInfo[] = makeInfoFromRecording(recording)
     let effectsI: EffectInfo[] = makeAllEffectInfo(track.effects);
-    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
+    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.overlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
 }
 
 
