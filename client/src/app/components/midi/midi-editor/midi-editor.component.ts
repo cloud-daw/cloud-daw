@@ -16,7 +16,6 @@ export class MidiEditorComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
-  @Input() blockMode: BlockMode = BlockMode.Editor;
 
   @Input() 
     set midi(data: Note[]) {
@@ -27,7 +26,7 @@ export class MidiEditorComponent {
     }
     private _midi: Note[] = [];
     @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
-    
-  public editModeEnabled: boolean = this.blockMode == BlockMode.Editor ? true : false;
-
+  
+  public blockMode: BlockMode = BlockMode.Editor;
+  public showEditor: boolean = true;
 }

@@ -135,6 +135,14 @@
     display: flex;
 }
 
+.midi-editor-container {
+  /* display: block;
+  top: 19%;
+  position: absolute;
+  border: 1px solid rgb(255, 0, 183); */
+  width: 100%;
+}
+
 .tracks-container {
     background-color: #3f3f3f;
     width: 20%;

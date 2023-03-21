@@ -27,13 +27,9 @@
     background-color: rgb(255, 55, 122);
 }
 
-/* .rows-container {
-    left: 0;
-    height: 100%;
-    display: block;
+.edit-notes-container {
+    opacity: 0.9;
+    background-color:rgb(53, 53, 53);
+    height: 23em;
+    border: 1px solid red;
 }
-
-.row {
-    border: 0.1px solid red;
-    height: 2.7778%;
-} */

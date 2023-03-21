@@ -306,9 +306,12 @@ export class HomeComponent {
     this.maxVW = event;
   }
 
+  public editMode: boolean = false;
+  
   openEditor() {
     this.blockMode = BlockMode.Editor;
     this.showEditor = true;
+    console.log('opening editor', this.showEditor);
   }
 
   closeEditor() {

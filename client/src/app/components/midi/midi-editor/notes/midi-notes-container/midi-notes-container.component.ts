@@ -19,7 +19,7 @@ export class MidiNotesContainerComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
-  @Input() blockMode: BlockMode = BlockMode.Block;
+  @Input() editMode: boolean = false;
 
   public visibility = 'hidden';
   public leftCSS = '';
@@ -28,7 +28,6 @@ export class MidiNotesContainerComponent {
   public isSelected = false;
 
   public maxWidth = 0;
-  public editModeEnabled: boolean = this.blockMode == BlockMode.Editor ? true : false;
 
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
