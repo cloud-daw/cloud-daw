@@ -15,7 +15,7 @@ export class MidiNotesContainerComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
-  @Input() mode: boolean = false;
+  @Input() editMode: boolean = false;
 
   public visibility = 'hidden';
   public leftCSS = '';

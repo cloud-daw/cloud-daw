@@ -180,7 +180,7 @@ export class HomeComponent {
 
   public showEditor: boolean = false;
 
-  public mode: boolean = false;
+  public editMode: boolean = false;
 
   initVars() {
     this.masterVolume = this.project.masterVolume;

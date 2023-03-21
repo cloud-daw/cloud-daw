@@ -1,5 +1,19 @@
-<div class="container" [ngClass]="{'selected' : isSelected, 'editMode' : mode}">
+<div class="container" [ngClass]="{'selected' : isSelected}" *ngIf="!editMode">
     <div class="notes-container" [ngStyle]="{'width': widthCSS}">
+        <div *ngFor="let data of track.midi.data">
+            <app-midi-note
+                [track]="track"
+                [vw]="vw"
+                [data]="data"
+                [isRecording]="isRecording"
+            >
+            </app-midi-note>
+        </div>
+    </div>
+</div>
+
+<div class="edit-container" *ngIf="editMode">
+    <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}">
         <div *ngFor="let data of track.midi.data">
             <app-midi-note
                 [track]="track"

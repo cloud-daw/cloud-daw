@@ -31,6 +31,6 @@ export class MidiEditorComponent {
     private _midi: Note[] = [];
     @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
 
-  public mode: boolean = true;
+  public editMode: boolean = true;
 
 }
