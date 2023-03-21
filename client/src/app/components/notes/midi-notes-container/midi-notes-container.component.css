@@ -22,6 +22,11 @@
     background-color: rgb(255, 99, 154);
 }
 
+.notes-container:hover {
+    cursor: pointer;
+    background-color: rgb(255, 55, 122);
+}
+
 /* .rows-container {
     left: 0;
     height: 100%;
