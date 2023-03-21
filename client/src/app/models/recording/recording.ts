@@ -1,14 +1,20 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
-import { MakeKeyDict } from '../../lib/dicts/keydict';
 import * as Tone from 'tone'
+
+enum play {
+    start = 0,
+    end = 1,
+}
 
 export class Recording {
     public data: Note[];
     public synth: MidiInstrument;
-    constructor(synth: MidiInstrument, data: Note[] = []) {
+    public maxOverlaps: number;
+    constructor(synth: MidiInstrument, data: Note[] = [], maxOverlaps: number = 1) {
         this.synth = synth;
         this.data = data;
+        this.maxOverlaps = maxOverlaps;
     }
 
     /**
@@ -46,7 +52,7 @@ export class Recording {
         private makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
             let a = Tone.Time(attack).toSeconds();
             let r = Tone.Time(release).toSeconds();
-            return r - a;
+            return (r - a) + this.synth.release;
         }
 
     /**
@@ -80,4 +86,38 @@ export class Recording {
         }
     }
 
+    
+    /**
+     * 
+     * @param notes an array of notes from a recording
+     * @returns maximum overlaps between notes in array
+     */
+    public UpdateOverlaps() {
+        const releaseOffset = this.synth.release;
+        const notes = this.data;
+        let currOverlap = 0;
+        let maxOverlap = 0;
+        let synthIdx: number[] = []
+        synthIdx.length = notes.length;
+        synthIdx.fill(0);
+        let startsCounter = 0;
+        let ranges : {time: number, quality: number}[] = [];
+        for (let i = 0; i < notes.length; i++) {
+            ranges.push({ time: Tone.Time(notes[i].attack).toSeconds(), quality: play.start });
+            ranges.push({ time: Tone.Time(notes[i].release).toSeconds() + releaseOffset, quality: play.end });
+        }
+        ranges.sort((a, b) => (a.time - b.time));
+        for (let i = 0; i < ranges.length; i++) {
+            if (ranges[i].quality == play.start) {
+                currOverlap++;
+                synthIdx[startsCounter] = currOverlap;
+                startsCounter++;
+            }
+            if (ranges[i].quality == play.end) {
+                currOverlap--;
+            }
+            maxOverlap = Math.max(maxOverlap, currOverlap);
+        }
+        this.maxOverlaps = maxOverlap;
+    }
 }

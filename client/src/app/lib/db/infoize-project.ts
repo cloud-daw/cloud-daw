@@ -65,7 +65,7 @@ function makeTrackInfo(track: MidiTrack): TrackInfo {
     let instrumentI: InstrumentInfo = makeInfoFromInstrument(track.instrument);
     let notesI: NoteInfo[] = makeInfoFromRecording(track.midi.data)
     let effectsI: EffectInfo[] = makeAllEffectInfo(track.effects);
-    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
+    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.midi.maxOverlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
 }
 
 

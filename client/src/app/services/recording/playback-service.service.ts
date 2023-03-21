@@ -1,5 +1,6 @@
 import { Note } from '../../models/recording/note';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'
+import { Recording } from '../../models/recording/recording';
 import * as Tone from 'tone';
 
 
@@ -43,8 +44,12 @@ class SynthAvailability {
 
 }
 
-export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
-    const overlaps = calculateOverlaps(data, synth.release);
+export function SchedulePlayback(recording: Recording) {
+    const data = recording.data;
+    const synth = recording.synth;
+    const release = synth.release;
+    //const overlaps = calculateOverlaps(data, release);
+    const overlaps = recording.maxOverlaps;
     synth.setVoices(overlaps);
     let availableSynths: SynthAvailability[] = [];
     let useSynthIdx = 0;
@@ -61,7 +66,7 @@ export function SchedulePlayback(data: Note[], synth: MidiInstrument) {
     });
     for (let i = 0; i < data.length; i++) {
         useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
-        Tone.Transport.schedule((time) => {
+        Tone.Transport.scheduleOnce((time) => {
             synth.voices[useSynthIdx].triggerAttackRelease(data[i].value, data[i].duration, time);
         }, data[i].attack);
     }
@@ -83,36 +88,4 @@ function manageVoices(availableSynths: SynthAvailability[], release: number, att
         }
     }
     return synthIdx;
-}
-
-/**
- * 
- * @param notes an array of notes from a recording
- * @returns maximum overlaps between notes in array
- */
-function calculateOverlaps(notes: Note[], releaseOffset: number) : number {
-    let currOverlap = 0;
-    let maxOverlap = 0;
-    let synthIdx: number[] = []
-    synthIdx.length = notes.length;
-    synthIdx.fill(0);
-    let startsCounter = 0;
-    let ranges : {time: number, quality: number}[] = [];
-    for (let i = 0; i < notes.length; i++) {
-        ranges.push({ time: Tone.Time(notes[i].attack).toSeconds(), quality: play.start });
-        ranges.push({ time: Tone.Time(notes[i].release).toSeconds() + releaseOffset, quality: play.end });
-    }
-    ranges.sort((a, b) => (a.time - b.time));
-    for (let i = 0; i < ranges.length; i++) {
-        if (ranges[i].quality == play.start) {
-            currOverlap++;
-            synthIdx[startsCounter] = currOverlap;
-            startsCounter++;
-        }
-        if (ranges[i].quality == play.end) {
-            currOverlap--;
-        }
-        maxOverlap = Math.max(maxOverlap, currOverlap);
-    }
-    return maxOverlap;
 }
