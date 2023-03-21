@@ -9,10 +9,9 @@ import { SchedulePlayback } from '../../services/recording/playback-service.serv
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
-import { MidiTrackComponent } from '../midi-track/midi-track.component';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { SliderComponent } from '../controls/slider/slider/slider.component';
-import { MidiBlockComponent } from '../midi-block/midi-block.component';
+import { MidiBlockComponent } from '../midi/midi-block/midi-block.component';
 import { MakeNewProject } from 'src/app/lib/db/new-project';
 import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';

@@ -13,17 +13,17 @@ import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
 import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
-import { MidiTrackComponent } from './components/midi-track/midi-track.component';
+import { MidiTrackComponent } from './components/midi/midi-track/midi-track.component';
 import { SliderComponent } from './components/controls/slider/slider/slider.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
-import { MidiBlockComponent } from './components/midi-block/midi-block.component';
+import { MidiBlockComponent } from './components/midi/midi-block/midi-block.component';
 import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
 import { SelectInstrumentComponent } from './components/select-instrument/select-instrument.component';
-import { MidiNotesContainerComponent } from './components/notes/midi-notes-container/midi-notes-container.component';
-import { MidiNoteComponent } from './components/notes/midi-note/midi-note.component';
-import { MidiEditorComponent } from './components/midi-editor/midi-editor.component';
+import { MidiNotesContainerComponent } from './components/midi/notes/midi-notes-container/midi-notes-container.component';
+import { MidiNoteComponent } from './components/midi/notes/midi-note/midi-note.component';
+import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.component';
 
 
 @NgModule({
