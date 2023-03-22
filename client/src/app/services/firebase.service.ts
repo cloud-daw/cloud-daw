@@ -32,10 +32,13 @@ export class FirebaseService {
         await this.firebaseAuth.createUserWithEmailAndPassword(email, password)
         .then(res=>{
             this.sendRegistrationEmail(res.user)
+            localStorage.setItem('isTutorial', "true")
         })
     }
     logout(){
         this.firebaseAuth.signOut()
+        // there is no need to automatically open tutorials if user is not new anymore.
+        localStorage.setItem('isTutorial', "false")
         localStorage.removeItem('user')
     }
     passwordReset(email:string){

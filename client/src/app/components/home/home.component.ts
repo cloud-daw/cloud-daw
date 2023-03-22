@@ -1,5 +1,6 @@
-import { Component, HostListener, SimpleChanges, ViewChildren, QueryList } from '@angular/core';
 import { first } from 'rxjs/operators';
+import { Component, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
 import {Project} from '../../models/project'
@@ -40,7 +41,7 @@ export enum BlockMode {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css',]
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
 
   @HostListener('document:keydown', ['$event'])
@@ -155,6 +156,7 @@ export class HomeComponent {
       "p": keyStatus.notPlaying,
       ";": keyStatus.notPlaying,
     };
+    
     Tone.start();
   }
   //status$: Observable<any>;
@@ -184,6 +186,8 @@ export class HomeComponent {
   public octave = 4;
   public showEditor: boolean = false;
   public blockMode: BlockMode = BlockMode.Block;
+  public isTutorial: boolean = false;
+  public tutorialState = 0;
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
@@ -408,15 +412,141 @@ export class HomeComponent {
   //     }
   //   }
   // }
+  
+  onTutorialNext() {
+    const header = <HTMLElement>document.getElementById("tutorialInstructionsHeader");
+    const body = <HTMLElement>document.getElementById("tutorialInstructionsBody");
+    const mainCtrl = <HTMLElement>document.getElementById("center-main-controls")
+    const volume = <HTMLElement>document.getElementById("volume")
+    const togglePiano = <HTMLElement>document.getElementById("togglePiano")
+    const piano = <HTMLElement>document.getElementById("piano")
+    const octaveInc = <HTMLElement>document.getElementById("octaveInc")
+    const octaveDec = <HTMLElement>document.getElementById("octaveDec")
+    const tracks = <HTMLElement>document.getElementById("tracks")
+    if (this.tutorialState == 0) {
+        header.textContent = "Welcome To Cloud DAW"
+        body.textContent = "Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. \n\n Follow along with the red rectangles. \nClick Next to go to the next page."
+    }
+    // main controls
+    else if (this.tutorialState == 1) {
+        mainCtrl.style.border = "3px #22C55E solid"
+        header.textContent = "Main Controls"
+        body.textContent = "These are your main controls, you can Rewind, Play, Pause, or Record respectively with these buttons. < Add more info. about them here >"
+    }
+    // volume
+    else if (this.tutorialState == 2) {
+        mainCtrl.style.border = "none"
+        volume.style.border = "3px #22C55E solid"
+        header.textContent = "Volume Control"
+        body.textContent = "You can use this slider to control the master volume of your tracks"
+    }
+    // piano toggle button
+    else if (this.tutorialState == 3) {
+        volume.style.border = "none"
+        header.textContent = "Piano"
+        togglePiano.style.border = "3px #22C55E solid"
+        body.textContent = "Press the Show/Hide Piano button to see the piano"
+    }
+    // piano
+    else if (this.tutorialState == 4) {
+        this.isExpanded = true;
+        togglePiano.style.border = "none"
+        piano.style.border = "3px #22C55E solid"
+        body.textContent = "Press the keys displayed on the piano keys to create the notes they correspond to."
+    }
+    // octave control
+    else if (this.tutorialState == 5) {
+        piano.style.border = "none"
+        octaveInc.style.border = "3px #22C55E solid"
+        octaveDec.style.border = "3px #22C55E solid"
+        header.textContent = "Octaves"
+        body.textContent = "Eventhough only a single octave of keys is displayed at a time, you can use these buttons to increase or decrease an octave and use the same keys."
+    }
+    // tracks
+    else if (this.tutorialState == 6) {
+        octaveInc.style.border = "none"
+        octaveDec.style.border = "none"
+        tracks.style.border = "3px #22C55E solid"
+        const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
+        nextBtn.textContent = "Finish"
+        header.textContent = "Tracks"
+        body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to add a new track, select tracks by clicking on them, or remove them."
+    }
+    else {
+        tracks.style.border = "none"
+        const instructions = <HTMLElement>document.getElementById("tutorialInstructions")
+        instructions.style.display = "none"
+        const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
+        nextBtn.textContent = "Next"
+        this.tutorialState = 0
+        this.isTutorial = false
+        this.isExpanded = false
+        // there is no need to automatically open tutorials if user completed tutorials once.
+        localStorage.setItem('isTutorial', "false")
+    }
+    this.tutorialState++; 
+  }
+
+  onTutorial() {
+    this.isTutorial = !this.isTutorial;
+
+    // there is no need to automatically open tutorials if user chooses to close it once.
+    localStorage.setItem('isTutorial', "false")
+    // reset tutorial state so that tutorial always starts from the beginning.
+    this.tutorialState = 0;
+    this.onTutorialNext();
+
+    // toggle the necessary elements of the tutorial.
+    const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
+    const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
+    if (this.isTutorial) {
+        nextBtn.style.display = "block";
+        instructions.style.display = "block";
+    } else{
+        nextBtn.style.display = "none";
+        instructions.style.display = "none";
+        const mainCtrl = <HTMLElement>document.getElementById("center-main-controls")
+        const volume = <HTMLElement>document.getElementById("volume")
+        const togglePiano = <HTMLElement>document.getElementById("togglePiano")
+        const piano = <HTMLElement>document.getElementById("piano")
+        const octaveInc = <HTMLElement>document.getElementById("octaveInc")
+        const octaveDec = <HTMLElement>document.getElementById("octaveDec")
+        const tracks = <HTMLElement>document.getElementById("tracks")
+
+        mainCtrl.style.border = "none"
+        volume.style.border = "none"
+        togglePiano.style.border = "none"
+        piano.style.border = "none"
+        octaveInc.style.border = "none"
+        octaveDec.style.border = "none"
+        tracks.style.border = "none"
+    }
+  }
 
   onLogout(){
     this.firebaseService.logout();
     this._router.navigateByUrl('/login');
-    //this.isLogout.emit()
   }  
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('home level changes: ', changes);
+  }
+
+  ngOnInit(){
+    this.isTutorial = "true" == localStorage.getItem('isTutorial');
+    console.log()
+    // toggle the necessary elements of the tutorial.
+    const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
+    const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
+    if (this.isTutorial) {
+        nextBtn.style.display = "block";
+        instructions.style.display = "block";
+    }
+
+    // reset tutorial state so that tutorial always starts from the beginning.
+    this.tutorialState = 0;
+    this.onTutorialNext();
+    
   }
 
 }

@@ -21,7 +21,7 @@
 .right-header {
     display: flex;
     align-items: center;
-    width: 15%;
+    width: 20%;
     /* border: 1px solid yellow; */
 }
 .center-header {
@@ -87,5 +87,11 @@
 
 #logout-button {
     color: rgb(215, 213, 213);
-    margin-left: 5em;
+    margin-left: 1em;
 }
+
+#tutorial-button {
+    color: rgb(215, 213, 213);
+    margin-left: 1em;
+}
+

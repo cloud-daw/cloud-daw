@@ -187,3 +187,33 @@
   width: auto;
   display: flex;
 }
+
+#tutorialInstructions {
+    display: none;
+    position: absolute;
+    background-color: rgba(91, 91, 91, 0.2);
+    width: 40%;
+    height: 15%;
+    left: 40%;
+    top: 18%;
+}
+
+.tutorialInstructionsText {
+    color: rgba(255, 255, 255, 1);
+}
+
+#tutorialInstructionsHeader {
+    font-weight: bolder;
+    font-size: large;
+}
+
+#next-button-tutorial{
+    bottom: 20px;
+    right: 20px;
+    position: absolute;
+    background-color: #22C55E;
+}
+
+.tutorials {
+    padding: 20px;
+}
