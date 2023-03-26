@@ -90,6 +90,7 @@
                             [editMode]="editMode"
                             (click)="setSelectedTrack(track)"
                             (dblclick)="openEditor()"
+                            (trackUpdated)="onTrackUpdated($event)"
                         />
                     </div>
                 </div>
@@ -109,6 +110,7 @@
             [(midi)]="selectedTrack.midi.data"
             (closeEditor)="closeEditor($event)"
             *ngIf="showEditor"
+            (trackUpdated)="onTrackUpdated($event)"
         >
         </app-midi-editor>
     </div>

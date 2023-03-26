@@ -82,6 +82,11 @@ export class HomeComponent implements OnInit{
     this.currMousekey = '';
   }
 
+  onTrackUpdated(track: MidiTrack) {
+    this.selectedTrack = track;
+    // console.log('from home', this.selectedTrack.midi.data);
+  }
+
   onKeyMousedown(key: string) {
     this.currMousekey = key;
     const myDiv = document.getElementById(this.currMousekey);
