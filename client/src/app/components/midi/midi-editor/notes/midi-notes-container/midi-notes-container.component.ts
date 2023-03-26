@@ -41,14 +41,8 @@ export class MidiNotesContainerComponent {
     droppedData.release = "1:2:1.822" as Tone.Unit.Time;
     droppedData.duration = 0.22187499999999974 as Tone.Unit.Time;
     this.track.midi.UpdateOverlaps();
-    const droppedIndex = this.track.midi.data.indexOf(droppedData);
-    console.log(droppedData);
-    //const draggedIndex = this.track.midi.data.indexOf(draggedData);
-    //this.track.midi.data[draggedIndex].attack = "1:2:0.847";
-    
     console.log(this.track.midi.data, droppedData);
     this.trackUpdated.emit(this.track);
-    // Do something with the dropped MIDI note data
   }
 
   extractMinMax() : number[] {

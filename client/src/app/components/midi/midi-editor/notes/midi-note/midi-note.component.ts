@@ -206,6 +206,7 @@ export class MidiNoteComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     this.updateDisplay();
+    console.log('update display');
     if (changes['isRecording']) {
       if (this.data) {
         // console.log('recording data??', this.data, this.data.attack.toString().split(':'));

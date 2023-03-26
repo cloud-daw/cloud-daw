@@ -84,6 +84,7 @@ export class HomeComponent implements OnInit{
 
   onTrackUpdated(track: MidiTrack) {
     this.selectedTrack = track;
+    console.log(this.project);
     // console.log('from home', this.selectedTrack.midi.data);
   }
 
