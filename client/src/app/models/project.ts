@@ -46,4 +46,8 @@ export class Project {
             }
         }
     }
+
+    save() {
+        this.updateEmitter.emit()
+    }
 }
