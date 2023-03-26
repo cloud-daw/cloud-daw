@@ -141,6 +141,7 @@ export class HomeComponent implements OnInit{
       },
       complete: () => {
         console.log('Project Loaded!')
+        this.loading = false;
       }
     });
     this.keyboardStatus = {
@@ -212,7 +213,6 @@ export class HomeComponent implements OnInit{
       this.trackIdCounter = Math.max(this.trackIdCounter, this.project.tracks[i].id)
     }
     this.trackIdCounter++;
-    this.loading = false;
   }
 
   toggleExpand() {
