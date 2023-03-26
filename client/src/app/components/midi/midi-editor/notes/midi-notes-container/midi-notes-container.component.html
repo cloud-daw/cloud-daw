@@ -15,7 +15,11 @@
 
 <div class="edit-container" *ngIf="editMode">
     <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}">
-        <div *ngFor="let data of track.midi.data">
+        <div *ngFor="let data of track.midi.data" 
+            cdkDrag 
+            (cdkDragEnded)="onDrop($event)" 
+            [cdkDragData]="data"
+        >
             <app-midi-note
                 [track]="track"
                 [vw]="vw"
@@ -27,3 +31,10 @@
         </div>
     </div>
 </div>
+
+<!-- <div cdkDropList (cdkDropListDropped)="onDrop($event)">
+  <div *ngFor="let item of items" cdkDrag>{{item}}</div>
+</div>
+ -->
+
+ <!--  cdkDropList (cdkDropListDropped)="onDrop($event)" -->

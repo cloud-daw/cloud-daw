@@ -17,6 +17,8 @@ export class MidiEditorComponent {
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
 
+  @Output() trackUpdated = new EventEmitter<MidiTrack>();
+
   @Input() 
     set midi(data: Note[]) {
       this._midi = data;
@@ -31,6 +33,12 @@ export class MidiEditorComponent {
   
   public blockMode: BlockMode = BlockMode.Editor;
   public showEditor: boolean = true;
+
+  onTrackUpdated(track: MidiTrack) {
+    this.track = track;
+    this.trackUpdated.emit(track);
+    // console.log('from editor', this.track.midi.data);
+  }
 
   onCloseEditor() {
     this.closeEditor.emit(false);

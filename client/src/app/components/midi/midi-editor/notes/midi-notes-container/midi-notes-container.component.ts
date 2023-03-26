@@ -1,9 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiNoteComponent } from '../midi-note/midi-note.component';
 import * as Tone from 'tone';
 import { BlockMode } from 'src/app/components/home/home.component';
+import { CdkDragDrop, CdkDragEnd, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Note } from 'src/app/models/recording/note';
 
 @Component({
   selector: 'app-midi-notes-container',
@@ -21,6 +23,8 @@ export class MidiNotesContainerComponent {
   @Input() isRecording: boolean = false;
   @Input() editMode: boolean = false;
 
+  @Output() trackUpdated = new EventEmitter<MidiTrack>();
+
   public visibility = 'hidden';
   public leftCSS = '';
   public widthCSS = '';
@@ -30,6 +34,22 @@ export class MidiNotesContainerComponent {
   public maxWidth = 0;
 
   public noteColor = this.editMode ? '#00ff62' : 'white';
+
+  onDrop(event: CdkDragEnd<Note>) {
+    const droppedData = event.source.data;
+    droppedData.attack = "1:2:0.847" as Tone.Unit.Time;
+    droppedData.release = "1:2:1.822" as Tone.Unit.Time;
+    droppedData.duration = 0.22187499999999974 as Tone.Unit.Time;
+    this.track.midi.UpdateOverlaps();
+    const droppedIndex = this.track.midi.data.indexOf(droppedData);
+    console.log(droppedData);
+    //const draggedIndex = this.track.midi.data.indexOf(draggedData);
+    //this.track.midi.data[draggedIndex].attack = "1:2:0.847";
+    
+    console.log(this.track.midi.data, droppedData);
+    this.trackUpdated.emit(this.track);
+    // Do something with the dropped MIDI note data
+  }
 
   extractMinMax() : number[] {
     const recording = this.track.midi.data;

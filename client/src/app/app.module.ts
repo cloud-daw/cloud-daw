@@ -24,6 +24,7 @@ import { SelectInstrumentComponent } from './components/select-instrument/select
 import { MidiNotesContainerComponent } from './components/midi/midi-editor/notes/midi-notes-container/midi-notes-container.component';
 import { MidiNoteComponent } from './components/midi/midi-editor/notes/midi-note/midi-note.component';
 import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.c
         appId: environment.firebase.appId,
     }),
     AngularFireDatabaseModule,
+    DragDropModule,
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],

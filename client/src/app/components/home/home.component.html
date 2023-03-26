@@ -8,16 +8,17 @@
             (rewind)="onRewind($event)" 
             (volume)="onMainVolumeChange($event)"
             (logout)="onLogout()"
+            (tutorial)="onTutorial()"
             [isRecording]="isRecording"
             [metronome]="metronome">
         </app-main-controls>
     </div>
-    <div class="piano-container" [ngClass]="{'expanded': isExpanded}">
+    <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
         <div class="piano-controls">
-            <button type="button" class="expand-piano" (click)="toggleExpand()">Show/Hide Piano</button>
+            <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()">Show/Hide Piano</button>
             <span class="octave-display">Current Octave: {{octave}}</span>
-            <button type="button" class="octave" (click)="onIncreaseOctave()">Increase Octave</button>
-            <button type="button" class="octave" (click)="onDecreaseOctave()">Decrease Octave</button>
+            <button type="button" class="octave" id="octaveInc" (click)="onIncreaseOctave()">Increase Octave</button>
+            <button type="button" class="octave" id="octaveDec" (click)="onDecreaseOctave()">Decrease Octave</button>
         </div>
         <div class="piano">
             <div id="a" (mousedown)="onKeyMousedown('a')" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
@@ -40,9 +41,9 @@
           </div>
     </div>
     <div class="production-container">
-        <div class='tracks-container'>
+        <div class='tracks-container' id="tracks">
             <button class="new-track-button" (click)="promptSelectInstrument()">
-                Add Track
+            Add Track
             </button>
             <app-select-instrument
             (createTrack)="newTrack($event)"
@@ -89,10 +90,16 @@
                             [editMode]="editMode"
                             (click)="setSelectedTrack(track)"
                             (dblclick)="openEditor()"
+                            (trackUpdated)="onTrackUpdated($event)"
                         />
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="tutorials" id="tutorialInstructions">
+            <p class="tutorialInstructionsText" id="tutorialInstructionsHeader">Welcome To Cloud DAW</p>
+            <p class="tutorialInstructionsText" id="tutorialInstructionsBody">Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. Click Next to go to the next page.</p>
+            <button type="button" id="next-button-tutorial" class="btn btn-light" (click)="onTutorialNext()"> Next</button>
         </div>
     </div>
     <div class="midi-editor-container">
@@ -103,6 +110,7 @@
             [(midi)]="selectedTrack.midi.data"
             (closeEditor)="closeEditor($event)"
             *ngIf="showEditor"
+            (trackUpdated)="onTrackUpdated($event)"
         >
         </app-midi-editor>
     </div>
