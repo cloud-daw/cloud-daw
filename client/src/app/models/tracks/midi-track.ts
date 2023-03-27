@@ -38,7 +38,6 @@ export class MidiTrack {
         this.effects = effects;
         this.volume = volume;
         this.ChangeVolume(this.volume);
-        console.log('inst created', instrument.instrument.volume.value)
     }
 
     /**
