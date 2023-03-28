@@ -23,7 +23,7 @@
             <button type="button" class="octave" id="octaveInc" (click)="onIncreaseOctave()">Increase Octave</button>
             <button type="button" class="octave" id="octaveDec" (click)="onDecreaseOctave()">Decrease Octave</button>
         </div>
-        <div class="piano">
+        <div *ngIf="!isDrums" class="piano">
             <div id="a" (mousedown)="onKeyMousedown('a')" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
             <div id="w" (mousedown)="onKeyMousedown('w')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
             <div id="s" (mousedown)="onKeyMousedown('s')" class="key white" style = "display:flex;justify-content:center;align-items:center;">S</div>
@@ -42,6 +42,24 @@
             <div id="p" (mousedown)="onKeyMousedown('p')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">P</div>
             <div id=";" (mousedown)="onKeyMousedown(';')" class="key white" style = "display:flex;justify-content:center;align-items:center;">;</div>
           </div>
+          <html>
+            <div *ngIf="isDrums" class="pad">
+                <div id="a" (mousedown)="onKeyMousedown('a')" class="box">A</div>
+                <div id="w" (mousedown)="onKeyMousedown('w')" class="box">W</div>
+                <div id="s" (mousedown)="onKeyMousedown('s')" class="box">S</div>
+                <div id="e" (mousedown)="onKeyMousedown('e')" class="box">E</div>
+                
+                <div id="d" (mousedown)="onKeyMousedown('d')" class="box">D</div>
+                <div id="f" (mousedown)="onKeyMousedown('f')" class="box">F</div>
+                <div id="t" (mousedown)="onKeyMousedown('t')" class="box">T</div>
+                <div id="g" (mousedown)="onKeyMousedown('g')" class="box">G</div>
+        
+                <div id="y" (mousedown)="onKeyMousedown('y')" class="box">Y</div>
+                <div id="h" (mousedown)="onKeyMousedown('h')" class="box">H</div>
+                <div id="u" (mousedown)="onKeyMousedown('u')" class="box">U</div>
+                <div id="j" (mousedown)="onKeyMousedown('j')" class="box">J</div>
+            </div>
+            </html>        
     </div>
     <div class="production-container">
         <div class='tracks-container' id="tracks">
