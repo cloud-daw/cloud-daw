@@ -205,11 +205,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   public reRender: number = 0;
 
-  onReRender(num: number) {
-    this.reRender = num;
-    console.log('rerendering from home');
-  }
-
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -237,6 +232,11 @@ export class HomeComponent implements AfterViewInit, OnInit{
       console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
     });
     
+  }
+
+  onReRender(num: number) {
+    this.reRender = num;
+    console.log('rerendering from home');
   }
 
   toggleExpand() {
@@ -299,11 +299,17 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
+      // this.selectedTrack.instrument.AdjustVolume(-100);
+      // this.selectedTrack.instrument.Play('a');
+      // this.selectedTrack.instrument.Release('a');
+      // setTimeout(() => {
+      //   this.selectedTrack.instrument.AdjustVolume(0);
+      // }, 500);
       this.isPlaying = true;
       this.metronome.ClearTransport();
       Array.from(this.recordings.values()).forEach((r: Recording) => {
         SchedulePlayback(r);
-        console.log('recording', r)
+        console.log('recording', r);
       });
       this.metronome.Start();
     }
@@ -370,12 +376,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.setRecordingToTrack(this.selectedTrack.id);
-    // this.blockRefs?.forEach((block) => {
-    //   if (block.track.id == this.selectedTrack.id) {
-    //     block.updateVisual();
-    //   }
-    // });
-    //(this.recordings);
   }
 
   /**
@@ -574,9 +574,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
     console.log('home level changes: ', changes);
   }
 
-  ngOnInit(){
+  ngOnInit() {
+    //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
-    console.log()
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
@@ -584,11 +584,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
         nextBtn.style.display = "block";
         instructions.style.display = "block";
     }
-
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
     this.onTutorialNext();
-    
   }
 
 }

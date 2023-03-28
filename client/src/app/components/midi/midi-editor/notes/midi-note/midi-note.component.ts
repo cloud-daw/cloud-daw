@@ -224,34 +224,44 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     return `${bar}:${beat}:${sixteenth.toFixed(3)}` as Tone.Unit.Time;
   }
 
+  /**
+   * 
+   * @param event Triggers on mouse up after a note has been dragged
+   * Handles logic for modifying note data based on new position
+   */ 
   onDragReleased(event: CdkDragRelease) {
     const viewportWidth = window.innerWidth;
     const noteElement = event.source.element.nativeElement;
     const container = this.midiContainerRef;
     const containerWidth = container.offsetWidth;
 
+    //get current position of dragged note
     const rect = noteElement.getBoundingClientRect();
     const rawLeftPos = rect.left - container.offsetLeft;
     const rawRightPos = rawLeftPos + rect.width;
 
+    //calculate leftPosition and rightPositon in terms of vw
     let leftPosition = (rawLeftPos / viewportWidth) * 100;
     const rightPosition = (rawRightPos / viewportWidth) * 100;
     if (leftPosition < 0) leftPosition = 0;
     const attack = this.convertPositionToBBS(leftPosition);
     const release = this.convertPositionToBBS(rightPosition);
 
+    //adjust attack and release based on new position
     const droppedData = event.source.data;
     droppedData.attack = attack;
     droppedData.release = release;
     console.log('DROPPED');
-    console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
-  
+    //console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
+    
+    //prevents position glitching on reRender
     this.dragPosition = {x: 0, y: 0};
-    // this.setDimensions(this.width, leftPosition, this.top);
+
+    //update data and reRender
     this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(this.track);
     this.triggerReRender.emit(this.reRender + 1);
-    //console.log('from note', this.track.midi.data);
+
   }
   
   calculateWidth(start: number, end: number) {
