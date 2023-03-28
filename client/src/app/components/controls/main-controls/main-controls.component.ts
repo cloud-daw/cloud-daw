@@ -17,6 +17,7 @@ export class MainControlsComponent {
   @Output() tutorial: EventEmitter<any> = new EventEmitter();
   @Output() tutorialNext: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
+  @Output() bounce: EventEmitter<any> = new EventEmitter();
   
   @Input() isRecording: boolean = false;
 
@@ -57,6 +58,10 @@ export class MainControlsComponent {
   }
   clickTutorialNext() {
     this.tutorialNext.emit();
+  }
+
+  clickBounce() {
+    this.bounce.emit();
   }
 
   /**

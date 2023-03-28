@@ -22,7 +22,6 @@
         <div *ngFor="let data of track.midi.data" 
         >
             <app-midi-note
-                cdkDragBoundary=".edit-notes-container"
                 [track]="track"
                 [vw]="vw"
                 [data]="data"

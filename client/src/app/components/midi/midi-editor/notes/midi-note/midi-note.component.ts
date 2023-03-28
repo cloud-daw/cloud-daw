@@ -234,18 +234,19 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     const rawLeftPos = rect.left - container.offsetLeft;
     const rawRightPos = rawLeftPos + rect.width;
 
-    const leftPosition = (rawLeftPos / viewportWidth) * 100;
+    let leftPosition = (rawLeftPos / viewportWidth) * 100;
     const rightPosition = (rawRightPos / viewportWidth) * 100;
-
+    if (leftPosition < 0) leftPosition = 0;
     const attack = this.convertPositionToBBS(leftPosition);
     const release = this.convertPositionToBBS(rightPosition);
 
     const droppedData = event.source.data;
     droppedData.attack = attack;
     droppedData.release = release;
-    this.dragPosition = {x: 0, y: 0};
     console.log('DROPPED');
     console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
+  
+    this.dragPosition = {x: 0, y: 0};
     // this.setDimensions(this.width, leftPosition, this.top);
     this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(this.track);

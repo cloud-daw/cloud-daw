@@ -10,9 +10,11 @@
             (logout)="onLogout()"
             (tutorial)="onTutorial()"
             [isRecording]="isRecording"
-            [metronome]="metronome">
+            [metronome]="metronome"
+            (bounce)="bounceToMP3()"
+            >
+            <!-- <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button> -->
         </app-main-controls>
-        <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button>
     </div>
     <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
         <div class="piano-controls">
@@ -44,11 +46,11 @@
     <div class="production-container">
         <div class='tracks-container' id="tracks">
             <button class="new-track-button" (click)="promptSelectInstrument()">
-            + Add Track
+                + Add Track
             </button>
             <app-select-instrument
-            (createTrack)="newTrack($event)"
-            [isPrompted]="showSelectInstrument"
+                (createTrack)="newTrack($event)"
+                [isPrompted]="showSelectInstrument"
             >
             </app-select-instrument>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
@@ -86,7 +88,7 @@
             <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
             <app-slider
                 #sliderRef
-                [bpm]="tempo" 
+                [bpm]="tempo"
                 [controlEvent]="controlEvent" 
                 [bars]="bars"
                 [isRecording]="isRecording"

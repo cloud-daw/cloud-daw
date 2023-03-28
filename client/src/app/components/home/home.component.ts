@@ -327,11 +327,14 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onRecord(event: boolean) {
     if (!this.isRecording) this.isRecording = true;
-    if (!this.isPlaying) this.onPlay(true);
     else {
       this.isRecording = false
+      this.onPause(event);
       this.onStopRecord();
+      return;
     }
+    if (!this.isPlaying) this.onPlay(true);
+    if (this.isPlaying) this.isRecording = true;
   }
 
   handleSliderChange(event: any) {

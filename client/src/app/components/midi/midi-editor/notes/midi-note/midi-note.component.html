@@ -2,6 +2,7 @@
     cdkDragRootElement
 >  
     <div
+        [cdkDragBoundary]="midiContainerRef"
         cdkDrag
         (cdkDragReleased)="onDragReleased($event)"
         [cdkDragData]="data"
