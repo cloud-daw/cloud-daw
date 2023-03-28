@@ -1,12 +1,13 @@
 .container {
     position: fixed;
-    top: 45%;
+    top: 30%;
     left: 20%;
-    height: 55%;
+    height: 70%;
     width: 10000em;
     background-color: #000000;
     z-index: 50;
     opacity: 0.9;
+    border-radius: 5px;
     /* margin: auto; */
 }
 

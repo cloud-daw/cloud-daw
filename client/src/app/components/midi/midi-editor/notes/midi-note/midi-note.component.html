@@ -1,5 +1,7 @@
 <div class="container"
     cdkDragRootElement
+    (click)="selectCurrentNote()"
+    [ngClass]="{selected: isSelected}"
 >  
     <div
         [cdkDragBoundary]="midiContainerRef"

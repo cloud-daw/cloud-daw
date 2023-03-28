@@ -43,6 +43,11 @@ export class MidiNotesContainerComponent implements OnChanges {
   public maxWidth = 0;
 
   public noteColor = this.editMode ? '#00ff62' : 'white';
+  public selectedNote: MidiNoteComponent = new MidiNoteComponent();
+
+  // selectCurrentNote(event: any) {
+  //   this.selectedNote = event;
+  // }
 
   onTrackUpdated(track: MidiTrack) {
     this.track = track;
@@ -55,6 +60,10 @@ export class MidiNotesContainerComponent implements OnChanges {
     this.track.midi.UpdateOverlaps();
     this.computeDimensions();
     this.triggerReRender.emit(num);
+  }
+
+  onSelectedNoteChange(note: MidiNoteComponent) {
+    this.selectedNote = note;
   }
 
   extractMinMax() : number[] {

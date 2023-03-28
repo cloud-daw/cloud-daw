@@ -1,23 +1,20 @@
 import { CdkDragEnd, CdkDragRelease } from '@angular/cdk/drag-drop';
-import { Component, AfterViewInit, OnChanges, ElementRef, Renderer2, EventEmitter, Input, Output, SimpleChanges, OnInit, ViewChild} from '@angular/core';
+import { Component, AfterViewInit, OnChanges, ElementRef, Renderer2, EventEmitter, Input, Output, SimpleChanges, OnInit, ViewChild, HostListener} from '@angular/core';
 import { timer } from 'rxjs/internal/observable/timer';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import * as Tone from 'tone';
 import { CdkDragPreview } from '@angular/cdk/drag-drop';
-
-interface NotesDict {
-  [note: string]: number;
-}
+import { createYNoteDict, notesArray, NotesDict, yPosNotesDict } from 'src/app/lib/dicts/ynotedict';
 
 @Component({
   selector: 'app-midi-note',
   templateUrl: './midi-note.component.html',
   styleUrls: ['./midi-note.component.css'],
 })
-export class MidiNoteComponent implements OnChanges, OnInit {
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+export class MidiNoteComponent implements OnChanges {
+  constructor() {}
 
   @ViewChild('midiContainerRef') midiContainerRef2!: ElementRef;
 
@@ -34,9 +31,12 @@ export class MidiNoteComponent implements OnChanges, OnInit {
   @Input() noteColor: string = '';
   @Input() reRender: number = 0;
   @Input() midiContainerRef: Element | any;
+  @Input() selectedNote: MidiNoteComponent = this;
+
   
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
   @Output() triggerReRender = new EventEmitter<number>();
+  @Output() selectedNoteChange = new EventEmitter<MidiNoteComponent>();
 
   public width: number = 0;
   public top: number = 0;
@@ -47,107 +47,12 @@ export class MidiNoteComponent implements OnChanges, OnInit {
   private midiContainer: Element | any;
   public dragPosition: any = {x: 0, y: 0};
   
-  public notesDict: { [key: string]: number } = {
-    C0   : 1,
-    'C#0': 2,
-    D0   : 3,
-    'D#0': 4,
-    E0   : 5,
-    F0   : 6,
-    'F#0': 7,
-    G0   : 8,
-    'G#0': 9,
-    A0   : 10,
-    'A#0': 11,
-    B0   : 12,
-    C1   : 13,
-    'C#1': 14,
-    D1   : 15,
-    'D#1': 16,
-    E1   : 17,
-    F1   : 18,
-    'F#1': 19,
-    G1   : 20,
-    'G#1': 21,
-    A1   : 22,
-    'A#1': 23,
-    B1   : 24,
-    C2   : 25,
-    'C#2': 26,
-    D2   : 27,
-    'D#2': 28,
-    E2   : 29,
-    F2   : 30,
-    'F#2': 31,
-    G2   : 32,
-    'G#2': 33,
-    A2   : 34,
-    'A#2': 35,
-    B2   : 36,
-    C3   : 37,
-    'C#3': 38,
-    D3   : 39,
-    'D#3': 40,
-    E3   : 41,
-    F3   : 42,
-    'F#3': 43,
-    G3   : 44,
-    'G#3': 45,
-    A3   : 46,
-    'A#3': 47,
-    B3   : 48,
-    C4   : 49,
-    'C#4': 50,
-    D4   : 51,
-    'D#4': 52,
-    E4   : 53,
-    F4   : 54,
-    'F#4': 55,
-    G4   : 56,
-    'G#4': 57,
-    A4   : 58,
-    'A#4': 59,
-    B4   : 60,
-    C5   : 61,
-    'C#5': 62,
-    D5   : 63,
-    'D#5': 64,
-    E5   : 65,
-    F5   : 66,
-    'F#5': 67,
-    G5   : 68,
-    'G#5': 69,
-    A5   : 70,
-    'A#5': 71,
-    B5   : 72,
-    C6   : 73,
-    'C#6': 74,
-    D6   : 75,
-    'D#6': 76,
-    E6   : 77,
-    F6   : 78,
-    'F#6': 79,
-    G6   : 80,
-    'G#6': 81,
-    A6   : 82,
-    'A#6': 83,
-    B6   : 84,
-    C7   : 85,
-    'C#7': 86,
-    D7   : 87,
-    'D#7': 88,
-    E7   : 89,
-    F7   : 90,
-    'F#7': 91,
-    G7   : 92,
-    'G#7': 93,
-    A7   : 94,
-    'A#7': 95,
-    B7   : 96,
-  };
+  public notesDict: NotesDict = yPosNotesDict;
+  public isSelected: boolean = this.selectedNote == this;
+  private notesArray = notesArray;
 
   //Start (TEMP GPT SOLUTION)
-  notesDict2: NotesDict = {};
+  //notesDict: { [key: string]: number} = createYNoteDict();
 
   notePositions: NotesDict = {
     C: 0,
@@ -164,13 +69,34 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     B: 11
   };
 
+
   containerHeight = 6; // in em
   containerTop = 0; // in pixels
   noteHeight = this.containerHeight / 28; // each octave has 4 white keys and 3 black keys (total 7), so 6em/28 = 0.214em
 
-  ngOnInit() {
-    const el = this.el.nativeElement;
-    this.renderer.setStyle(el, 'all', 'unset');
+  @HostListener('document:keydown', ['$event'])
+  handleKeydownEvent(event: KeyboardEvent) {
+    event.preventDefault();
+    if (this.isSelected) {
+      this.keyDownActions(event.code);
+    }
+    // if (event.code === 'ArrowUp' && this.isSelected) {
+    //   this.pitchUp();
+    // }
+    // if (event.code === 'ArrowDown' && this.isSelected) {
+    //   this.pitchDown();
+    // }
+    // if (event.code === 'ArrowLeft' && this.isSelected) {
+    //   this.shiftLeft();
+    // }
+    // if (event.code === 'ArrowRight' && this.isSelected) {
+    //   this.shiftRight();
+    // }
+  }
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyupEvent(event: KeyboardEvent) {
+    event.preventDefault();
   }
 
   ngAfterViewInit() {
@@ -189,6 +115,13 @@ export class MidiNoteComponent implements OnChanges, OnInit {
   }
   //End (TEMP GPT SOLUTION)
 
+
+
+  selectCurrentNote() {
+    this.isSelected = true;
+    this.selectedNoteChange.emit(this);
+    this.track.instrument.instrument.triggerAttackRelease(this.data.value, 0.1);
+  }
   /**
    * 
    * @param position 
@@ -268,13 +201,64 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     return end - start;
   }
 
+  keyDownActions(key: string) {
+    const currentNoteIndex = this.notesArray.indexOf(this.data.value);
+    const noteTimeToArray =  {
+      attack: this.data.attack.toString().split(':'), 
+      release: this.data.release.toString().split(':')
+    };
+    const bar = {
+      attack: parseInt(noteTimeToArray.attack[0]), 
+      release: parseInt(noteTimeToArray.release[0])
+    };
+    const beat = {
+      attack: parseInt(noteTimeToArray.attack[1]), 
+      release: parseInt(noteTimeToArray.release[1])
+    };
+    const sixteenth = {
+      attack: parseInt(noteTimeToArray.attack[2]), 
+      release: parseInt(noteTimeToArray.release[2])
+    };
+    switch (key) {
+      case 'ArrowUp':
+        if (currentNoteIndex < (this.notesArray.length - 1)) {
+          const newNote = this.notesArray[currentNoteIndex - 1];
+          this.data.value = this.notesArray[currentNoteIndex + 1];
+          this.track.midi.UpdateOverlaps();
+          this.triggerReRender.emit(this.reRender + 1);
+          this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+        }
+        break;
+      case 'ArrowDown':
+        if (currentNoteIndex > (0)) {
+          const newNote = this.notesArray[currentNoteIndex - 1];
+          this.data.value = newNote;
+          this.track.midi.UpdateOverlaps();
+          this.triggerReRender.emit(this.reRender + 1);
+          this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+        }
+        break;  
+      case 'ArrowLeft':
+        
+        // if (this.data.attack)
+        break;
+      case 'ArrowRight':
+        break;
+      default:
+        break;
+    }
+  }
+
   updateDisplay() {
     const start: number = this.convertBBSToPosition(this.data.attack);
     const end: number = this.convertBBSToPosition(this.data.release);
     const width = this.calculateWidth(start, end);
-    const getNoteValue = Math.abs(100-this.notesDict[this.data.value]);
-    const modifier = 1;
-    const topOffset = getNoteValue * modifier;
+    // const getNoteValue = Math.abs(100-this.notesDict[this.data.value]);
+    // const modifier = 1;
+    // const topOffset = getNoteValue * modifier;
+
+    const topOffset = (100 - this.notesDict[this.data.value]);
+    //console.log(topOffset);
     //console.log('start:', start, 'end:', end);
     this.setDimensions(width, start, topOffset);
    // console.log('attack;', this.data.attack, 'release:', this.data.release, 'left;', this.leftCSS, 'width:', this.widthCSS, 'top', this.topCSS);
@@ -288,14 +272,15 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     this.leftCSS = `${left}vw`;
     this.topCSS = `${Math.abs(top)}%`;
     
-    console.log('left', this.leftCSS, 'top', this.topCSS);
+    //console.log('left', this.leftCSS, 'top', this.topCSS);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.updateDisplay();
     if (changes['isRecording']) {
-      if (this.data) {
-        // console.log('recording data??', this.data, this.data.attack.toString().split(':'));
+      if (this.selectedNote) {
+        if (this.selectedNote != this) this.isSelected = false;
+        else this.isSelected = true;
       }
       if (this.data && !this.isRecording) {
         this.updateDisplay();
