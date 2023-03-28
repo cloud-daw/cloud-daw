@@ -100,7 +100,7 @@ export class MidiNoteComponent implements OnChanges {
   }
 
   ngAfterViewInit() {
-    console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
+    //console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
   }
 
   populateNotePos() {
@@ -186,8 +186,7 @@ export class MidiNoteComponent implements OnChanges {
     droppedData.release = release;
     console.log('DROPPED');
     //console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
-    
-    //prevents position glitching on reRender
+  
     this.dragPosition = {x: 0, y: 0};
 
     //update data and reRender

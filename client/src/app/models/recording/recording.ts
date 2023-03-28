@@ -1,6 +1,7 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import * as Tone from 'tone'
+import { MakeKeyDict } from 'src/app/lib/dicts/keydict';
 
 enum play {
     start = 0,
@@ -17,6 +18,8 @@ export class Recording {
         this.maxOverlaps = maxOverlaps;
     }
 
+    // public keyDict = MakeKeyDict(0);
+
     /**
      * Pushes newly played note onto recording array
      * @param key key value e.g. 'C4'
@@ -24,7 +27,7 @@ export class Recording {
      */
     public RecordNote(key: string) {
         let attack = Tone.Transport.position;
-        this.data.push(new Note(key, attack));
+        if (key != 'invalid') this.data.push(new Note(key, attack));
     }
 
     /**

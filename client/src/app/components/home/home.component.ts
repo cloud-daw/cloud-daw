@@ -231,7 +231,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.midiContainerRef = changes.first.nativeElement;
       console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
     });
-    
   }
 
   onReRender(num: number) {
@@ -465,6 +464,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
     const octaveInc = <HTMLElement>document.getElementById("octaveInc")
     const octaveDec = <HTMLElement>document.getElementById("octaveDec")
     const tracks = <HTMLElement>document.getElementById("tracks")
+    const editor = <HTMLElement>document.getElementById("midi-editor")
     if (this.tutorialState == 0) {
         header.textContent = "Welcome To Cloud DAW"
         body.textContent = "Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. \n\n Follow along with the red rectangles. \nClick Next to go to the next page."
@@ -506,16 +506,31 @@ export class HomeComponent implements AfterViewInit, OnInit{
     }
     // tracks
     else if (this.tutorialState == 6) {
+        this.isExpanded = false
         octaveInc.style.border = "none"
         octaveDec.style.border = "none"
         tracks.style.border = "3px #22C55E solid"
-        const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
-        nextBtn.textContent = "Finish"
         header.textContent = "Tracks"
         body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to add a new track, select tracks by clicking on them, or remove them."
     }
-    else {
+    // Opening Editor
+    else if (this.tutorialState == 7) {
         tracks.style.border = "none"
+        header.textContent = "Editor"
+        body.textContent = "You can double click any track to open the editing window for the track."
+        this.showEditor = true
+    }
+
+    // editor
+    else if (this.tutorialState == 8) {
+        const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
+        nextBtn.textContent = "Finish"
+        header.textContent = "Editor"
+        body.textContent = "In this editor window, you can edit and save your track."
+        editor.style.border = "3px #22C55E solid"
+    }
+    else {
+        editor.style.border = "none"
         const instructions = <HTMLElement>document.getElementById("tutorialInstructions")
         instructions.style.display = "none"
         const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
@@ -523,6 +538,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         this.tutorialState = 0
         this.isTutorial = false
         this.isExpanded = false
+        this.showEditor = false
         // there is no need to automatically open tutorials if user completed tutorials once.
         localStorage.setItem('isTutorial', "false")
     }
