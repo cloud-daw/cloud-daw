@@ -87,5 +87,5 @@ function manageVoices(availableSynths: SynthAvailability[], release: number, att
             synthIdx = availableSynths[i].idx;
         }
     }
-    return synthIdx;
+    return synthIdx == -1 ? 0 : synthIdx;
 }

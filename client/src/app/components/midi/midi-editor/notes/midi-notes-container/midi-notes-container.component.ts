@@ -87,7 +87,8 @@ export class MidiNotesContainerComponent implements OnChanges {
     const endLeft = this.convertMeasureToPosition(minmax[1]);
     const width = endLeft;
     this.maxWidth = Math.max(this.maxWidth, width);
-    if (width >= this.maxWidth) this.updateVisual(left, width);
+    // if (width >= this.maxWidth) 
+    this.updateVisual(left, width);
   }
 
   updateVisual(left: number, width: number) {

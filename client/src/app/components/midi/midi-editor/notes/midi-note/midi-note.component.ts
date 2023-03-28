@@ -45,6 +45,7 @@ export class MidiNoteComponent implements OnChanges, OnInit {
   public topCSS: string = `0vw`;
 
   private midiContainer: Element | any;
+  public dragPosition: any = {x: 0, y: 0};
   
   public notesDict: { [key: string]: number } = {
     C0   : 1,
@@ -242,7 +243,7 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     const droppedData = event.source.data;
     droppedData.attack = attack;
     droppedData.release = release;
-
+    this.dragPosition = {x: 0, y: 0};
     console.log('DROPPED');
     console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
     // this.setDimensions(this.width, leftPosition, this.top);

@@ -5,6 +5,8 @@
         cdkDrag
         (cdkDragReleased)="onDragReleased($event)"
         [cdkDragData]="data"
+        cdkDragLockAxis="x"
+        [cdkDragFreeDragPosition]="dragPosition"
         class="note-block"
         [ngStyle]=
             "{

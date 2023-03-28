@@ -18,10 +18,11 @@
 </div>
 
 <div class="edit-container" *ngIf="editMode">
-    <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}" cdkDragBoundary>
+    <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}">
         <div *ngFor="let data of track.midi.data" 
         >
             <app-midi-note
+                cdkDragBoundary=".edit-notes-container"
                 [track]="track"
                 [vw]="vw"
                 [data]="data"
