@@ -238,6 +238,7 @@ html {
   flex-wrap: wrap;
   justify-content: space-between;
   margin: auto;
+  height: 0;
 }
 .box {
   width: 100px;
