@@ -75,6 +75,8 @@
                     [(midi)]="selectedTrack.midi.data"
                     (closeEditor)="closeEditor($event)"
                     [midiContainerRef]="midiContainerRef"
+                    [reRender]="reRender"
+                    (triggerReRender)="onReRender($event)"
                     *ngIf="showEditor"
                     (trackUpdated)="onTrackUpdated($event)"
                 >
@@ -101,6 +103,8 @@
                             [isRecording]="isRecording"
                             [selectedTrack]="selectedTrack"
                             [editMode]="editMode"
+                            [reRender]="reRender"
+                            (triggerReRender)="onReRender($event)"
                             (click)="setSelectedTrack(track)"
                             (dblclick)="openEditor()"
                             (trackUpdated)="onTrackUpdated($event)"

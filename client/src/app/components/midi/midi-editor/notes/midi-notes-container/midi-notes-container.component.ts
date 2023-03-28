@@ -27,7 +27,9 @@ export class MidiNotesContainerComponent implements OnChanges {
   @Input() isRecording: boolean = false;
   @Input() editMode: boolean = false;
   @Input() midiContainerRef: Element | any;
+  @Input() reRender: number = 0;
 
+  @Output() triggerReRender: EventEmitter<number> = new EventEmitter();
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
 
   //@ViewChild(MidiNoteComponent, { static: false }) noteComponent?: MidiNoteComponent;
@@ -42,8 +44,6 @@ export class MidiNotesContainerComponent implements OnChanges {
 
   public noteColor = this.editMode ? '#00ff62' : 'white';
 
-  public reRender: number = 0;
-
   onTrackUpdated(track: MidiTrack) {
     this.track = track;
     this.track.midi.UpdateOverlaps();
@@ -51,10 +51,10 @@ export class MidiNotesContainerComponent implements OnChanges {
     // console.log('from editor', this.track.midi.data);
   }
 
-  onTriggerReRender(any: number) {
+  onTriggerReRender(num: number) {
     this.track.midi.UpdateOverlaps();
     this.computeDimensions();
-    this.reRender++;
+    this.triggerReRender.emit(num);
   }
 
   extractMinMax() : number[] {
@@ -62,8 +62,12 @@ export class MidiNotesContainerComponent implements OnChanges {
     let max = 0;
     let min = 1000;
     if (recording.length > 0) {
-      min = parseInt(recording[0].attack.toString().split(':')[0]);
-      max = parseInt(recording[recording.length-1].release.toString().split(':')[0]);
+      for (let i = 0; i < recording.length; i++) {
+        min = Math.min(parseInt(recording[i].attack.toString().split(':')[0]), min);
+        max = Math.max(parseInt(recording[i].release.toString().split(':')[0]), max);
+      };
+      // min = parseInt(recording[0].attack.toString().split(':')[0]);
+      // max = parseInt(recording[recording.length-1].release.toString().split(':')[0]);
     }
     max++;
     //console.log('min, max', min, max, this.track.midi.data);

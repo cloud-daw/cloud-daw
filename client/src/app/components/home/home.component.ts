@@ -202,6 +202,13 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   midiContainerRef: Element | any;
 
+  public reRender: number = 0;
+
+  onReRender(num: number) {
+    this.reRender = num;
+    console.log('rerendering from home');
+  }
+
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;

@@ -1,4 +1,4 @@
-<div class="container" [ngClass]="{'selected' : isSelected}" *ngIf="!editMode">
+<div class="container" [ngClass]="{'selected' : isSelected}"  *ngIf="!editMode">
     <div class="notes-container" [ngStyle]="{'width': widthCSS}">
         <div *ngFor="let data of track.midi.data">
             <app-midi-note
@@ -27,7 +27,7 @@
                 [data]="data"
                 [isRecording]="isRecording"
                 [noteColor]="noteColor"
-                [reRender]="reRender" 
+                [reRender]="reRender"
                 (trackUpdated)="onTrackUpdated($event)"
                 [midiContainerRef]="midiContainerRef"
                 (triggerReRender)="onTriggerReRender($event)"

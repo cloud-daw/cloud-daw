@@ -10,6 +10,8 @@
             [editMode]="showEditor"
             (trackUpdated)="onTrackUpdated($event)"
             [midiContainerRef]="midiContainerRef"
+            [reRender]="reRender"
+            (triggerReRender)="onReRender($event)"
         />
     </div>
 </div>

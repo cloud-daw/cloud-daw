@@ -1,7 +1,7 @@
 <div class="container"
     cdkDragRootElement
 >  
-    <div 
+    <div
         cdkDrag
         (cdkDragReleased)="onDragReleased($event)"
         [cdkDragData]="data"
@@ -16,6 +16,18 @@
     >
     </div>
 </div>
+
+<!-- <ng-template #dragPreview>
+    <div
+      class="note-block"
+      [ngStyle]="{
+        'width': widthCSS,
+        'left': leftCSS,
+        'top': topCSS,
+        'background-color': noteColor
+      }"
+    ></div>
+  </ng-template> -->
 
 <!--     cdkDragRootElement -->
 
