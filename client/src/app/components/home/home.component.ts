@@ -473,7 +473,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
     else if (this.tutorialState == 1) {
         mainCtrl.style.border = "3px #22C55E solid"
         header.textContent = "Main Controls"
-        body.textContent = "These are your main controls, you can Rewind, Play, Pause, or Record respectively with these buttons. < Add more info. about them here >"
+        body.textContent = "These are your main controls, you can Rewind, Play, Pause, or Record respectively with these buttons. Hit record and begin playing music to record the notes you play. Hit record again, or pause, to stop recording. Hit rewind or drag the slider to the desired position, then click play to listen to what you have recorded."
     }
     // volume
     else if (this.tutorialState == 2) {
@@ -511,7 +511,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         octaveDec.style.border = "none"
         tracks.style.border = "3px #22C55E solid"
         header.textContent = "Tracks"
-        body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to add a new track, select tracks by clicking on them, or remove them."
+        body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to be prompted to select an instrument to use to add a new track. You can select tracks by clicking on them, or remove them."
     }
     // Opening Editor
     else if (this.tutorialState == 7) {
@@ -526,7 +526,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
         nextBtn.textContent = "Finish"
         header.textContent = "Editor"
-        body.textContent = "In this editor window, you can edit and save your track."
+        body.textContent = "In this editor window, you can edit the horizontal position of each note by clicking it and dragging it to the desired position. You can also select a note and pitch it up or down using the up and down arrow keys respectively."
         editor.style.border = "3px #22C55E solid"
     }
     else {
