@@ -39,6 +39,7 @@ export class MidiEditorComponent {
     this.track = track;
     this.trackUpdated.emit(track);
     // console.log('from editor', this.track.midi.data);
+    //console.log('from editor', this.track.midi.data);
   }
 
   onCloseEditor() {

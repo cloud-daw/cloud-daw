@@ -156,12 +156,12 @@
 }
 
 .midi-container {
-    width: 80%;
-    position: relative;
-    box-sizing: border-box;
-    height: 100em;
-    margin-top: 2em;
-    /* border: 1px solid pink; */
+  width: 80%;
+  position: relative;
+  box-sizing: border-box;
+  height: 100em;
+  margin-top: 2em;
+  border: 1px solid blue;
 }
 
 .midi-subContainer {

@@ -35,6 +35,7 @@ export class MidiNoteComponent implements OnChanges {
   @Input() midiContainerRef: Element | any;
   
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
+  @Output() triggerReRender = new EventEmitter<number>();
 
   public width: number = 0;
   public widthCSS: string = `0vw`;
@@ -208,22 +209,23 @@ export class MidiNoteComponent implements OnChanges {
   convertPositionToBBS(position: number): Tone.Unit.Time {
     const bbsInterval = this.vw / (this.bars * 16);
     const bbsSum = position / bbsInterval;
-    const sixteenth = bbsSum % 1;
-    const beat = Math.floor((bbsSum / 4) % 4) + 1;
+    const sixteenth = bbsSum % 4;
+    const beat = Math.floor((bbsSum / 4) % 4);
     const bar = Math.floor(bbsSum / 16) + 1;
   
-    return `${bar}:${beat}:${sixteenth}` as Tone.Unit.Time;
+    return `${bar}:${beat}:${sixteenth.toFixed(3)}` as Tone.Unit.Time;
   }
 
   onDragReleased(event: CdkDragRelease) {
     const viewportWidth = window.innerWidth;
     const noteElement = event.source.element.nativeElement;
     const container = this.midiContainerRef;
+    const containerWidth = container.offsetWidth;
 
     const rect = noteElement.getBoundingClientRect();
     const rawLeftPos = rect.left - container.offsetLeft;
-
     const rawRightPos = rawLeftPos + rect.width;
+
     const leftPosition = (rawLeftPos / viewportWidth) * 100;
     const rightPosition = (rawRightPos / viewportWidth) * 100;
 
@@ -239,7 +241,9 @@ export class MidiNoteComponent implements OnChanges {
 
     this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(this.track);
-    this.updateDisplay();
+    // this.updateDisplay(); 
+    // this.triggerReRender.emit(this.reRender++);
+    //console.log('from note', this.track.midi.data);
   }
   
   calculateWidth(start: number, end: number) {

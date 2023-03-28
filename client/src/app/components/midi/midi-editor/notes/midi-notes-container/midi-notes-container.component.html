@@ -10,6 +10,7 @@
                 [reRender]="reRender"
                 (trackUpdated)="onTrackUpdated($event)"
                 [midiContainerRef]="midiContainerRef"
+                (triggerReRender)="onTriggerReRender($event)"
             >
             </app-midi-note>
         </div>
@@ -29,6 +30,7 @@
                 [reRender]="reRender" 
                 (trackUpdated)="onTrackUpdated($event)"
                 [midiContainerRef]="midiContainerRef"
+                (triggerReRender)="onTriggerReRender($event)"
             >
             </app-midi-note>
         </div>

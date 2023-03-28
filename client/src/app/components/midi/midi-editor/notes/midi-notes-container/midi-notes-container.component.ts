@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiNoteComponent } from '../midi-note/midi-note.component';
@@ -15,7 +15,7 @@ import { timer } from 'rxjs/internal/observable/timer';
   styleUrls: ['./midi-notes-container.component.css']
 })
 
-export class MidiNotesContainerComponent {
+export class MidiNotesContainerComponent implements OnChanges {
   
   constructor(private cdr: ChangeDetectorRef) {}
   
@@ -44,27 +44,17 @@ export class MidiNotesContainerComponent {
 
   public reRender: number = 0;
 
-  // onDrop(event: CdkDragEnd<Note>) {
-  //   const droppedData = event.source.data;
-  //   droppedData.attack = "1:2:0.847" as Tone.Unit.Time;
-  //   droppedData.release = "1:2:3.822" as Tone.Unit.Time;
-  //   droppedData.duration = 0.52187499999999974 as Tone.Unit.Time;
-  //   this.track.midi.UpdateOverlaps();
-  //   console.log(this.track.midi.data, droppedData);
-  //   this.trackUpdated.emit(this.track);
-  //   this.reRender++;
-  // }
-
-  // onDragReleased(event: CdkDragRelease) {
-  //   timer(0).subscribe(() => {
-  //     console.log('Final position:', event.source.getFreeDragPosition());
-  //   });
-  // }
-
   onTrackUpdated(track: MidiTrack) {
     this.track = track;
+    this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(track);
     // console.log('from editor', this.track.midi.data);
+  }
+
+  onTriggerReRender(any: number) {
+    this.track.midi.UpdateOverlaps();
+    this.computeDimensions();
+    this.reRender++;
   }
 
   extractMinMax() : number[] {

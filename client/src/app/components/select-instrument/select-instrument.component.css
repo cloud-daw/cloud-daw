@@ -1,6 +1,5 @@
 .master {
     width: 100%;
-    border: 1px solid blue;
 }
 
 .header {
@@ -11,7 +10,6 @@
 
 .container {
     width: 100%;
-    border: 1px solid red;
     background-color: #717171;
     height: 0em;
     display: block;
