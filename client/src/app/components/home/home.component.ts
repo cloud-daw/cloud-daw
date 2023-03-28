@@ -51,11 +51,26 @@ export class HomeComponent implements AfterViewInit, OnInit{
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
     this.synthOnKeydown(event.key);
+    // let myDiv;
     //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+    // if(this.selectedTrack.instrument.name !== 'Drums') {
     const myDiv = document.getElementById(event.key);
+    // }
+    // else {
+    //   const test = event.key+'1';
+    //   console.log(test);
+    //   myDiv = document.getElementById(test);
+    // }
     if (myDiv) {
       myDiv.classList.add("active");
+      console.log(myDiv.classList);
     }
+    // if (this.selectedTrack.instrument.name = 'Drums') {
+    //   const test = myDiv + '1';
+    //   if (test) {
+    //     test.classList.add("active");
+    //   }  
+    // }
     //this.PlayRelease();
   }
 
@@ -64,7 +79,15 @@ export class HomeComponent implements AfterViewInit, OnInit{
     this.synthOnKeyup(event.key);
 
     //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
+    // let myDiv;
+    // if(this.selectedTrack.instrument.name !== 'Drums') {
     const myDiv = document.getElementById(event.key);
+    // }
+    // else {
+    //   const test = event.key+'1';
+    //   console.log(test);
+    //   myDiv = document.getElementById(test);
+    // }
     if (myDiv) {
       myDiv.classList.remove("active");
     }
@@ -95,9 +118,11 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onKeyMousedown(key: string) {
     this.currMousekey = key;
+    console.log(this.currMousekey);
     const myDiv = document.getElementById(this.currMousekey);
     if (myDiv) {
       myDiv.classList.add("active");
+      console.log(myDiv.classList);
     }
     this.synthOnKeydown(key);
   }
@@ -197,6 +222,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   public octave = 4;
   public showEditor: boolean = false;
+  public isDrums: boolean = false;
   public blockMode: BlockMode = BlockMode.Block;
   public isTutorial: boolean = false;
   public tutorialState = 0;
@@ -247,6 +273,12 @@ export class HomeComponent implements AfterViewInit, OnInit{
   }
 
   newTrack(instrument: MidiInstrument) {
+    // if(instrument.name = "Drums") {
+    //   this.isDrums = true;
+    // }
+    // else {
+    //   this.isDrums = false;
+    // }
     if (!this.isRecording) {
       this.trackIdCounter++;
       const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
@@ -262,11 +294,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.recordings.delete(trackId);
       this.project.deleteTrack(trackId);
       if (this.selectedTrack.id == trackId) {
-        const it = 
-        this.setSelectedTrack(this.selectedTrack);
+        this.setSelectedTrack(this.project.tracks[0]);
       }
     }
-    this.selectedTrack = this.project.tracks[0];
   }
 
   setSelectedTrack(track: MidiTrack) {
@@ -275,6 +305,12 @@ export class HomeComponent implements AfterViewInit, OnInit{
       temp.selected = false;
       this.selectedTrack = track;
       this.selectedTrack.selected = true;
+      if (this.selectedTrack.instrument.name === "Drums") {
+        this.isDrums = true;
+      }
+      else {
+        this.isDrums = false;
+      }
       this.setRecordingToTrack(this.selectedTrack.id);
       console.log(`Selected track: ${this.selectedTrack.title}`, track.title);
     }
@@ -397,6 +433,12 @@ export class HomeComponent implements AfterViewInit, OnInit{
    */
   onSelectedTrackChange(track: MidiTrack) {
     this.setRecordingToTrack(this.selectedTrack.id);
+    // if(this.selectedTrack.instrument.name = "Drums") {
+    //   this.isDrums = true;
+    // }
+    // else {
+    //   this.isDrums = false;
+    // }
   }
 
   onUndo(event: number) {
