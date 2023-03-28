@@ -3,7 +3,8 @@ import { Component, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import {Project} from '../../models/project'
+import { Project } from '../../models/project'
+import { ProjectInfo } from 'src/app/models/db/project-info';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
@@ -109,62 +110,68 @@ export class HomeComponent implements OnInit{
   }
   // projects
   @Input() projectName: string = '';
+  @Input() projectInfo!: ProjectInfo;
   projectFound : boolean = false;
   isNew: boolean = false;
-  project: Project;
+  project!: Project;
 
   projectKey: string = "";
   loading: boolean = true;
   constructor(public firebaseService: FirebaseService, public _router: Router, private projectManagement: ProjectManagementService) {
-    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-    this.project = MakeNewProject(sessionEmail);
-    
-    firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
+    //const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+    //this.project = MakeNewProject(sessionEmail);
+    // console.log('info in home: ', this.projectInfo)
+    // this.project = HydrateProjectFromInfo(this.projectInfo);
+    // this.initVars();
+    // this.project.updateEmitter.subscribe(() => {
+    //     firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    // })
+    // firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
         
-        next: res => {
-            if (res.length > 0) {
-                for(const r of res) {
-                    if (r.name === this.projectName){
-                        this.projectFound = true;
-                        const resProjectInfo = MakeInfoFromDbRes(r)
-                        this.project = HydrateProjectFromInfo(resProjectInfo)
-                        this.projectKey = r.key;
-                        console.log('loaded proj', this.project)
-                        break;
-                    }
-                }
-            } else {
-                firebaseService.initProject(InfoizeProject(this.project));
-            }
-            if (this.projectFound){
-                this.initVars()
-                this.project.updateEmitter.subscribe(() => {
-                    firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-                })
-            } else {
+    //     next: res => {
+    //         if (res.length > 0) {
+    //             for(const r of res) {
+    //                 if (r.name === this.projectName){
+    //                     this.projectFound = true;
+    //                     const resProjectInfo = MakeInfoFromDbRes(r)
+    //                     this.project = HydrateProjectFromInfo(resProjectInfo)
+    //                     this.projectKey = r.key;
+    //                     console.log('loaded proj', this.project)
+    //                     break;
+    //                 }
+    //             }
+    //         } else {
+    //             firebaseService.initProject(InfoizeProject(this.project));
+    //         }
+    //         if (this.projectFound){
+    //             this.initVars()
+    //             this.project.updateEmitter.subscribe(() => {
+    //                 firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    //             })
+    //         } else {
                 
-                this.project = MakeNewProject(sessionEmail, this.projectName);
-                this.initVars()
-                console.log(this.project);
-                this.project.updateEmitter.subscribe(() => {
-                    console.log('making new project')
-                    firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-                })
-            }
-        },
-        error: err => {
-          console.log('err gpbe', err)
-          this.project = MakeNewProject(sessionEmail);
-          this.initVars()
-          this.project.updateEmitter.subscribe(() => {
-            firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-          })
-        },
-        complete: () => {
-          console.log('Project Loaded!')
-          this.loading = false;
-        }
-    });
+    //             this.project = MakeNewProject(sessionEmail, this.projectName);
+    //             this.initVars()
+    //             console.log(this.project);
+    //             this.project.updateEmitter.subscribe(() => {
+    //                 console.log('making new project')
+    //                 firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    //             })
+    //         }
+    //     },
+    //     error: err => {
+    //       console.log('err gpbe', err)
+    //       this.project = MakeNewProject(sessionEmail);
+    //       this.initVars()
+    //       this.project.updateEmitter.subscribe(() => {
+    //         firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    //       })
+    //     },
+    //     complete: () => {
+    //       console.log('Project Loaded!')
+    //       this.loading = false;
+    //     }
+    // });
 
     // firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
     //   next: res => {
@@ -598,6 +605,12 @@ export class HomeComponent implements OnInit{
 
   ngOnInit(){
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
+    console.log('info in home: ', this.projectInfo)
+    this.project = HydrateProjectFromInfo(this.projectInfo);
+    this.initVars();
+    this.project.updateEmitter.subscribe(() => {
+        this.firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    })
     console.log()
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
@@ -607,6 +620,7 @@ export class HomeComponent implements OnInit{
         instructions.style.display = "block";
     }
 
+    this.loading = false;
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
     this.onTutorialNext();

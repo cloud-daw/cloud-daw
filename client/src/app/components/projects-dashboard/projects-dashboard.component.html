@@ -3,7 +3,7 @@
     <input type="text" #projectN class="inputField" id="signInEmailInput" placeholder="New Project" />
     <button (click)="submitProjTitle(projectN.value)">Create</button>
 
-    <button *ngFor="let item of projectNames" (click)="sendProjectNum(item)">{{item}}</button>
+    <button class="h-20 w-20 bg-red-200" *ngFor="let item of projectNames" (click)="sendProjectNum(item)">{{item}}</button>
 </div>
 
-<app-home *ngIf="openProject" [projectName]="projectName"></app-home>
+<app-home *ngIf="openProject" [projectName]="projectName" [projectInfo]="project"></app-home>
