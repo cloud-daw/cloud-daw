@@ -206,11 +206,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   public reRender: number = 0;
 
-  onReRender(num: number) {
-    this.reRender = num;
-    console.log('rerendering from home');
-  }
-
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -237,6 +232,11 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.midiContainerRef = changes.first.nativeElement;
       console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
     });
+  }
+
+  onReRender(num: number) {
+    this.reRender = num;
+    console.log('rerendering from home');
   }
 
   toggleExpand() {
@@ -303,11 +303,17 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
+      // this.selectedTrack.instrument.AdjustVolume(-100);
+      // this.selectedTrack.instrument.Play('a');
+      // this.selectedTrack.instrument.Release('a');
+      // setTimeout(() => {
+      //   this.selectedTrack.instrument.AdjustVolume(0);
+      // }, 500);
       this.isPlaying = true;
       this.metronome.ClearTransport();
       Array.from(this.recordings.values()).forEach((r: Recording) => {
         SchedulePlayback(r);
-        console.log('recording', r)
+        console.log('recording', r);
       });
       this.metronome.Start();
     }
@@ -374,12 +380,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.setRecordingToTrack(this.selectedTrack.id);
-    // this.blockRefs?.forEach((block) => {
-    //   if (block.track.id == this.selectedTrack.id) {
-    //     block.updateVisual();
-    //   }
-    // });
-    //(this.recordings);
   }
 
   /**
@@ -402,6 +402,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
    */
   onSelectedTrackChange(track: MidiTrack) {
     this.setRecordingToTrack(this.selectedTrack.id);
+    this.octave = this.selectedTrack.instrument.currentOctave;
   }
 
   onUndo(event: number) {
@@ -410,12 +411,14 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onIncreaseOctave() {
     this.selectedTrack.instrument.increaseOctave();
-    if (this. octave < 7) this.octave++;
+    this.octave = this.selectedTrack.instrument.currentOctave;
+    // if (this.octave < 7) this.octave++;
   }
 
   onDecreaseOctave() {
     this.selectedTrack.instrument.decreaseOctave();
-    if (this. octave > 0) this.octave--;
+    this.octave = this.selectedTrack.instrument.currentOctave;
+    //if (this.octave > 0) this.octave--;
   }
 
   onMainVolumeChange(event: number) {
@@ -478,7 +481,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
     else if (this.tutorialState == 1) {
         mainCtrl.style.border = "3px #22C55E solid"
         header.textContent = "Main Controls"
-        body.textContent = "These are your main controls, you can Rewind, Play, Pause, or Record respectively with these buttons. < Add more info. about them here >"
+        body.textContent = "These are your main controls, you can Rewind, Play, Pause, or Record respectively with these buttons. Hit record and begin playing music to record the notes you play. Hit record again, or pause, to stop recording. Hit rewind or drag the slider to the desired position, then click play to listen to what you have recorded."
     }
     // volume
     else if (this.tutorialState == 2) {
@@ -516,7 +519,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         octaveDec.style.border = "none"
         tracks.style.border = "3px #22C55E solid"
         header.textContent = "Tracks"
-        body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to add a new track, select tracks by clicking on them, or remove them."
+        body.textContent = "Here is a list of all of your tracks, You can use 'Add Track' to be prompted to select an instrument to use to add a new track. You can select tracks by clicking on them, or remove them."
     }
     // Opening Editor
     else if (this.tutorialState == 7) {
@@ -531,7 +534,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial")
         nextBtn.textContent = "Finish"
         header.textContent = "Editor"
-        body.textContent = "In this editor window, you can edit and save your track."
+        body.textContent = "In this editor window, you can edit the horizontal position of each note by clicking it and dragging it to the desired position. You can also select a note and pitch it up or down using the up and down arrow keys respectively."
         editor.style.border = "3px #22C55E solid"
     }
     else {
@@ -595,9 +598,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
     console.log('home level changes: ', changes);
   }
 
-  ngOnInit(){
+  ngOnInit() {
+    //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
-    console.log()
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
@@ -605,11 +608,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
         nextBtn.style.display = "block";
         instructions.style.display = "block";
     }
-
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
     this.onTutorialNext();
-    
   }
 
 }

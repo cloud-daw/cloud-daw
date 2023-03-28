@@ -11,6 +11,8 @@
                 (trackUpdated)="onTrackUpdated($event)"
                 [midiContainerRef]="midiContainerRef"
                 (triggerReRender)="onTriggerReRender($event)"
+                [selectedNote]="selectedNote"
+                (selectedNoteChange)="onSelectedNoteChange($event)"
             >
             </app-midi-note>
         </div>
@@ -31,6 +33,8 @@
                 (trackUpdated)="onTrackUpdated($event)"
                 [midiContainerRef]="midiContainerRef"
                 (triggerReRender)="onTriggerReRender($event)"
+                [selectedNote]="selectedNote"
+                (selectedNoteChange)="onSelectedNoteChange($event)"
             >
             </app-midi-note>
         </div>
