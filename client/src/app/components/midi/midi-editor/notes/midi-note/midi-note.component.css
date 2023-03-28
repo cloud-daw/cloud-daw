@@ -8,6 +8,10 @@
 }
 
 .note-block:hover {
-    cursor: pointer;
+    cursor: move;
+}
+
+.note-block.cdk-drag {
+    left: unset;
 }
 

@@ -7,6 +7,9 @@
                 [data]="data"
                 [isRecording]="isRecording"
                 [noteColor]="noteColor"
+                [reRender]="reRender"
+                (trackUpdated)="onTrackUpdated($event)"
+                [midiContainerRef]="midiContainerRef"
             >
             </app-midi-note>
         </div>
@@ -14,11 +17,8 @@
 </div>
 
 <div class="edit-container" *ngIf="editMode">
-    <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}">
+    <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}" cdkDragBoundary>
         <div *ngFor="let data of track.midi.data" 
-            cdkDrag 
-            (cdkDragEnded)="onDrop($event)" 
-            [cdkDragData]="data"
         >
             <app-midi-note
                 [track]="track"
@@ -26,6 +26,9 @@
                 [data]="data"
                 [isRecording]="isRecording"
                 [noteColor]="noteColor"
+                [reRender]="reRender" 
+                (trackUpdated)="onTrackUpdated($event)"
+                [midiContainerRef]="midiContainerRef"
             >
             </app-midi-note>
         </div>
@@ -38,3 +41,8 @@
  -->
 
  <!--  cdkDropList (cdkDropListDropped)="onDrop($event)" -->
+
+ <!--           cdkDrag 
+            (cdkDragEnded)="onDrop($event)" 
+            (cdkDragReleased)="onDragReleased($event)"
+            [cdkDragData]="data" -->

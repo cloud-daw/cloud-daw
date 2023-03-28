@@ -16,6 +16,7 @@ export class MidiEditorComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
+  @Input() midiContainerRef: Element | any;
 
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
 

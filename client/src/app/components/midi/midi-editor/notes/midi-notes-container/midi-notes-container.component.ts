@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { MidiNoteComponent } from '../midi-note/midi-note.component';
 import * as Tone from 'tone';
 import { BlockMode } from 'src/app/components/home/home.component';
-import { CdkDragDrop, CdkDragEnd, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragEnd, CdkDragRelease, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Note } from 'src/app/models/recording/note';
+import { timer } from 'rxjs/internal/observable/timer';
+
 
 @Component({
   selector: 'app-midi-notes-container',
@@ -15,6 +17,8 @@ import { Note } from 'src/app/models/recording/note';
 
 export class MidiNotesContainerComponent {
   
+  constructor(private cdr: ChangeDetectorRef) {}
+  
   @Input() selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Input() vw : number = 100;
   @Input() bars: number = 16;
@@ -22,8 +26,11 @@ export class MidiNotesContainerComponent {
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
   @Input() editMode: boolean = false;
+  @Input() midiContainerRef: Element | any;
 
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
+
+  //@ViewChild(MidiNoteComponent, { static: false }) noteComponent?: MidiNoteComponent;
 
   public visibility = 'hidden';
   public leftCSS = '';
@@ -35,14 +42,29 @@ export class MidiNotesContainerComponent {
 
   public noteColor = this.editMode ? '#00ff62' : 'white';
 
-  onDrop(event: CdkDragEnd<Note>) {
-    const droppedData = event.source.data;
-    droppedData.attack = "1:2:0.847" as Tone.Unit.Time;
-    droppedData.release = "1:2:1.822" as Tone.Unit.Time;
-    droppedData.duration = 0.22187499999999974 as Tone.Unit.Time;
-    this.track.midi.UpdateOverlaps();
-    console.log(this.track.midi.data, droppedData);
-    this.trackUpdated.emit(this.track);
+  public reRender: number = 0;
+
+  // onDrop(event: CdkDragEnd<Note>) {
+  //   const droppedData = event.source.data;
+  //   droppedData.attack = "1:2:0.847" as Tone.Unit.Time;
+  //   droppedData.release = "1:2:3.822" as Tone.Unit.Time;
+  //   droppedData.duration = 0.52187499999999974 as Tone.Unit.Time;
+  //   this.track.midi.UpdateOverlaps();
+  //   console.log(this.track.midi.data, droppedData);
+  //   this.trackUpdated.emit(this.track);
+  //   this.reRender++;
+  // }
+
+  // onDragReleased(event: CdkDragRelease) {
+  //   timer(0).subscribe(() => {
+  //     console.log('Final position:', event.source.getFreeDragPosition());
+  //   });
+  // }
+
+  onTrackUpdated(track: MidiTrack) {
+    this.track = track;
+    this.trackUpdated.emit(track);
+    // console.log('from editor', this.track.midi.data);
   }
 
   extractMinMax() : number[] {
