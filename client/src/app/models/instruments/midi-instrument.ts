@@ -120,6 +120,10 @@ export class MidiInstrument {
         return new Tone.PolySynth(this.synth).toDestination();
     }
 
+    public GetVoicesForBounce() {
+        
+    }
+
     // Mute(status: boolean) {
     //     this.instrument.volume.
     // }

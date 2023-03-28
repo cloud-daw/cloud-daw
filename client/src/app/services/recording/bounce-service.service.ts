@@ -4,8 +4,9 @@ import { MidiInstrument } from '../../models/instruments/midi-instrument'
 import { Recording } from '../../models/recording/recording';
 import { Project } from '../../models/project'
 import { Transport } from 'tone/build/esm/core/clock/Transport';
+import { LoadSamplerBlocking } from 'src/app/lib/dicts/synthdict';
 
-
+const AudioBufferToWav = require('audiobuffer-to-wav')
 
 /* Note class for reference:
 
@@ -51,15 +52,18 @@ export function BounceProjectToMP3(project: Project) {
     console.log('length of project, ', x);
     Tone.Offline(({ transport }) => {
         for (let i = 0; i < project.tracks.length; i++) {
-            ScheduleOfflinePlayback(project.tracks[i].midi, transport)
+            ScheduleOfflinePlaybackBasic(project.tracks[i].midi, transport)
+            //ScheduleOfflinePlaybackTest(transport, i); 
         }
         transport.start();
     }, x).then((buffer) => {
         console.log('bounced, buffer: ', buffer);
-        const player = new Tone.Player(buffer, () => {
-            console.log('starting player');
-            player.start();
-        }).toDestination();
+        const audioBuffer = buffer.get();
+        const wavFile = AudioBufferToWav(audioBuffer);
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(new Blob([wavFile], { type: 'audio/wav' }));
+        downloadLink.download = 'audio.wav';
+        downloadLink.click();
     }).catch((err) => {
         console.log('error: ', err);
     });
@@ -82,10 +86,42 @@ function findLengthOfProject(project: Project): number {
         }
     }
     const lengthInSeconds = ((maxMeasure + 1) / measuresPerMinute) * 60;
-    return lengthInSeconds;
+    return lengthInSeconds + 2; //give room
+}
+
+function ScheduleOfflinePlaybackTest(transport: Transport, recIdx: number) {
+    if (recIdx === 0) {
+        const synth = new Tone.PolySynth().toDestination();
+        transport.schedule((time) => {
+            synth.triggerAttackRelease("C4", 4, time)
+        }, '1:0:0')
+    }
+}
+
+function ScheduleOfflinePlaybackBasic(recording: Recording, transport: Transport) {
+    //const synth = recording.synth.name != 'Drums' ? new Tone.PolySynth(recording.synth.synth).toDestination() : recording.synth.instrument;
+    if (recording.synth.name != 'Drums') {
+        const synth = new Tone.PolySynth(recording.synth.synth).toDestination() //TODO: need to set parameters (volume, etc) to match project
+        for (let i = 0; i < recording.data.length; i++) {
+            transport.scheduleOnce((time) => {
+                synth.triggerAttackRelease(recording.data[i].value, recording.data[i].duration, time)
+            }, recording.data[i].attack)
+        }
+    }
+    else {
+        LoadSamplerBlocking('drumkits/kit0', (sampler: Tone.Sampler) => {
+            sampler.toDestination(); //TODO: need to set parameters (volume, etc) to match project
+            for (let i = 0; i < recording.data.length; i++) {
+                transport.schedule((time) => {
+                    sampler.triggerAttack(recording.data[i].value, time)
+                }, recording.data[i].attack)
+            }
+        });
+    }
 }
 
 function ScheduleOfflinePlayback(recording: Recording, transport: Transport) {
+    console.log('scheduling offline: ', recording)
     const data = recording.data;
     const synth = recording.synth;
     const release = synth.release;
