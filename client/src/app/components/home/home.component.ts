@@ -197,6 +197,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   public octave = 4;
   public showEditor: boolean = false;
+  public isDrums: boolean = false;
   public blockMode: BlockMode = BlockMode.Block;
   public isTutorial: boolean = false;
   public tutorialState = 0;
@@ -262,11 +263,9 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.recordings.delete(trackId);
       this.project.deleteTrack(trackId);
       if (this.selectedTrack.id == trackId) {
-        const it = 
-        this.setSelectedTrack(this.selectedTrack);
+        this.setSelectedTrack(this.project.tracks[0]);
       }
     }
-    this.selectedTrack = this.project.tracks[0];
   }
 
   setSelectedTrack(track: MidiTrack) {
@@ -275,6 +274,12 @@ export class HomeComponent implements AfterViewInit, OnInit{
       temp.selected = false;
       this.selectedTrack = track;
       this.selectedTrack.selected = true;
+      if (this.selectedTrack.instrument.name === "Drums") {
+        this.isDrums = true;
+      }
+      else {
+        this.isDrums = false;
+      }
       this.setRecordingToTrack(this.selectedTrack.id);
       console.log(`Selected track: ${this.selectedTrack.title}`, track.title);
     }
