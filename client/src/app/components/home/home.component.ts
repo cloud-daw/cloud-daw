@@ -1,5 +1,5 @@
 import { first } from 'rxjs/operators';
-import { Component, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit } from '@angular/core';
+import { Component, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -18,6 +18,7 @@ import { MakeNewProject } from 'src/app/lib/db/new-project';
 import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';
 import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
+import { ProjectManagementService } from 'src/app/services/project-management.service';
   
 /**
  * Int status of keys for keyboard
@@ -106,43 +107,94 @@ export class HomeComponent implements OnInit{
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
   }
+  // projects
+  @Input() projectName: string = '';
+  projectFound : boolean = false;
   isNew: boolean = false;
   project: Project;
 
   projectKey: string = "";
   loading: boolean = true;
-  constructor(public firebaseService: FirebaseService, public _router: Router) {
+  constructor(public firebaseService: FirebaseService, public _router: Router, private projectManagement: ProjectManagementService) {
     const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
     this.project = MakeNewProject(sessionEmail);
+    
     firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
-      next: res => {
-        if (res.length > 0) {
-          const resProjectInfo = MakeInfoFromDbRes(res[0])
-          this.project = HydrateProjectFromInfo(resProjectInfo)
-          this.projectKey = res[0].key;
-          console.log('loaded proj', this.project)
+        
+        next: res => {
+            if (res.length > 0) {
+                for(const r of res) {
+                    if (r.name === this.projectName){
+                        this.projectFound = true;
+                        const resProjectInfo = MakeInfoFromDbRes(r)
+                        this.project = HydrateProjectFromInfo(resProjectInfo)
+                        this.projectKey = r.key;
+                        console.log('loaded proj', this.project)
+                        break;
+                    }
+                }
+            } else {
+                firebaseService.initProject(InfoizeProject(this.project));
+            }
+            if (this.projectFound){
+                this.initVars()
+                this.project.updateEmitter.subscribe(() => {
+                    firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+                })
+            } else {
+                
+                this.project = MakeNewProject(sessionEmail, this.projectName);
+                this.initVars()
+                console.log(this.project);
+                this.project.updateEmitter.subscribe(() => {
+                    console.log('making new project')
+                    firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+                })
+            }
+        },
+        error: err => {
+          console.log('err gpbe', err)
+          this.project = MakeNewProject(sessionEmail);
+          this.initVars()
+          this.project.updateEmitter.subscribe(() => {
+            firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+          })
+        },
+        complete: () => {
+          console.log('Project Loaded!')
+          this.loading = false;
         }
-        else {
-          firebaseService.initProject(InfoizeProject(this.project));
-        }
-        this.initVars()
-        this.project.updateEmitter.subscribe(() => {
-          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-        })
-      },
-      error: err => {
-        console.log('err gpbe', err)
-        this.project = MakeNewProject(sessionEmail);
-        this.initVars()
-        this.project.updateEmitter.subscribe(() => {
-          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-        })
-      },
-      complete: () => {
-        console.log('Project Loaded!')
-        this.loading = false;
-      }
     });
+
+    // firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
+    //   next: res => {
+    //     if (res.length > 0) {
+    //       const resProjectInfo = MakeInfoFromDbRes(res[0])
+    //       this.project = HydrateProjectFromInfo(resProjectInfo)
+    //       this.projectKey = res[0].key;
+    //       console.log('loaded proj', this.project)
+    //     }
+    //     else {
+    //       firebaseService.initProject(InfoizeProject(this.project));
+    //     }
+    //     this.initVars()
+    //     this.project.updateEmitter.subscribe(() => {
+    //       firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    //     })
+    //   },
+    //   error: err => {
+    //     console.log('err gpbe', err)
+    //     this.project = MakeNewProject(sessionEmail);
+    //     this.initVars()
+    //     this.project.updateEmitter.subscribe(() => {
+    //       firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    //     })
+    //   },
+    //   complete: () => {
+    //     console.log('Project Loaded!')
+    //     this.loading = false;
+    //   }
+    // });
     this.keyboardStatus = {
       "a": keyStatus.notPlaying,
       "w": keyStatus.notPlaying,
@@ -194,6 +246,8 @@ export class HomeComponent implements OnInit{
   public blockMode: BlockMode = BlockMode.Block;
   public isTutorial: boolean = false;
   public tutorialState = 0;
+
+  
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
@@ -528,6 +582,11 @@ export class HomeComponent implements OnInit{
     }
   }
 
+  onProjects(){
+    console.log("========" + this.projectName);
+    this._router.navigateByUrl('/projectsDashboard');
+  }
+
   onLogout(){
     this.firebaseService.logout();
     this._router.navigateByUrl('/login');
@@ -551,6 +610,7 @@ export class HomeComponent implements OnInit{
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
     this.onTutorialNext();
+
     
   }
 

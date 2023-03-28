@@ -1,0 +1,9 @@
+<div *ngIf="!openProject">
+
+    <input type="text" #projectN class="inputField" id="signInEmailInput" placeholder="New Project" />
+    <button (click)="submitProjTitle(projectN.value)">Create</button>
+
+    <button *ngFor="let item of projectNames" (click)="sendProjectNum(item)">{{item}}</button>
+</div>
+
+<app-home *ngIf="openProject" [projectName]="projectName"></app-home>

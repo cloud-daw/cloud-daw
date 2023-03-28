@@ -71,5 +71,6 @@ export class FirebaseService {
     saveProject(key: string, updatedProject: ProjectInfo) {
         console.log('in save project');
         this.projectsRef.update(key, updatedProject);
+        console.log(this.projectsRef)
     }
 }
