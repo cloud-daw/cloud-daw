@@ -49,6 +49,8 @@ export class MidiTrackComponent {
   public deleteTrack() {
     if (this.tracks.size > 1 && !this.isRecording) {
       this.track.midi = new Recording(this.track.instrument);
+      this.onDelete.emit(this.track.id);
+      this.tracks.delete(this.track);
       if (this.selectedTrack == this.track) {
         const it = this.tracks.values();
         //get first entry:
@@ -58,8 +60,6 @@ export class MidiTrackComponent {
         this.selectedTrack = firstTrack;
         this.selectedTrackChange.emit(firstTrack);
       }
-      this.onDelete.emit(this.track.id);
-      this.tracks.delete(this.track);
     }
   }
   
@@ -83,6 +83,9 @@ export class MidiTrackComponent {
       } else {
         this.track.selected = true;
       }
+    }
+    if (changes['track']) {
+      this.track.midi.UpdateOverlaps();
     }
   }
 

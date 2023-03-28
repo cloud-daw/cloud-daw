@@ -1,5 +1,5 @@
 import { first } from 'rxjs/operators';
-import { Component, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit } from '@angular/core';
+import { Component, AfterViewInit, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -42,8 +42,11 @@ export enum BlockMode {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css',]
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements AfterViewInit, OnInit{
+  
   @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
+  // @ViewChild('midiContainerRef', { static: false }) midiContainerRef: ElementRef | any;
+  @ViewChildren('midiContainer') midiContainerRefs?: QueryList<Element | any>;
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
@@ -85,6 +88,8 @@ export class HomeComponent implements OnInit{
 
   onTrackUpdated(track: MidiTrack) {
     this.selectedTrack = track;
+    this.project.save();
+    console.log(this.project);
     // console.log('from home', this.selectedTrack.midi.data);
   }
 
@@ -112,7 +117,7 @@ export class HomeComponent implements OnInit{
 
   projectKey: string = "";
   loading: boolean = true;
-  constructor(public firebaseService: FirebaseService, public _router: Router) {
+  constructor(public firebaseService: FirebaseService, public _router: Router, private _renderer: Renderer2) {
     const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
     this.project = MakeNewProject(sessionEmail);
     firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
@@ -196,6 +201,15 @@ export class HomeComponent implements OnInit{
   public isTutorial: boolean = false;
   public tutorialState = 0;
 
+  midiContainerRef: Element | any;
+
+  public reRender: number = 0;
+
+  onReRender(num: number) {
+    this.reRender = num;
+    console.log('rerendering from home');
+  }
+
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -213,6 +227,16 @@ export class HomeComponent implements OnInit{
       this.trackIdCounter = Math.max(this.trackIdCounter, this.project.tracks[i].id)
     }
     this.trackIdCounter++;
+  }
+
+  ngAfterViewInit() {
+    // this.midiContainerRef = this._renderer.selectRootElement('#midiContainer');
+    // this.midiContainerRef = this.midiContainerElementRef;
+    this.midiContainerRefs?.changes.subscribe((changes: QueryList<Element | any>)  => {
+      this.midiContainerRef = changes.first.nativeElement;
+      console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
+    });
+    
   }
 
   toggleExpand() {
@@ -238,6 +262,10 @@ export class HomeComponent implements OnInit{
     if (!this.isRecording) {
       this.recordings.delete(trackId);
       this.project.deleteTrack(trackId);
+      if (this.selectedTrack.id == trackId) {
+        const it = 
+        this.setSelectedTrack(this.selectedTrack);
+      }
     }
     this.selectedTrack = this.project.tracks[0];
   }

@@ -44,7 +44,7 @@
     <div class="production-container">
         <div class='tracks-container' id="tracks">
             <button class="new-track-button" (click)="promptSelectInstrument()">
-            Add Track
+            + Add Track
             </button>
             <app-select-instrument
             (createTrack)="newTrack($event)"
@@ -67,7 +67,22 @@
                 </app-midi-track>
             </div>
         </div>
-        <div class="midi-container">
+        <div id="midiContainer" class="midi-container" #midiContainer>
+            <div class="midi-editor-container">
+                <app-midi-editor
+                    [track]="selectedTrack"
+                    [vw]="maxVW"
+                    [isRecording]="isRecording"
+                    [(midi)]="selectedTrack.midi.data"
+                    (closeEditor)="closeEditor($event)"
+                    [midiContainerRef]="midiContainerRef"
+                    [reRender]="reRender"
+                    (triggerReRender)="onReRender($event)"
+                    *ngIf="showEditor"
+                    (trackUpdated)="onTrackUpdated($event)"
+                >
+                </app-midi-editor>
+            </div>
             <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
             <app-slider
                 #sliderRef
@@ -89,9 +104,12 @@
                             [isRecording]="isRecording"
                             [selectedTrack]="selectedTrack"
                             [editMode]="editMode"
+                            [reRender]="reRender"
+                            (triggerReRender)="onReRender($event)"
                             (click)="setSelectedTrack(track)"
                             (dblclick)="openEditor()"
                             (trackUpdated)="onTrackUpdated($event)"
+                            [midiContainerRef]="midiContainerRef"
                         />
                     </div>
                 </div>
@@ -102,18 +120,6 @@
             <p class="tutorialInstructionsText" id="tutorialInstructionsBody">Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. Click Next to go to the next page.</p>
             <button type="button" id="next-button-tutorial" class="btn btn-light" (click)="onTutorialNext()"> Next</button>
         </div>
-    </div>
-    <div class="midi-editor-container">
-        <app-midi-editor
-            [track]="selectedTrack"
-            [vw]="maxVW"
-            [isRecording]="isRecording"
-            [(midi)]="selectedTrack.midi.data"
-            (closeEditor)="closeEditor($event)"
-            *ngIf="showEditor"
-            (trackUpdated)="onTrackUpdated($event)"
-        >
-        </app-midi-editor>
     </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

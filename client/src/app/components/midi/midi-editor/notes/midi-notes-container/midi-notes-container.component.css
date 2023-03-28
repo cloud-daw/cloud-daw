@@ -35,13 +35,27 @@
 .edit-notes-container {
     position: absolute;
     color: rgb(255, 255, 255);
-    height: 22em;
+    height: 90%;
     left: 0;
     border-top: 0.5px solid rgb(48, 48, 48);
     border-bottom: 0.5px solid rgb(48, 48, 48);
-    border: 0.1px solid rgb(0, 0, 0);
+    border: 0.1px solid rgb(255, 0, 0);
     background-color: rgb(50, 50, 50);
     opacity: 0.9;
     border-radius: 5px;
     display: flex;
 }
+
+/* .editing .notes-container {
+    position: absolute;
+    color: rgb(255, 255, 255);
+    height: 90%;
+    left: 0;
+    border-top: 0.5px solid rgb(48, 48, 48);
+    border-bottom: 0.5px solid rgb(48, 48, 48);
+    border: 0.1px solid rgb(255, 0, 0);
+    background-color: rgb(50, 50, 50);
+    opacity: 0.9;
+    border-radius: 5px;
+    display: flex;
+} */

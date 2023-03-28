@@ -1,4 +1,4 @@
-.note-block {
+.container .note-block {
     position: absolute;
     /* width: 0; */
     /* margin-right: 1em; */
@@ -7,7 +7,15 @@
     border: 0.05px solid rgb(255, 255, 255);
 }
 
-.note-block:hover {
-    cursor: pointer;
+.container .note-block:hover {
+    cursor: move;
+}
+
+.container .note-block[cdkDrag][ngStyle] {
+    left: var(--leftCSS);
+}
+
+.container .note-block[cdkDrag][ngStyle] {
+    --leftCSS: {{ leftCSS }};
 }
 

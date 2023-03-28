@@ -1,8 +1,11 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { CdkDragEnd, CdkDragRelease } from '@angular/cdk/drag-drop';
+import { Component, AfterViewInit, OnChanges, ElementRef, Renderer2, EventEmitter, Input, Output, SimpleChanges, OnInit, ViewChild} from '@angular/core';
+import { timer } from 'rxjs/internal/observable/timer';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import * as Tone from 'tone';
+import { CdkDragPreview } from '@angular/cdk/drag-drop';
 
 interface NotesDict {
   [note: string]: number;
@@ -13,7 +16,11 @@ interface NotesDict {
   templateUrl: './midi-note.component.html',
   styleUrls: ['./midi-note.component.css'],
 })
-export class MidiNoteComponent {
+export class MidiNoteComponent implements OnChanges, OnInit {
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+
+  @ViewChild('midiContainerRef') midiContainerRef2!: ElementRef;
+
   @Input() track: MidiTrack = new MidiTrack(
     'default',
     0,
@@ -25,11 +32,20 @@ export class MidiNoteComponent {
   @Input() bars: number = 16;
   @Input() isRecording: boolean = false;
   @Input() noteColor: string = '';
+  @Input() reRender: number = 0;
+  @Input() midiContainerRef: Element | any;
+  
+  @Output() trackUpdated = new EventEmitter<MidiTrack>();
+  @Output() triggerReRender = new EventEmitter<number>();
 
+  public width: number = 0;
+  public top: number = 0;
   public widthCSS: string = `0vw`;
   public leftCSS: string = `0vw`;
   public topCSS: string = `0vw`;
 
+  private midiContainer: Element | any;
+  
   public notesDict: { [key: string]: number } = {
     C0   : 1,
     'C#0': 2,
@@ -151,6 +167,15 @@ export class MidiNoteComponent {
   containerTop = 0; // in pixels
   noteHeight = this.containerHeight / 28; // each octave has 4 white keys and 3 black keys (total 7), so 6em/28 = 0.214em
 
+  ngOnInit() {
+    const el = this.el.nativeElement;
+    this.renderer.setStyle(el, 'all', 'unset');
+  }
+
+  ngAfterViewInit() {
+    console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
+  }
+
   populateNotePos() {
     for (let octave = 0; octave <= 7; octave++) {
       for (const note in this.notePositions) {
@@ -163,6 +188,11 @@ export class MidiNoteComponent {
   }
   //End (TEMP GPT SOLUTION)
 
+  /**
+   * 
+   * @param position 
+   * @returns viewport position converted from Tone.Unit.Time
+   */
   convertBBSToPosition(position: Tone.Unit.Time) {
     if (!position) return 0;
     let strPosArr: string[] = position.toString().split(':');
@@ -174,15 +204,54 @@ export class MidiNoteComponent {
     const normedBeat = 4 * beat;
     const bbsSum = normedBar + normedBeat + sixteenth;
     //console.log('final BBS return value should be', bbsSum * bbsInterval);
+
     return bbsSum * bbsInterval; //as VW
   }
 
-  // convertDurationToWidth(duration: Tone.Unit.Time) {
-  //   if (!duration) return 0;
-  //   const interval = this.vw / this.bars;
-  //   return parseFloat(duration.toString()) * interval;
-  // }
-    
+  /**
+   * 
+   * @param position 
+   * @returns Tone.Unit.Time convert from viewport position
+   */
+  convertPositionToBBS(position: number): Tone.Unit.Time {
+    const bbsInterval = this.vw / (this.bars * 16);
+    const bbsSum = position / bbsInterval;
+    const sixteenth = bbsSum % 4;
+    const beat = Math.floor((bbsSum / 4) % 4);
+    const bar = Math.floor(bbsSum / 16) + 1;
+  
+    return `${bar}:${beat}:${sixteenth.toFixed(3)}` as Tone.Unit.Time;
+  }
+
+  onDragReleased(event: CdkDragRelease) {
+    const viewportWidth = window.innerWidth;
+    const noteElement = event.source.element.nativeElement;
+    const container = this.midiContainerRef;
+    const containerWidth = container.offsetWidth;
+
+    const rect = noteElement.getBoundingClientRect();
+    const rawLeftPos = rect.left - container.offsetLeft;
+    const rawRightPos = rawLeftPos + rect.width;
+
+    const leftPosition = (rawLeftPos / viewportWidth) * 100;
+    const rightPosition = (rawRightPos / viewportWidth) * 100;
+
+    const attack = this.convertPositionToBBS(leftPosition);
+    const release = this.convertPositionToBBS(rightPosition);
+
+    const droppedData = event.source.data;
+    droppedData.attack = attack;
+    droppedData.release = release;
+
+    console.log('DROPPED');
+    console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
+    // this.setDimensions(this.width, leftPosition, this.top);
+    this.track.midi.UpdateOverlaps();
+    this.trackUpdated.emit(this.track);
+    this.triggerReRender.emit(this.reRender + 1);
+    //console.log('from note', this.track.midi.data);
+  }
+  
   calculateWidth(start: number, end: number) {
     return end - start;
   }
@@ -194,14 +263,20 @@ export class MidiNoteComponent {
     const getNoteValue = Math.abs(100-this.notesDict[this.data.value]);
     const modifier = 1;
     const topOffset = getNoteValue * modifier;
-
+    //console.log('start:', start, 'end:', end);
     this.setDimensions(width, start, topOffset);
+   // console.log('attack;', this.data.attack, 'release:', this.data.release, 'left;', this.leftCSS, 'width:', this.widthCSS, 'top', this.topCSS);
   }
 
   setDimensions(width: number, left: number, top: number) {
+    this.width = width;
+    this.top = top;
+
     this.widthCSS = `${width}vw`;
     this.leftCSS = `${left}vw`;
     this.topCSS = `${Math.abs(top)}%`;
+    
+    console.log('left', this.leftCSS, 'top', this.topCSS);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -214,5 +289,8 @@ export class MidiNoteComponent {
         this.updateDisplay();
       }
     }
+    // if (changes['data']) {
+    //   this.updateDisplay();
+    // }
   }
 }

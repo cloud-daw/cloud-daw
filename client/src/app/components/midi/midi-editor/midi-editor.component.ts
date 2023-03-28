@@ -16,6 +16,8 @@ export class MidiEditorComponent {
   @Input() signature: number = 4;
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Input() isRecording: boolean = false;
+  @Input() midiContainerRef: Element | any;
+  @Input() reRender: number = 0;
 
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
 
@@ -31,6 +33,8 @@ export class MidiEditorComponent {
 
     @Output() closeEditor: EventEmitter<boolean> = new EventEmitter<boolean>();
   
+  @Output() triggerReRender: EventEmitter<number> = new EventEmitter();
+  
   public blockMode: BlockMode = BlockMode.Editor;
   public showEditor: boolean = true;
 
@@ -38,9 +42,15 @@ export class MidiEditorComponent {
     this.track = track;
     this.trackUpdated.emit(track);
     // console.log('from editor', this.track.midi.data);
+    //console.log('from editor', this.track.midi.data);
   }
 
   onCloseEditor() {
     this.closeEditor.emit(false);
+  }
+
+  onReRender(num: number) {
+    this.triggerReRender.emit(num);
+    console.log('rerendering');
   }
 }

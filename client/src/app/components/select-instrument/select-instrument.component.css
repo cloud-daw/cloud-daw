@@ -1,7 +1,18 @@
+.master {
+    width: 100%;
+}
+
+.header {
+    text-align: center;
+    width: 100%;
+    background-color: #515151;
+}
+
 .container {
+    width: 100%;
     background-color: #717171;
     height: 0em;
-    display: flex;
+    display: block;
     box-shadow: inset 0px 0px 15px 5px rgba(0, 0, 0, 0.3);
     color: white;
     font-family: 'Inter', sans-serif;
@@ -16,6 +27,8 @@
 
 .content {
     padding: 1em;
+    width: 50%;
+    margin: auto;
 }
 
 .instrument {

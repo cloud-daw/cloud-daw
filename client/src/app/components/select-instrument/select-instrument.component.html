@@ -1,6 +1,7 @@
 <div class="master" [ngClass] ="{'show' : isPrompted}">
     <div class="container">
         <div class="header">
+            Select an instrument:
         </div>
         <div class="content" id="synths">
             <div class="instrument" id={{instrument}} *ngFor="let instrument of instruments" (click)="createTrackWithInstrument(instrument)">

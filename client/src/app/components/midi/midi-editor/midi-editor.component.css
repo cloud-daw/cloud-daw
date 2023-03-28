@@ -2,9 +2,8 @@
     position: fixed;
     top: 45%;
     left: 20%;
-    right: 0;
     height: 55%;
-    width: auto;
+    width: 10000em;
     background-color: #000000;
     z-index: 50;
     opacity: 0.9;
