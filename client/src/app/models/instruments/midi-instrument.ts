@@ -39,11 +39,14 @@ export class MidiInstrument {
      */
     Play(noteKey : string) : string {
        //code to emit sound
+       if (this.keyDict[noteKey]) {
         let key = this.keyDict[noteKey];
-        let now = Tone.now()
+        let now = Tone.now();
         this.instrument.triggerAttack(key, now);
         this.isPlaying = true;
         return key;
+       }
+       return 'invalid';
     }
 
     /**
