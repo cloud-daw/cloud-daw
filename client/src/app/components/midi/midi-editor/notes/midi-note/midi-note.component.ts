@@ -80,18 +80,6 @@ export class MidiNoteComponent implements OnChanges {
     if (this.isSelected) {
       this.keyDownActions(event.code);
     }
-    // if (event.code === 'ArrowUp' && this.isSelected) {
-    //   this.pitchUp();
-    // }
-    // if (event.code === 'ArrowDown' && this.isSelected) {
-    //   this.pitchDown();
-    // }
-    // if (event.code === 'ArrowLeft' && this.isSelected) {
-    //   this.shiftLeft();
-    // }
-    // if (event.code === 'ArrowRight' && this.isSelected) {
-    //   this.shiftRight();
-    // }
   }
 
   @HostListener('document:keyup', ['$event'])
@@ -118,7 +106,7 @@ export class MidiNoteComponent implements OnChanges {
 
 
   selectCurrentNote() {
-    this.isSelected = true;
+    this.isSelected == true;
     this.selectedNoteChange.emit(this);
     this.track.instrument.instrument.triggerAttackRelease(this.data.value, 0.1);
   }
@@ -276,11 +264,11 @@ export class MidiNoteComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.updateDisplay();
+    if (changes['selectedNote']) {
+      if (this.selectedNote != this) this.isSelected = false;
+      else this.isSelected = true;
+    }
     if (changes['isRecording']) {
-      if (this.selectedNote) {
-        if (this.selectedNote != this) this.isSelected = false;
-        else this.isSelected = true;
-      }
       if (this.data && !this.isRecording) {
         this.updateDisplay();
       }

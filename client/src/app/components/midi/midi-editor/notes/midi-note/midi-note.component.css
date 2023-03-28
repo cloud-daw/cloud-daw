@@ -11,16 +11,16 @@
 .container .note-block:hover {
     cursor: move;
 }
-
+/* 
 .container .note-block[cdkDrag][ngStyle] {
     left: var(--leftCSS);
 }
 
 .container .note-block[cdkDrag][ngStyle] {
     --leftCSS: {{ leftCSS }};
-}
+} */
 
 .selected .note-block {
-    background-color: #8fffba;
+    background-color: #00aaff !important;
 }
 
