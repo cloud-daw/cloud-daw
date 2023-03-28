@@ -495,14 +495,14 @@ export class HomeComponent implements AfterViewInit, OnInit{
         volume.style.border = "none"
         header.textContent = "Piano"
         togglePiano.style.border = "3px #22C55E solid"
-        body.textContent = "Press the Show/Hide Piano button to see the piano"
+        body.textContent = "Press the Show/Hide Instrument button to see the instrument"
     }
     // piano
     else if (this.tutorialState == 4) {
         this.isExpanded = true;
         togglePiano.style.border = "none"
         piano.style.border = "3px #22C55E solid"
-        body.textContent = "Press the keys displayed on the piano keys to create the notes they correspond to."
+        body.textContent = "Press the keys displayed on the instrument to create the notes they correspond to."
     }
     // octave control
     else if (this.tutorialState == 5) {
