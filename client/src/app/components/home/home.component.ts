@@ -7,6 +7,7 @@ import {Project} from '../../models/project'
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
+import { BounceProjectToMP3 } from 'src/app/services/recording/bounce-service.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
@@ -266,6 +267,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
         this.setSelectedTrack(this.selectedTrack);
       }
     }
+    this.selectedTrack = this.project.tracks[0];
   }
 
   setSelectedTrack(track: MidiTrack) {
@@ -412,6 +414,10 @@ export class HomeComponent implements AfterViewInit, OnInit{
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
+  }
+
+  bounceToMP3() {
+    BounceProjectToMP3(this.project);
   }
   
   /**

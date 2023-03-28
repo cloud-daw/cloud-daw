@@ -51,19 +51,15 @@ export function SchedulePlayback(recording: Recording) {
     //const overlaps = calculateOverlaps(data, release);
     const overlaps = recording.maxOverlaps;
     synth.setVoices(overlaps);
-    let availableSynths: SynthAvailability[] = [];
+    const availableSynths: SynthAvailability[] = new Array(synth.voices.length);
     let useSynthIdx = 0;
     for (let i = 0; i < synth.voices.length; i++) {
-        availableSynths.push(new SynthAvailability(i));
+        availableSynths[i] = (new SynthAvailability(i));
     }
-    const times = data.map(note => {
-        let s = Tone.Time(note.attack).toSeconds();
-        let e = Tone.Time(note.release).toSeconds() + synth.release;
-        return {
-            start: s,
-            end: e,
-        }
-    });
+    const times: { start: number; end: number; }[] = new Array(data.length);
+    for (let i = 0; i < data.length; i++) {
+        times[i] = { start: Tone.Time(data[i].attack).toSeconds(), end: Tone.Time(data[i].release).toSeconds() + release }
+    }
     for (let i = 0; i < data.length; i++) {
         useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
         Tone.Transport.scheduleOnce((time) => {

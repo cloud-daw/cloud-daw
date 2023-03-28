@@ -12,6 +12,7 @@
             [isRecording]="isRecording"
             [metronome]="metronome">
         </app-main-controls>
+        <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button>
     </div>
     <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
         <div class="piano-controls">

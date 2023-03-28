@@ -55,8 +55,31 @@ function LoadSampler(sample: string): Tone.Sampler {
         onload: () => {
             console.log('done loading');
             loaded = true;
-
         }
     });
     return sampler;
+}
+
+export function LoadSamplerBlocking(sample: string, callback: (sampler: Tone.Sampler) => void): void {
+  const sampler = new Tone.Sampler({
+    urls: {
+      'C4': 'kick/kick.mp3',
+      'C#4': 'snare/sidestick.mp3',
+      'D4': 'snare/base.mp3',
+      'D#4': 'snare/rimshot.mp3',
+      'E4': 'toms/low.mp3',
+      'F4': 'toms/mid.mp3',
+      'F#4': 'toms/high.mp3',
+      'G4': 'hihat/closed.mp3',
+      'G#4': 'hihat/semi.mp3',
+      'A4': 'cymbals/ride.mp3',
+      'A#4': 'cymbals/ridebell.mp3',
+      'B4': 'cymbals/crash.mp3',
+    },
+    baseUrl: `../../../../assets/audio/${sample}/`,
+    onload: () => {
+      console.log('done loading');
+      callback(sampler);
+    },
+  });
 }
