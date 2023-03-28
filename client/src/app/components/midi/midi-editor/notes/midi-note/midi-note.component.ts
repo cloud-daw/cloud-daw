@@ -244,7 +244,7 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     droppedData.attack = attack;
     droppedData.release = release;
     console.log('DROPPED');
-    console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
+    //console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
   
     this.dragPosition = {x: 0, y: 0};
     // this.setDimensions(this.width, leftPosition, this.top);
@@ -278,7 +278,7 @@ export class MidiNoteComponent implements OnChanges, OnInit {
     this.leftCSS = `${left}vw`;
     this.topCSS = `${Math.abs(top)}%`;
     
-    console.log('left', this.leftCSS, 'top', this.topCSS);
+    //console.log('left', this.leftCSS, 'top', this.topCSS);
   }
 
   ngOnChanges(changes: SimpleChanges) {

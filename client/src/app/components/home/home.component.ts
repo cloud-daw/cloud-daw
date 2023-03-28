@@ -236,7 +236,6 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.midiContainerRef = changes.first.nativeElement;
       console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
     });
-    
   }
 
   toggleExpand() {
