@@ -19,38 +19,44 @@ export class ProjectsDashboardComponent  implements OnInit{
     projects: ProjectInfo[] = [];
     projectNames = new Set<string>;
     projectIds = new Set<string>; 
-    constructor(public firebaseService: FirebaseService) { 
-
-        // const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-        // firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => console.log(x[0]));
-        // firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => this.projects.push(x.email));
-        
-    }
+    constructor(public firebaseService: FirebaseService) {  }
     
-
+    projectName: string = '';
+    project: ProjectInfo = InfoizeProject(MakeNewProject('a@a.com'));
+    savedName: string | null = localStorage.getItem("openProjectName");
+    openProject: boolean = localStorage.getItem('inProject') == "true";
+    initialized: boolean = false
     ngOnInit() {
-
+        // localStorage.setItem('inProject', "false")
         const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
         this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
             for (let i = 0; i < x.length; i++) {
-                console.log('x:', x)
                 this.projectNames.add(x[i].name)
                 this.projectIds.add(x[i].id)
                 this.projects.push(MakeInfoFromDbRes(x[i]))
             }
             console.log('projects: ', this.projects)
+            this.initialized = true;
+            this.projectName = localStorage.getItem("openProjectName") as string;
+            this.project = this.getInfoFromName(this.projectName)
         });
+        this.savedName = localStorage.getItem("openProjectName");
+        if (this.savedName !== undefined && this.savedName !== "") {
+            console.log(localStorage.getItem("openProjectName") as string)
+            this.sendProjectNum(localStorage.getItem("openProjectName") as string);
+        }
+        
     }
 
-    projectName: string = '';
-    project: ProjectInfo = InfoizeProject(MakeNewProject('a@a.com'));
-    openProject: boolean = false;
+    
+    // openProject: boolean = false;
     sendProjectNum(nameClicked: string) {
+        
         this.project = this.getInfoFromName(nameClicked);
-        console.log('sending project, ', this.project)
         this.openProject = true;
         this.projectName = nameClicked;
-
+        localStorage.setItem('inProject', "true")
+        localStorage.setItem('openProjectName', nameClicked)
     }
     getInfoFromName(name: string) : ProjectInfo {
         for (let i = 0; i < this.projects.length; i++) {
@@ -62,12 +68,14 @@ export class ProjectsDashboardComponent  implements OnInit{
     }
 
     async submitProjTitle(projectNameInput: string) {
+        localStorage.setItem('inProject', "true")
         const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
         const newProjInfo = InfoizeProject(MakeNewProject(sessionEmail, projectNameInput))
         this.firebaseService.initProject(newProjInfo);
         this.project = newProjInfo;
         this.openProject = true;
         this.projectName = projectNameInput;
+        localStorage.setItem('openProjectName', projectNameInput)
     }
 
         

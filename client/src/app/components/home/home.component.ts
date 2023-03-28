@@ -625,6 +625,7 @@ export class HomeComponent implements OnInit{
   ngOnInit(){
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
     console.log('info in home: ', this.projectInfo)
+    
     this.project = HydrateProjectFromInfo(this.projectInfo);
     this.initVars();
     this.project.updateEmitter.subscribe(() => {
