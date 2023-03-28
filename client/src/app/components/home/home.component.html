@@ -1,4 +1,4 @@
-<div class="body">
+<div *ngIf="!loading" class="body">
     <div class='header'>
         <app-main-controls 
             (play)="onPlay($event)" 
@@ -10,17 +10,18 @@
             (logout)="onLogout()"
             (tutorial)="onTutorial()"
             [isRecording]="isRecording"
-            [metronome]="metronome">
+            [metronome]="metronome"
+            (bounce)="bounceToMP3()"
+            >
+            <!-- <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button> -->
         </app-main-controls>
     </div>
     <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
-        <div class="piano-controls" >
-            <button type="button" class="octave" id="octaveInc" (click)="onIncreaseOctave()">Increase Octave</button>
-            <button type="button" class="octave" id="octaveDec" (click)="onDecreaseOctave()">Decrease Octave</button>
-            <!-- <p *ngIf="isTutorial" class="octave">Hello worlhjjjjjjj hkkjkjhkjh kjhkjhk khkj lkj lkjh lkjh lkjh d!</p> -->
-        </div>
         <div class="piano-controls">
             <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()">Show/Hide Piano</button>
+            <span class="octave-display">Current Octave: {{octave}}</span>
+            <button type="button" class="octave" id="octaveInc" (click)="onIncreaseOctave()">Increase Octave</button>
+            <button type="button" class="octave" id="octaveDec" (click)="onDecreaseOctave()">Decrease Octave</button>
         </div>
         <div class="piano">
             <div id="a" (mousedown)="onKeyMousedown('a')" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
@@ -44,9 +45,14 @@
     </div>
     <div class="production-container">
         <div class='tracks-container' id="tracks">
-            <button class="new-track-button" (click)="newTrack()">
-                Add Track
+            <button class="new-track-button" (click)="promptSelectInstrument()">
+                + Add Track
             </button>
+            <app-select-instrument
+                (createTrack)="newTrack($event)"
+                [isPrompted]="showSelectInstrument"
+            >
+            </app-select-instrument>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <!-- <li *ngFor="let item of myMap | keyvalue">
                     Key: {{item.key}}, value: {{item.value}}
@@ -54,33 +60,60 @@
                 <app-midi-track 
                     [track]="track"
                     [tracks]="tracks"
-                    [(selectedTrack)]="selectedTrack" 
+                    [(selectedTrack)]="selectedTrack"
+                    (onDelete)="onDeleteTrack($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
-                    [isRecording]="isRecording">
+                    [isRecording]="isRecording"
+                    (click)="setSelectedTrack(track)"
+                >
                 </app-midi-track>
             </div>
         </div>
-        <div class="midi-container">
+        <div id="midiContainer" class="midi-container" #midiContainer>
+            <div class="midi-editor-container">
+                <app-midi-editor
+                    [track]="selectedTrack"
+                    [vw]="maxVW"
+                    [isRecording]="isRecording"
+                    [(midi)]="selectedTrack.midi.data"
+                    (closeEditor)="closeEditor($event)"
+                    [midiContainerRef]="midiContainerRef"
+                    [reRender]="reRender"
+                    (triggerReRender)="onReRender($event)"
+                    *ngIf="showEditor"
+                    (trackUpdated)="onTrackUpdated($event)"
+                >
+                </app-midi-editor>
+            </div>
             <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
             <app-slider
                 #sliderRef
-                [bpm]="tempo" 
+                [bpm]="tempo"
                 [controlEvent]="controlEvent" 
-                [bars]="bars" 
+                [bars]="bars"
                 [isRecording]="isRecording"
                 (positionChange)="handleSliderChange($event)" 
                 (sPos)="catchSliderStartPos($event)"
             >
             </app-slider>
+
             <div class="midi-subContainer">
                 <div *ngFor="let track of tracks">
-                    <app-midi-block
-                        #blockRef
-                        [track]="track"
-                        [isRecording]="isRecording"
-                        [vw]="maxVW"
-                    >
-                    </app-midi-block>
+                    <div class="midi-note-section">
+                        <app-midi-notes-container
+                            [track]="track"
+                            [vw]="maxVW"
+                            [isRecording]="isRecording"
+                            [selectedTrack]="selectedTrack"
+                            [editMode]="editMode"
+                            [reRender]="reRender"
+                            (triggerReRender)="onReRender($event)"
+                            (click)="setSelectedTrack(track)"
+                            (dblclick)="openEditor()"
+                            (trackUpdated)="onTrackUpdated($event)"
+                            [midiContainerRef]="midiContainerRef"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,3 +124,4 @@
         </div>
     </div>
 </div>
+<div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

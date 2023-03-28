@@ -1,0 +1,21 @@
+<div class="container"
+    [ngClass]="{'selected' : isSelected}"
+>
+    <div class='block'
+        [ngStyle]=
+        "{
+            'width': blockWidth,
+            'visibility': isVisible,
+            'left': leftOffsetToString
+        }"
+    >
+    </div>
+</div>
+
+<!--
+        [ngStyle]=
+        "{
+            'width': blockWidth,
+            'visibility': isVisible
+        }"
+  -->

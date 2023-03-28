@@ -1,4 +1,6 @@
-<div class="absolute h-full w-auto bg-transparent z-10">
+<div class="absolute h-full w-auto bg-transparent z-10"
+    [ngClass]="{recording: isRecording}"
+>
     <div id='slider' (mousedown)="startDrag($event)" class="h-screen w-0.5 -ml-0.5 bg-blue-400 hover:cursor-pointer" #slider>
     </div>
 </div>

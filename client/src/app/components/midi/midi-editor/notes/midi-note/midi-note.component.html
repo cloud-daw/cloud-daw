@@ -1,0 +1,40 @@
+<div class="container"
+    cdkDragRootElement
+>  
+    <div
+        [cdkDragBoundary]="midiContainerRef"
+        cdkDrag
+        (cdkDragReleased)="onDragReleased($event)"
+        [cdkDragData]="data"
+        cdkDragLockAxis="x"
+        [cdkDragFreeDragPosition]="dragPosition"
+        class="note-block"
+        [ngStyle]=
+            "{
+                'width': widthCSS,
+                'left': leftCSS,
+                'top': topCSS,
+                'background-color': noteColor
+            }"
+    >
+    </div>
+</div>
+
+<!-- <ng-template #dragPreview>
+    <div
+      class="note-block"
+      [ngStyle]="{
+        'width': widthCSS,
+        'left': leftCSS,
+        'top': topCSS,
+        'background-color': noteColor
+      }"
+    ></div>
+  </ng-template> -->
+
+<!--     cdkDragRootElement -->
+
+<!--         cdkDrag
+        (cdkDragEnded)="onDrop($event)" 
+        (cdkDragReleased)="onDragReleased($event)"
+        [cdkDragData]="data" -->

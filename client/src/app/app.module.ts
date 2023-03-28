@@ -7,20 +7,24 @@ import { MainControlsComponent } from './components/controls/main-controls/main-
 import { MainVolumeComponent } from './components/controls/main-volume/main-volume/main-volume.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
-import { MidiNoteComponent } from './components/midi-controller/midi-note/midi-note/midi-note.component';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { AuthComponent } from './components/Authentication/auth.component';
 import { FirebaseService } from './services/firebase.service';
-
 import { environment } from './environments/environment';
 import { HomeComponent } from './components/home/home.component';
-import { MidiTrackComponent } from './components/midi-track/midi-track.component';
+import { MidiTrackComponent } from './components/midi/midi-editor/midi-track/midi-track.component';
 import { SliderComponent } from './components/controls/slider/slider/slider.component';
 import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
-import { MidiBlockComponent } from './components/midi-block/midi-block.component';
+import { MidiBlockComponent } from './components/midi/midi-editor/midi-block/midi-block.component';
 import { SliderGridComponent } from './components/controls/slider/slider-grid/slider-grid.component';
+import { SelectInstrumentComponent } from './components/select-instrument/select-instrument.component';
+import { MidiNotesContainerComponent } from './components/midi/midi-editor/notes/midi-notes-container/midi-notes-container.component';
+import { MidiNoteComponent } from './components/midi/midi-editor/notes/midi-note/midi-note.component';
+import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -28,7 +32,6 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
     AppComponent,
     MainControlsComponent,
     MainVolumeComponent,
-    MidiNoteComponent,
     MidiTrackComponent,
     HomeComponent,
     AuthComponent,
@@ -38,7 +41,11 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
     SliderGridComponent,
     PasswordResetComponent,
     EmailVerificationComponent,
-    MidiBlockComponent
+    MidiBlockComponent,
+    SelectInstrumentComponent,
+    MidiNotesContainerComponent,
+    MidiNoteComponent,
+    MidiEditorComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +60,9 @@ import { SliderGridComponent } from './components/controls/slider/slider-grid/sl
         storageBucket: environment.firebase.storageBucket,
         messagingSenderId: environment.firebase.messagingSenderId,
         appId: environment.firebase.appId,
-    })
+    }),
+    AngularFireDatabaseModule,
+    DragDropModule,
   ],
   providers: [FirebaseService],
   bootstrap: [AppComponent],

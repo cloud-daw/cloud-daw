@@ -1,4 +1,4 @@
-import { Component, Output, Input, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
 import { Metronome } from '../../../models/instruments/metronome';
 import * as Tone from 'tone';
 
@@ -7,7 +7,7 @@ import * as Tone from 'tone';
   templateUrl: './main-controls.component.html',
   styleUrls: ['./main-controls.component.css']
 })
-export class MainControlsComponent implements OnChanges {
+export class MainControlsComponent {
   @Output() play: EventEmitter<boolean> = new EventEmitter();
   @Output() record: EventEmitter<boolean> = new EventEmitter();
   @Output() pause: EventEmitter<boolean> = new EventEmitter();
@@ -17,6 +17,7 @@ export class MainControlsComponent implements OnChanges {
   @Output() tutorial: EventEmitter<any> = new EventEmitter();
   @Output() tutorialNext: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
+  @Output() bounce: EventEmitter<any> = new EventEmitter();
   
   @Input() isRecording: boolean = false;
 
@@ -24,9 +25,6 @@ export class MainControlsComponent implements OnChanges {
   @Input() bar: number = 1;
   @Input() beat: number = 1;
   constructor() {}
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes)
-  }
 
   clickPlay() {
     this.play.emit(true);
@@ -60,6 +58,10 @@ export class MainControlsComponent implements OnChanges {
   }
   clickTutorialNext() {
     this.tutorialNext.emit();
+  }
+
+  clickBounce() {
+    this.bounce.emit();
   }
 
   /**

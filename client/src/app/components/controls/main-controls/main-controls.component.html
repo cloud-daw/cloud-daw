@@ -32,12 +32,12 @@
             <span class="record-status" *ngIf="isRecording">Recording...</span>
         </div>
         <div class="right-header">
-            
-            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickTutorial()"> Tutorials</button>
-            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>   
+            <button type="button" id="bounce-button" class="btn btn-dark" (click)="clickBounce()"> Export </button>
+            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickTutorial()"> Tutorials </button>
+            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"><i class="bi bi-box-arrow-right"></i> Logout </button>   
         </div>
     </div>
-    <div class="tempo-control-container">
+    <!-- <div class="tempo-control-container">
         <div class="tempo-display">
             <span class="currentMeasure">
                 Current Measure: {{bar}}
@@ -46,6 +46,5 @@
                 Current Beat: {{beat}}
             </span>
         </div>
-        <!-- <input type="text" value = "{{metronome.currentSixteenth}}" class="w-12 my-2 bg-green-500"> -->
-    </div>
+    </div> -->
 </div>

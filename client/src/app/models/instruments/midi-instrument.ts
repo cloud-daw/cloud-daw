@@ -1,5 +1,6 @@
 import * as Tone from 'tone';
-import { MakeKeyDict } from '../../lib/keydict';
+import { SynthOptions } from 'tone';
+import { MakeKeyDict } from '../../lib/dicts/keydict';
 
 //monophonic (poly requires refactor) instrument class
 
@@ -7,21 +8,28 @@ export class MidiInstrument {
     public name: string;
     public soundpack?: AudioBuffer; //i think this is the right type
     public sound: string;
-    public instrument: Tone.PolySynth;
-    public voices: Tone.PolySynth[];
+    public instrument: Tone.PolySynth | Tone.Sampler;
+    public voices: any[];
     public isPlaying: boolean;
     public currentOctave: number = 4;
     private keyDict: Record<string, string>;
     private attack: number; //unused for now
     public release: number;
-    constructor(name: string) {
-        this.name = name;
-        this.sound = "Synthesizer" //to load for later
-        this.instrument = new Tone.PolySynth().toDestination();
+    public synth: any;
+    constructor(name: string, synth?: any, release: number = 0.1) {
+        this.name = name != '' ? name : 'Default Synth';
+        this.sound = "" //to load for later
+        this.synth = synth ?? {};
+        if (name != 'Drums') {
+            this.instrument = new Tone.PolySynth(this.synth).toDestination();
+        }
+        else {
+            this.instrument = this.synth.toDestination();
+        }
         this.keyDict = MakeKeyDict(this.currentOctave);
         this.isPlaying = false;
         this.attack = 0;
-        this.release = 0.1;
+        this.release = release;
         this.voices = [this.instrument];
     }
 
@@ -57,13 +65,36 @@ export class MidiInstrument {
 
     public setVoices(overlaps: number) {
         this.resetVoices();
+        if (this.name != 'Drums') {
+            this.setPolyVoices(overlaps);
+        }
+        else {
+            this.setSamplerVoices(overlaps);
+        }
+        this.NormalizeVolume();
+    }
+
+    private setPolyVoices(overlaps: number) {
         for (let i = 1; i < overlaps; i++) {
             this.voices.push(this.MakeSynthCopy());
         }
     }
 
+    private setSamplerVoices(overlaps: number) {
+        for (let i = 1; i < overlaps; i++) {
+            this.voices.push(this.instrument);
+        }
+    }
+
     private resetVoices() {
         this.voices = [this.instrument];
+    }
+
+    public NormalizeVolume() {
+        const volume = this.instrument.volume.value;
+        for (let i = 0; i < this.voices.length; i++) {
+            this.voices[i].volume.value = volume;
+        }
     }
 
     public changeOctave(newOctave: number) {
@@ -72,17 +103,25 @@ export class MidiInstrument {
     }
 
     public increaseOctave() {
-        this.currentOctave = this.currentOctave + 1;
-        this.keyDict = MakeKeyDict(this.currentOctave);
+        if (this.currentOctave < 7) {
+            this.currentOctave = this.currentOctave + 1;
+            this.keyDict = MakeKeyDict(this.currentOctave);
+        }
     }
 
     public decreaseOctave() {
-        this.currentOctave = this.currentOctave - 1;
-        this.keyDict = MakeKeyDict(this.currentOctave);
+        if (this.currentOctave > 0) {
+            this.currentOctave = this.currentOctave - 1;
+            this.keyDict = MakeKeyDict(this.currentOctave);
+        }
     }
 
     public MakeSynthCopy() : Tone.PolySynth {
-        return new Tone.PolySynth().toDestination();
+        return new Tone.PolySynth(this.synth).toDestination();
+    }
+
+    public GetVoicesForBounce() {
+        
     }
 
     // Mute(status: boolean) {

@@ -1,6 +1,6 @@
 import { Component, Renderer2, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { style, animate, AnimationBuilder, AnimationFactory, AnimationPlayer } from '@angular/animations';
-import { PositionDict } from 'src/app/lib/posdict';
+import { PositionDict } from 'src/app/lib/dicts/posdict';
 
 enum controlStatus {
   play = 0,
@@ -53,7 +53,7 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     this.maxVW = 100 - this.startingPosition;
     this.sPos.emit(this.maxVW);
     this.posDict = new PositionDict(this.maxVW, this.startingPosition, this.bars, this.signature);
-    this.setTransformOnPosition(this.startingPosition) //offset by 0.02 to make it look a little cleaner
+    this.setTransformOnPosition(this.startingPosition)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -62,13 +62,11 @@ export class SliderComponent implements AfterViewInit, OnChanges {
       if (this.isRecording) {
         this.recordingStartPos.pos = this.getCurrVWPos();
         this.recordingStartPos.left = this._slider.getBoundingClientRect().left
-        console.log('started recording at: ', this.recordingStartPos);
       }
       else {
         this.recordingEndPos.pos = this.getCurrVWPos();
         this.recordingEndPos.left = this._slider.getBoundingClientRect().left + this._slider.getBoundingClientRect().width;
         this.sliderWidth = this._slider.getBoundingClientRect().width;
-        console.log('ended recording at: ', this.recordingEndPos);
       }
     }
   }
@@ -137,17 +135,14 @@ export class SliderComponent implements AfterViewInit, OnChanges {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    console.log('resize');
     this.resetSlider()
     this.startingPosition = this.getCurrVWPos();
-    console.log(this.startingPosition);
   }
 
   @HostListener('window:mouseup', ['$event'])
   stopDrag(event: MouseEvent) {
     if (this.isDragging) {
       let pos = 0;
-      console.log('drag stop')
       const vwPos = (event.clientX / window.innerWidth) * 100;
       const diff = vwPos - this.startingPosition;
       if (diff > 0 && diff <= this.maxVW) {
@@ -178,7 +173,6 @@ export class SliderComponent implements AfterViewInit, OnChanges {
   }
 
   startDrag(event: MouseEvent) {
-    console.log('drag start');
     this.player?.destroy();
     setTimeout(() => {
       this.player = undefined;

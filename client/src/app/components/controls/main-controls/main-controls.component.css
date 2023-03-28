@@ -21,11 +21,11 @@
 .right-header {
     display: flex;
     align-items: center;
-    width: 20%;
+    width: 25%;
     /* border: 1px solid yellow; */
 }
 .center-header {
-    width: 70%;
+    width: 65%;
     margin: auto;
     align-items: center;
     text-align: center;
@@ -91,6 +91,11 @@
 }
 
 #tutorial-button {
+    color: rgb(215, 213, 213);
+    margin-left: 1em;
+}
+
+#bounce-button {
     color: rgb(215, 213, 213);
     margin-left: 1em;
 }
