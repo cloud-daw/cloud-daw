@@ -397,6 +397,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
    */
   onSelectedTrackChange(track: MidiTrack) {
     this.setRecordingToTrack(this.selectedTrack.id);
+    this.octave = this.selectedTrack.instrument.currentOctave;
   }
 
   onUndo(event: number) {
@@ -405,12 +406,14 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   onIncreaseOctave() {
     this.selectedTrack.instrument.increaseOctave();
-    if (this. octave < 7) this.octave++;
+    this.octave = this.selectedTrack.instrument.currentOctave;
+    // if (this.octave < 7) this.octave++;
   }
 
   onDecreaseOctave() {
     this.selectedTrack.instrument.decreaseOctave();
-    if (this. octave > 0) this.octave--;
+    this.octave = this.selectedTrack.instrument.currentOctave;
+    //if (this.octave > 0) this.octave--;
   }
 
   onMainVolumeChange(event: number) {

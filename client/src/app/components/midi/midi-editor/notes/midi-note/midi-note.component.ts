@@ -106,8 +106,13 @@ export class MidiNoteComponent implements OnChanges {
 
 
   selectCurrentNote() {
-    this.isSelected == true;
-    this.selectedNoteChange.emit(this);
+    if (this.isSelected) {
+      this.isSelected = false;
+    }
+    else {
+      this.isSelected = true;
+      this.selectedNoteChange.emit(this);
+    }
     this.track.instrument.instrument.triggerAttackRelease(this.data.value, 0.1);
   }
   /**
@@ -209,11 +214,11 @@ export class MidiNoteComponent implements OnChanges {
     switch (key) {
       case 'ArrowUp':
         if (currentNoteIndex < (this.notesArray.length - 1)) {
-          const newNote = this.notesArray[currentNoteIndex - 1];
-          this.data.value = this.notesArray[currentNoteIndex + 1];
+          const newNote = this.notesArray[currentNoteIndex + 1];
+          this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
-          this.triggerReRender.emit(this.reRender + 1);
           this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+          this.triggerReRender.emit(this.reRender + 1);
         }
         break;
       case 'ArrowDown':
@@ -221,8 +226,8 @@ export class MidiNoteComponent implements OnChanges {
           const newNote = this.notesArray[currentNoteIndex - 1];
           this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
-          this.triggerReRender.emit(this.reRender + 1);
           this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+          this.triggerReRender.emit(this.reRender + 1);
         }
         break;  
       case 'ArrowLeft':
@@ -244,7 +249,7 @@ export class MidiNoteComponent implements OnChanges {
     // const modifier = 1;
     // const topOffset = getNoteValue * modifier;
 
-    const topOffset = (100 - this.notesDict[this.data.value]);
+    const topOffset = (98 - this.notesDict[this.data.value]);
     //console.log(topOffset);
     //console.log('start:', start, 'end:', end);
     this.setDimensions(width, start, topOffset);
