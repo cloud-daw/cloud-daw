@@ -174,7 +174,7 @@ export class MidiNoteComponent implements OnChanges, OnInit {
   }
 
   ngAfterViewInit() {
-    console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
+    //console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
   }
 
   populateNotePos() {
