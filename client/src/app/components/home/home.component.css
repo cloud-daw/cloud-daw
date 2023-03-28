@@ -216,4 +216,5 @@
 
 .tutorials {
     padding: 20px;
+    z-index: 100;
 }
