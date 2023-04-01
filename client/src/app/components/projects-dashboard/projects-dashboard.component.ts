@@ -46,7 +46,6 @@ export class ProjectsDashboardComponent  implements OnInit{
             console.log(localStorage.getItem("openProjectName") as string)
             this.sendProjectNum(localStorage.getItem("openProjectName") as string);
         }
-        
     }
 
     
@@ -69,17 +68,43 @@ export class ProjectsDashboardComponent  implements OnInit{
     }
 
     async submitProjTitle(projectNameInput: string) {
-        localStorage.setItem('inProject', "true")
-        const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-        const newProjInfo = InfoizeProject(MakeNewProject(sessionEmail, projectNameInput))
-        this.firebaseService.initProject(newProjInfo);
-        this.project = newProjInfo;
-        this.openProject = true;
-        this.projectName = projectNameInput;
-        localStorage.setItem('openProjectName', projectNameInput)
+        this.validateProjectName(projectNameInput).then(()=>{
+            localStorage.setItem('inProject', "true")
+            const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+            const newProjInfo = InfoizeProject(MakeNewProject(sessionEmail, projectNameInput))
+            this.firebaseService.initProject(newProjInfo);
+            this.project = newProjInfo;
+            this.openProject = true;
+            this.projectName = projectNameInput;
+            localStorage.setItem('openProjectName', projectNameInput)
+        })
+        .catch(()=>{
+            alert("Invalid Project Name. Name should be unique and 1-15 characters long");
+        })
     }
     onCloseHome() {
         this.openProject = false;
       }
+    
+    async validateProjectName(name: string) : Promise<Boolean>{
         
+        const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+        return new Promise((resolve, reject) => {
+            if (name.replace(/\s/g, "") === "") {
+                reject(false);
+            }
+            if (name.length > 15) {
+                reject(false);
+            }
+            this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
+                for (let i = 0; i < x.length; i++) {
+                    if (name === x[i].name) {
+                        reject(false);
+                    }
+                }
+                resolve(true);
+            });
+            
+        })
+    }
 }
