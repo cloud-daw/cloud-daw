@@ -31,11 +31,12 @@ export class ProjectsDashboardComponent  implements OnInit{
         const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
         this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
             for (let i = 0; i < x.length; i++) {
+                console.log(x[i].key);
                 this.projectNames.add(x[i].name)
                 this.projectIds.add(x[i].id)
                 this.projects.push(MakeInfoFromDbRes(x[i]))
             }
-            console.log('projects: ', this.projects)
+            console.log('projects: ', this.projectIds)
             this.initialized = true;
             this.projectName = localStorage.getItem("openProjectName") as string;
             this.project = this.getInfoFromName(this.projectName)
@@ -77,6 +78,8 @@ export class ProjectsDashboardComponent  implements OnInit{
         this.projectName = projectNameInput;
         localStorage.setItem('openProjectName', projectNameInput)
     }
-
+    onCloseHome() {
+        this.openProject = false;
+      }
         
 }
