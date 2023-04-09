@@ -120,42 +120,11 @@ export class HomeComponent implements AfterViewInit, OnInit{
   @Output() close = new EventEmitter<void>();
   projectFound : boolean = false;
   isNew: boolean = false;
-  project: Project;
+  project!: Project;
 
   projectKey: string = "";
   loading: boolean = true;
   constructor(public firebaseService: FirebaseService, public _router: Router, private _renderer: Renderer2, private projectManagement: ProjectManagementService) {
-    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-    this.project = MakeNewProject(sessionEmail);
-    firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
-      next: res => {
-        if (res.length > 0) {
-          const resProjectInfo = MakeInfoFromDbRes(res[0])
-          this.project = HydrateProjectFromInfo(resProjectInfo)
-          this.projectKey = res[0].key;
-          console.log('loaded proj', this.project)
-        }
-        else {
-          firebaseService.initProject(InfoizeProject(this.project));
-        }
-        this.initVars()
-        this.project.updateEmitter.subscribe(() => {
-          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-        })
-      },
-      error: err => {
-        console.log('err gpbe', err)
-        this.project = MakeNewProject(sessionEmail);
-        this.initVars()
-        this.project.updateEmitter.subscribe(() => {
-          firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-        })
-      },
-      complete: () => {
-        console.log('Project Loaded!')
-        this.loading = false;
-      }
-    });
     this.keyboardStatus = {
       "a": keyStatus.notPlaying,
       "w": keyStatus.notPlaying,
