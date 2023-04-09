@@ -20,7 +20,7 @@ export class AuthComponent {
         await this.firebaseService.signin(email,password)
             .then(()=>{
                 if (this.firebaseService.isLoggedIn) 
-                    this._router.navigateByUrl('/home')
+                    this._router.navigateByUrl('/projectsDashboard')
                 })
             .catch (error =>{ this.errorShown = true })
             }

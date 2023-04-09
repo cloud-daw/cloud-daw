@@ -16,6 +16,7 @@ export class MainControlsComponent {
   @Output() volume: EventEmitter<number> = new EventEmitter();
   @Output() tutorial: EventEmitter<any> = new EventEmitter();
   @Output() tutorialNext: EventEmitter<any> = new EventEmitter();
+  @Output() projects: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
   @Output() bounce: EventEmitter<any> = new EventEmitter();
   
@@ -55,6 +56,9 @@ export class MainControlsComponent {
   }
   clickTutorial() {
     this.tutorial.emit();
+  }
+  clickProjects(){
+    this.projects.emit();
   }
   clickTutorialNext() {
     this.tutorialNext.emit();

@@ -1,9 +1,10 @@
 import { first } from 'rxjs/operators';
-import { Component, AfterViewInit, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit,Input, Renderer2, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
-import {Project} from '../../models/project'
+import { Project } from '../../models/project'
+import { ProjectInfo } from 'src/app/models/db/project-info';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
 import { SchedulePlayback } from '../../services/recording/playback-service.service';
@@ -19,6 +20,7 @@ import { MakeNewProject } from 'src/app/lib/db/new-project';
 import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';
 import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
+import { ProjectManagementService } from 'src/app/services/project-management.service';
   
 /**
  * Int status of keys for keyboard
@@ -112,12 +114,17 @@ export class HomeComponent implements AfterViewInit, OnInit{
     this.synthOnKeyup(this.currMousekey);
     this.currMousekey = '';
   }
+  // projects
+  @Input() projectName: string = '';
+  @Input() projectInfo!: ProjectInfo;
+  @Output() close = new EventEmitter<void>();
+  projectFound : boolean = false;
   isNew: boolean = false;
   project: Project;
 
   projectKey: string = "";
   loading: boolean = true;
-  constructor(public firebaseService: FirebaseService, public _router: Router, private _renderer: Renderer2) {
+  constructor(public firebaseService: FirebaseService, public _router: Router, private _renderer: Renderer2, private projectManagement: ProjectManagementService) {
     const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
     this.project = MakeNewProject(sessionEmail);
     firebaseService.getProjectByEmail(sessionEmail).pipe(first()).subscribe({
@@ -463,6 +470,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
   // }
   
   onTutorialNext() {
+    console.log(this.tutorialState)
     const header = <HTMLElement>document.getElementById("tutorialInstructionsHeader");
     const body = <HTMLElement>document.getElementById("tutorialInstructionsBody");
     const mainCtrl = <HTMLElement>document.getElementById("center-main-controls")
@@ -589,6 +597,11 @@ export class HomeComponent implements AfterViewInit, OnInit{
     }
   }
 
+  onProjects(){
+    console.log("going to projects")
+    this.close.emit();
+  }
+
   onLogout(){
     this.firebaseService.logout();
     this._router.navigateByUrl('/login');
@@ -598,9 +611,36 @@ export class HomeComponent implements AfterViewInit, OnInit{
     console.log('home level changes: ', changes);
   }
 
-  ngOnInit() {
-    //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+  async getProjectKey(projectName: string) : Promise<string> {
+    console.log("Trying to get key from project name")
+    let foundKey = ""
+    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+    return new Promise((resolve, reject) => {
+        this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
+            for (let i = 0; i < x.length; i++) {
+                if (projectName === x[i].name) {
+                    resolve(x[i].key)
+                }
+            }
+            reject()
+        });
+    })
+    
+  }
+
+  async ngOnInit(){
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
+    
+    this.project = HydrateProjectFromInfo(this.projectInfo);
+    console.log(this.projectInfo)
+    this.initVars();
+    this.project.updateEmitter.subscribe(() => {
+        console.log("updateEmitter event emitted.");
+        console.log("project name in ngonInit: " + this.projectName);
+        this.getProjectKey(this.project.name).then((key) => {
+            this.firebaseService.saveProject(key, InfoizeProject(this.project))
+        }).catch((err) => console.log(err));
+    })
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
@@ -608,9 +648,10 @@ export class HomeComponent implements AfterViewInit, OnInit{
         nextBtn.style.display = "block";
         instructions.style.display = "block";
     }
+
+    this.loading = false;
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
-    this.onTutorialNext();
   }
 
 }

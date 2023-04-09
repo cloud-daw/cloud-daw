@@ -1,0 +1,22 @@
+<div *ngIf="!openProject">
+    <div class="projectDashboard">
+        <div class="projectDashboardContent">
+            <div class="createProject">
+                <div class="createProjectContent">
+                    <input type="text" #projectN class="inputField" id="createProjectInput" placeholder="New Project Name" />
+                    <button class="createBtn" (click)="submitProjTitle(projectN.value)">Create</button>
+                </div>
+            </div>
+            <div class="projects">
+                <div class="project" *ngFor="let item of projectNames" (click)="sendProjectNum(item)">
+                    <img src="../../../assets/images/image 2.png" alt="track"/>
+                    <div class="projectName">
+                        {{item}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-home *ngIf="openProject && initialized" [projectName]="projectName" [projectInfo]="project" (close)="onCloseHome()"></app-home>

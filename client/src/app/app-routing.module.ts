@@ -5,6 +5,7 @@ import { SignUpComponent } from './components/Authentication/sign-up.component';
 import { HomeComponent } from './components/home/home.component';
 import { PasswordResetComponent } from './components/password-reset/password-reset.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
+import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
 
 const routes: Routes = [
   { path: 'login', component: AuthComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'pw-reset', component: PasswordResetComponent },
   { path: 'verifyEmail', component: EmailVerificationComponent },
+  { path: 'projectsDashboard', component: ProjectsDashboardComponent }
 ];
 
 @NgModule({

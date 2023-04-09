@@ -9,6 +9,7 @@
             (volume)="onMainVolumeChange($event)"
             (logout)="onLogout()"
             (tutorial)="onTutorial()"
+            (projects)="onProjects()"
             [isRecording]="isRecording"
             [metronome]="metronome"
             (bounce)="bounceToMP3()"
@@ -140,6 +141,19 @@
             <p class="tutorialInstructionsText" id="tutorialInstructionsBody">Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. Click Next to go to the next page.</p>
             <button type="button" id="next-button-tutorial" class="btn btn-light" (click)="onTutorialNext()"> Next</button>
         </div>
+    </div>
+    <div class="midi-editor-container">
+        <app-midi-editor
+            [track]="selectedTrack"
+            [vw]="maxVW"
+            [isRecording]="isRecording"
+            [(midi)]="selectedTrack.midi.data"
+            (closeEditor)="closeEditor($event)"
+            *ngIf="showEditor"
+            (trackUpdated)="onTrackUpdated($event)"
+            id="midi-editor"
+        >
+        </app-midi-editor>
     </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>

@@ -25,6 +25,7 @@ import { MidiNotesContainerComponent } from './components/midi/midi-editor/notes
 import { MidiNoteComponent } from './components/midi/midi-editor/notes/midi-note/midi-note.component';
 import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     SelectInstrumentComponent,
     MidiNotesContainerComponent,
     MidiNoteComponent,
-    MidiEditorComponent
+    MidiEditorComponent,
+    ProjectsDashboardComponent
   ],
   imports: [
     BrowserModule,
