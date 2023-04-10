@@ -21,6 +21,20 @@
 </div>
 
 <div class="edit-container" *ngIf="editMode">
+    <div class="control-header">
+        <button type="button" class="quantize-button" (click)="onQuantizeRecording(2)">
+            Quantize 1/2
+        </button>
+        <button type="button" class="quantize-button" (click)="onQuantizeRecording(4)">
+            Quantize 1/4
+        </button>
+        <button type="button" class="quantize-button" (click)="onQuantizeRecording(8)">
+            Quantize 1/8
+        </button>
+        <button type="button" class="quantize-button" (click)="onQuantizeRecording(16)">
+            Quantize 1/16
+        </button>
+    </div>
     <div class="edit-notes-container" [ngStyle]="{'width': widthCSS}">
         <div *ngFor="let data of track.midi.data" 
         >

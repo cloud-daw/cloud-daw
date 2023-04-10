@@ -7,6 +7,7 @@ import { BlockMode } from 'src/app/components/home/home.component';
 import { CdkDragDrop, CdkDragEnd, CdkDragRelease, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Note } from 'src/app/models/recording/note';
 import { timer } from 'rxjs/internal/observable/timer';
+import { QuantizeRecording } from 'src/app/services/recording/quantize-service.service';
 
 
 @Component({
@@ -65,6 +66,12 @@ export class MidiNotesContainerComponent implements OnChanges {
 
   onSelectedNoteChange(note: MidiNoteComponent) {
     this.selectedNote = note;
+  }
+
+  onQuantizeRecording(division: number) {
+    QuantizeRecording(this.track.midi, division);
+    this.trackUpdated.emit(this.track);
+    this.triggerReRender.emit(this.reRender+1);
   }
 
   extractMinMax() : number[] {
