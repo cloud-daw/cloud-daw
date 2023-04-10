@@ -3,11 +3,21 @@
 >
     <div class="header-container">
         <div class="header">
-            <span class='track-title'>{{track.instrument.name}}</span>
+            <span class='track-instrument'>{{track.instrument.name}}</span>
             <button class="delete-track" (click)="deleteTrack()">x</button>
         </div>
     </div>
-    <div class='track-instrument'>{{track.title}}</div>
+    <!-- <div class='track-title' (dblclick)="changeTrackTitle('1')">{{track.title}}</div> -->
+    <div class="track-title-container">
+        <label class='track-title' *ngIf="!editing" (dblclick)="editing = true">{{track.title}}</label>
+        <input #box class='track-input' 
+            *ngIf="editing" 
+            type="text"
+            (change)="changeTrackTitle($event, box.value)"
+            (blur)="editing = false"
+            [placeholder]="placeholder"
+        >
+    </div>
     <div class="volume-slider">
         <input type="range" class="form-range" id="volume-slider" min="0" max="60" [value]="volumeLevel" (input)="onVolumeChange($event)">     
     </div>

@@ -3,32 +3,32 @@ import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 
 export function GetSynthByKeyword(keyword: string) : MidiInstrument {
     switch (keyword) {
-        case 'MonoSynth': {
-            return new MidiInstrument('MonoSynth', Tone.MonoSynth);
+        case 'Vintage Synth': {
+            return new MidiInstrument('Vintage Synth', Tone.MonoSynth);
         }
-        case 'AMSynth': {
-            return new MidiInstrument('AMSynth', Tone.AMSynth);
+        case 'Radio Synth': {
+            return new MidiInstrument('Radio Synth', Tone.AMSynth);
         }
-        case 'FMSynth': {
-            return new MidiInstrument('FMSynth', Tone.FMSynth);
+        case 'Retro Synth': {
+            return new MidiInstrument('Retro Synth', Tone.FMSynth);
         }
         case 'Drums': {
             const drums = LoadSampler('drumkits/kit0');
             return new MidiInstrument('Drums', drums, 2)
         }
         default: {
-            return new MidiInstrument('Default');
+            return new MidiInstrument('Pluck Synth');
         }
     }
 }
 
 export function GetAllSynthKeywords(): string[] {
     return [
-    'Default',
-    'AMSynth',
-    'FMSynth',
-    'MonoSynth',
-    'Drums'
+    'Pluck Synth', //   Default
+    'Radio Synth', //   AMSynth
+    'Retro Synth', //   FMSynth
+    'Vintage Synth', // MONOSynth
+    'Drums' //  Drums
   ]
 }
 

@@ -25,12 +25,35 @@
     padding-left: 0.5em;
 }
 
-.track-title {
+.track-instrument {
     font-size: small;
 }
-.track-instrument {
+.track-title {
     font-size: large;
     padding: 0.5em;
+}
+
+.track-title-container {
+
+}
+
+.track-input {
+    background-color: transparent;
+    color: white;
+    border: none;
+    font-size: large;
+    margin-left: 0.5em;
+    height: 2em;
+    /* height: 3em; */
+}
+
+.track-input:focus {
+    border: none;
+    outline: none;
+    position: relative;
+    font-size: large;
+    height: 2em;
+    /* height: 3em; */
 }
 
 .volume-slider {
