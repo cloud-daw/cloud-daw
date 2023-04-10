@@ -142,18 +142,5 @@
             <button type="button" id="next-button-tutorial" class="btn btn-light" (click)="onTutorialNext()"> Next</button>
         </div>
     </div>
-    <div class="midi-editor-container">
-        <app-midi-editor
-            [track]="selectedTrack"
-            [vw]="maxVW"
-            [isRecording]="isRecording"
-            [(midi)]="selectedTrack.midi.data"
-            (closeEditor)="closeEditor($event)"
-            *ngIf="showEditor"
-            (trackUpdated)="onTrackUpdated($event)"
-            id="midi-editor"
-        >
-        </app-midi-editor>
-    </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>
