@@ -24,7 +24,7 @@
 }
 
 .show .container {
-    height: auto;
+    height: 20em;
     visibility: visible;
 }
 

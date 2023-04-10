@@ -6,6 +6,7 @@ import { MakeKeyDict } from '../../lib/dicts/keydict';
 
 export class MidiInstrument {
     public name: string;
+    public sampler: boolean;
     public soundpack?: AudioBuffer; //i think this is the right type
     public sound: string;
     public instrument: Tone.PolySynth | Tone.Sampler;
@@ -16,11 +17,12 @@ export class MidiInstrument {
     private attack: number; //unused for now
     public release: number;
     public synth: any;
-    constructor(name: string, synth?: any, release: number = 0.1) {
+    constructor(name: string, synth?: any, release: number = 0.1, sampler?: boolean) {
         this.name = name != '' ? name : 'Default Synth';
         this.sound = "" //to load for later
+        this.sampler = sampler ? sampler : false;
         this.synth = synth ?? {};
-        if (name != 'Drums' && name != 'Jazz Guitar' && name != 'Acoustic Guitar') {
+        if (!sampler) {
             this.instrument = new Tone.PolySynth(this.synth).toDestination();
         }
         else {
@@ -68,7 +70,8 @@ export class MidiInstrument {
 
     public setVoices(overlaps: number) {
         this.resetVoices();
-        if (this.name != 'Drums') {
+        if (!this.sampler) 
+        {
             this.setPolyVoices(overlaps);
         }
         else {

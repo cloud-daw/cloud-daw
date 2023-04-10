@@ -27,10 +27,13 @@
 
 .track-instrument {
     font-size: small;
+    margin-left: 0.5em;
 }
 .track-title {
     font-size: large;
-    padding: 0.5em;
+    margin-left: 0.75em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 
 .track-title-container {
