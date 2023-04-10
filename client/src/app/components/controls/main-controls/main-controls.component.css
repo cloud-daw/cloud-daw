@@ -1,9 +1,9 @@
 @import '~bootstrap-icons/font/bootstrap-icons.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400&family=Inter:wght@100;200;300;400&family=Rajdhani:wght@300;400;500&display=swap');
 
 .control-bar-container {
     background-color: #313131;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rajdhani', sans-serif;
     font-weight: 300;
     /* align-items: center; */
     height: 5em;
@@ -56,23 +56,40 @@
 }
 
 .right-header button {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Rajdhani', sans-serif;
     background-color: #171717;
     color: white;
     font-size: 12pt;
     font-weight: 200;
     color: rgb(215, 213, 213);
-    margin-left: 0.5em;
+    margin-right: 0.1em;
     display: flex;
+    padding-inline: 1em;
+    border-radius: 0px;
+    outline: none;
+    border: none;
 }
 
 .right-header button:hover {
-    background-color:#252424;
+    background-color:#272727;
+    border: none;
+    outline: none;
+}
+
+#bounce-button {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
 
 #bounce-button svg {
     margin-right: 0.5em;
     margin-left: -0.25em;
+
+}
+
+#logout-button {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 #logout-button i {
@@ -95,9 +112,10 @@
     align-items: center;
     margin: auto;
     background-color: #171717;
-    border-radius: 5px;
+    border-radius: 50px;
     width: 90%;
     height: 70%;
+
 }
 
 .button-container .octave-container {
@@ -132,10 +150,17 @@
 
 .octaveText {
     /* position: absolute; */
+    font-family: 'Rajdhani', sans-serif;
     font-weight: 100;
     font-size: 13pt;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-top: 0.15em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    height: 2em;
+    /* background-color:#242323; */
+    border-radius: 15px;
 }
 
 .record-status {
