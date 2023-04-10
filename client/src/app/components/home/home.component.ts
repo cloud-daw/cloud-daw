@@ -250,7 +250,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
   newTrack(instrument: MidiInstrument) {
     if (!this.isRecording) {
       this.trackIdCounter++;
-      const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+      const newTrack = new MidiTrack('Untitled Track', this.trackIdCounter, instrument, true);
       this.tracks.add(newTrack);
       this.project.addTrack(newTrack);
       this.setSelectedTrack(newTrack);

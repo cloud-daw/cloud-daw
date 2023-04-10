@@ -2,23 +2,23 @@
 
 .track-container {
     position: relative;
-    background-color: #414141;
+    background-color: #292929;
     color: white;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
     padding: 0.25em;
-    border: 1px solid #585858;
+    border: 1px solid #3D3D3D;
     height: 6em;
 }
 
 .track-container:hover {
-    background-color: #676767;
+    background-color: #414141;
     color: rgb(220, 220, 220);
     cursor: pointer;
 }
 
 .selected {
-    background-color: #5b5b5b;
+    background-color: #3a3a3a;
 }
 
 .header {
@@ -46,27 +46,19 @@
     padding-right: 0.5em;
 }
 
-.form-range::-moz-range-track {
-    background-color: #d3d2d2;
-}
-  
-.form-range::-moz-range-thumb {
-    background-color: #00ff62;
-}
-
-.form-range::-moz-range-thumb:hover {
-    cursor: pointer;
-}
-
+.form-range::-moz-range-track,
 .form-range::-webkit-slider-runnable-track {
     background-color: #d3d2d2;
 }
-  
+
+.form-range::-moz-range-thumb, 
 .form-range::-webkit-slider-thumb {
     background-color: #00ff62;
 }
-  
+
+.form-range::-moz-range-thumb:hover, 
 .form-range::-webkit-slider-thumb:hover {
     cursor: pointer;
 }
+
   

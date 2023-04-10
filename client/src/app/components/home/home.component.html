@@ -12,17 +12,20 @@
             [isRecording]="isRecording"
             [metronome]="metronome"
             (bounce)="bounceToMP3()"
+            [octave]="octave"
+            (octaveUp)="onIncreaseOctave()"
+            (octaveDown)="onDecreaseOctave()"
             >
             <!-- <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button> -->
         </app-main-controls>
     </div>
     <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
-        <div class="piano-controls">
-            <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()">Show/Hide Instrument</button>
+        <!-- <div class="piano-controls">
+            <button type="button" class="expand-piano"  (click)="toggleExpand()">Show/Hide Instrument</button>
             <span class="octave-display">Current Octave: {{octave}}</span>
             <button type="button" class="octave" id="octaveInc" (click)="onIncreaseOctave()">Increase Octave</button>
             <button type="button" class="octave" id="octaveDec" (click)="onDecreaseOctave()">Decrease Octave</button>
-        </div>
+        </div> -->
         <div *ngIf="!isDrums" class="piano">
             <div id="a" (mousedown)="onKeyMousedown('a')" class="key white" style = "display:flex;justify-content:center;align-items:center;">A</div>
             <div id="w" (mousedown)="onKeyMousedown('w')" class="key black" style = "display:flex;justify-content:center;align-items:center;color:white">W</div>
@@ -62,18 +65,32 @@
     </div>
     <div class="production-container">
         <div class='tracks-container' id="tracks">
-            <button class="new-track-button" (click)="promptSelectInstrument()">
-                + Add Track
-            </button>
+            <div class="tracks-header">
+                <button class="new-track-button" (click)="promptSelectInstrument()">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.11765 0.882353C4.11765 0.395043 4.5127 0 5.00001 0C5.48732 0 5.88236 0.395043 5.88236 0.882353V9.11765C5.88236 9.60496 5.48732 10 5.00001 10C4.5127 10 4.11765 9.60496 4.11765 9.11765V0.882353Z" fill="white"/>
+                        <path d="M0.882353 5.88235C0.395043 5.88235 -5.81111e-09 5.4873 0 4.99999C5.81111e-09 4.51268 0.395043 4.11764 0.882353 4.11764H9.11765C9.60496 4.11764 10 4.51268 10 4.99999C10 5.4873 9.60496 5.88235 9.11765 5.88235H0.882353Z" fill="white"/>
+                    </svg>
+                    New Track
+                </button>
+                <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()">
+                    <svg width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 1C0 0.447715 0.447715 0 1 0H3C3.55228 0 4 0.447715 4 1V11C4 11.5523 3.55228 12 3 12H1C0.447715 12 0 11.5523 0 11V1Z" fill="#D9D9D9"/>
+                        <path d="M5 1C5 0.447715 5.44772 0 6 0H8C8.55228 0 9 0.447715 9 1V11C9 11.5523 8.55228 12 8 12H6C5.44772 12 5 11.5523 5 11V1Z" fill="#D9D9D9"/>
+                        <path d="M10 1C10 0.447715 10.4477 0 11 0H13C13.5523 0 14 0.447715 14 1V11C14 11.5523 13.5523 12 13 12H11C10.4477 12 10 11.5523 10 11V1Z" fill="#D9D9D9"/>
+                        <path d="M15 1C15 0.447715 15.4477 0 16 0H18C18.5523 0 19 0.447715 19 1V11C19 11.5523 18.5523 12 18 12H16C15.4477 12 15 11.5523 15 11V1Z" fill="#D9D9D9"/>
+                        <path d="M3 1C3 0.447715 3.44772 0 4 0H5C5.55228 0 6 0.447715 6 1V7C6 7.55228 5.55228 8 5 8H4C3.44772 8 3 7.55228 3 7V1Z" fill="#484848"/>
+                        <path d="M8 1C8 0.447715 8.44772 0 9 0H10C10.5523 0 11 0.447715 11 1V7C11 7.55228 10.5523 8 10 8H9C8.44772 8 8 7.55228 8 7V1Z" fill="#484848"/>
+                        <path d="M13 1C13 0.447715 13.4477 0 14 0H15C15.5523 0 16 0.447715 16 1V7C16 7.55228 15.5523 8 15 8H14C13.4477 8 13 7.55228 13 7V1Z" fill="#484848"/>
+                    </svg> 
+                </button>
+            </div>
             <app-select-instrument
                 (createTrack)="newTrack($event)"
                 [isPrompted]="showSelectInstrument"
             >
             </app-select-instrument>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
-                <!-- <li *ngFor="let item of myMap | keyvalue">
-                    Key: {{item.key}}, value: {{item.value}}
-                  </li> -->
                 <app-midi-track 
                     [track]="track"
                     [tracks]="tracks"

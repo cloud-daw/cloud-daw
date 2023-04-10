@@ -29,6 +29,7 @@ export class MidiNoteComponent implements OnChanges {
   @Input() bars: number = 16;
   @Input() isRecording: boolean = false;
   @Input() noteColor: string = '';
+  @Input() borderCSS: string = '';
   @Input() reRender: number = 0;
   @Input() midiContainerRef: Element | any;
   @Input() selectedNote: MidiNoteComponent = this;

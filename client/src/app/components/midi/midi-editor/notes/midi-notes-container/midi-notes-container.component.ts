@@ -43,6 +43,7 @@ export class MidiNotesContainerComponent implements OnChanges {
   public maxWidth = 0;
 
   public noteColor = this.editMode ? '#00ff62' : 'white';
+  public borderCSS = this.editMode ? '0.5px solid black' : '0.5px solid white';
   public selectedNote: MidiNoteComponent = new MidiNoteComponent();
 
   // selectCurrentNote(event: any) {

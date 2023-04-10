@@ -3,11 +3,11 @@
 >
     <div class="header-container">
         <div class="header">
-            <span class='track-title'>{{track.title}}</span>
+            <span class='track-title'>{{track.instrument.name}}</span>
             <button class="delete-track" (click)="deleteTrack()">x</button>
         </div>
     </div>
-    <div class='track-instrument'>{{track.instrument.name}} {{track.id}}</div>
+    <div class='track-instrument'>{{track.title}}</div>
     <div class="volume-slider">
         <input type="range" class="form-range" id="volume-slider" min="0" max="60" [value]="volumeLevel" (input)="onVolumeChange($event)">     
     </div>

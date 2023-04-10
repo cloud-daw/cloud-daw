@@ -1,34 +1,141 @@
 @import '~bootstrap-icons/font/bootstrap-icons.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
 
 .control-bar-container {
-    background-color: #656565;
+    background-color: #313131;
     font-family: 'Inter', sans-serif;
     font-weight: 300;
+    /* align-items: center; */
+    height: 5em;
 }
 
 .control-bar-header {
+    height: 100%;
     display: flex;
-    background-color: #4E4E4E;
+    background-color: #313131;
+    /* border: 1px solid red; */
 }
 
 .left-header {
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 15%;
+    align-items: center;
+    width: 25%;
+    /* background-color: rgb(255, 148, 148); */
+    text-align: center;
+    height: 100%;
     /* border: 1px solid yellow; */
+}
+
+.left-header .volume-icon {
+}
+
+.left-header .volume-slider {
+    margin-right: 1em;
+    margin-top: 0.4em;
+}
+
+.left-header .volume-text {
+    color: white;
+    font-weight: 100;
+    font-size: 16px;
 }
 
 .right-header {
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 25%;
-    /* border: 1px solid yellow; */
-}
-.center-header {
-    width: 65%;
     margin: auto;
     align-items: center;
+    width: 25%;
+    /* background-color: rgb(110, 110, 255); */
     text-align: center;
+    height: 100%;
+    /* border: 1px solid yellow; */
+}
+
+.right-header button {
+    font-family: 'Inter', sans-serif;
+    background-color: #171717;
+    color: white;
+    font-size: 12pt;
+    font-weight: 200;
+    color: rgb(215, 213, 213);
+    margin-left: 0.5em;
+    display: flex;
+}
+
+.right-header button:hover {
+    background-color:#252424;
+}
+
+#bounce-button svg {
+    margin-right: 0.5em;
+    margin-left: -0.25em;
+}
+
+#logout-button i {
+    margin-right: 0.5em;
+}
+
+.center-header {
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    /* background-color: rgb(141, 250, 141); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-header .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: #171717;
+    border-radius: 5px;
+    width: 90%;
+    height: 70%;
+}
+
+.button-container .octave-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: white;
+    float: left;
+    margin-left: 0em;
+    width: 30%;
+}
+
+.button-container .control-button-container {
+    width: 40%;
+    margin: auto;
+}
+
+.button-container .tempo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    color: white;
+    /* display: inline-block; */
+    align-items: center;
+    /* border: 1px solid red; */
+    float: right;
+    margin-right: 0em;
+    width: 30%;
+}
+
+.octaveText {
+    /* position: absolute; */
+    font-weight: 100;
+    font-size: 13pt;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .record-status {
@@ -38,12 +145,25 @@
     margin-left: 0.5em;
 }
 
+.octaveButton {
+    height: 1.5em;
+}
+
+.octaveButton:hover svg rect {
+    fill: #969696;
+}
+
+.octaveButton:hover svg path{
+    fill: #969696;
+}
+
 .volume-slider {
     margin-left: 1em;
     margin-top: 0.25em;
 }
 
 .control-button {
+    color: white;
     height: 3em;
     width: 3em; 
     border-radius: 5px;
@@ -85,18 +205,4 @@
     fill: rgb(201, 0, 0);
 }
 
-#logout-button {
-    color: rgb(215, 213, 213);
-    margin-left: 1em;
-}
-
-#tutorial-button {
-    color: rgb(215, 213, 213);
-    margin-left: 1em;
-}
-
-#bounce-button {
-    color: rgb(215, 213, 213);
-    margin-left: 1em;
-}
 
