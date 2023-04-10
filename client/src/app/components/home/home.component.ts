@@ -206,6 +206,8 @@ export class HomeComponent implements AfterViewInit, OnInit{
 
   public reRender: number = 0;
 
+  public newTrackInstrument: boolean = false;
+
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -243,7 +245,13 @@ export class HomeComponent implements AfterViewInit, OnInit{
     this.isExpanded = !this.isExpanded;
   }
 
-  promptSelectInstrument() {
+  promptNewTrackInstrument() {
+    this.newTrackInstrument = true;
+    this.showSelectInstrument = !this.showSelectInstrument;
+  }
+
+  promptChangeTrackInstrument() {
+    this.newTrackInstrument = false;
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
@@ -254,6 +262,16 @@ export class HomeComponent implements AfterViewInit, OnInit{
       this.tracks.add(newTrack);
       this.project.addTrack(newTrack);
       this.setSelectedTrack(newTrack);
+      this.showSelectInstrument = false;
+    }
+  }
+
+  changeTrackInstrument(instrument: MidiInstrument) {
+    if (!this.isRecording) {
+      this.selectedTrack.instrument = instrument;
+      this.setSelectedTrack(this.selectedTrack);
+      this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
+      this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
       this.showSelectInstrument = false;
     }
   }
@@ -403,6 +421,7 @@ export class HomeComponent implements AfterViewInit, OnInit{
   onSelectedTrackChange(track: MidiTrack) {
     this.setRecordingToTrack(this.selectedTrack.id);
     this.octave = this.selectedTrack.instrument.currentOctave;
+    console.log('track changes are being made');
   }
 
   onUndo(event: number) {

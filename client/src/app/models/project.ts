@@ -2,6 +2,7 @@ import { MidiTrack } from './tracks/midi-track'
 import { Metronome} from './instruments/metronome'
 import { Recording } from './recording/recording';
 import { EventEmitter } from '@angular/core';
+import { MidiInstrument } from './instruments/midi-instrument';
 
 export class Project {
     public id: string;
@@ -42,6 +43,15 @@ export class Project {
         for (let i = 0; i < this.tracks.length; i++) {
             if (id == this.tracks[i].id) {
                 this.tracks.splice(i, 1)
+                this.updateEmitter.emit()
+            }
+        }
+    }
+
+    changeTrackInstrument(id: number, instrument: MidiInstrument) {
+        for (let i = 0; i < this.tracks.length; i++) {
+            if (id == this.tracks[i].id) {
+                this.tracks[i].instrument = instrument;
                 this.updateEmitter.emit()
             }
         }

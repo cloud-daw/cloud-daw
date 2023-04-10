@@ -1,10 +1,18 @@
 <div class="master" [ngClass] ="{'show' : isPrompted}">
     <div class="container">
-        <div class="header">
+        <div class="header" *ngIf="newTrack">
             Select an instrument:
         </div>
-        <div class="content" id="synths">
+        <div class="header" *ngIf="!newTrack">
+            Change to instrument:
+        </div>
+        <div class="content" id="synths" *ngIf="newTrack">
             <div class="instrument" id={{instrument}} *ngFor="let instrument of instruments" (click)="createTrackWithInstrument(instrument)">
+                {{instrument}}
+            </div>
+        </div>
+        <div class="content" id="synths" *ngIf="!newTrack">
+            <div class="instrument" id={{instrument}} *ngFor="let instrument of instruments" (click)="changeTrackInstrument(instrument)">
                 {{instrument}}
             </div>
         </div>

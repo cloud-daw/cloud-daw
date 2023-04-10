@@ -1,12 +1,30 @@
 import { CdkDragEnd, CdkDragRelease } from '@angular/cdk/drag-drop';
-import { Component, AfterViewInit, OnChanges, ElementRef, Renderer2, EventEmitter, Input, Output, SimpleChanges, OnInit, ViewChild, HostListener} from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnChanges,
+  ElementRef,
+  Renderer2,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+  OnInit,
+  ViewChild,
+  HostListener,
+} from '@angular/core';
 import { timer } from 'rxjs/internal/observable/timer';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import * as Tone from 'tone';
 import { CdkDragPreview } from '@angular/cdk/drag-drop';
-import { createYNoteDict, notesArray, NotesDict, yPosNotesDict } from 'src/app/lib/dicts/ynotedict';
+import {
+  createYNoteDict,
+  notesArray,
+  NotesDict,
+  yPosNotesDict,
+} from 'src/app/lib/dicts/ynotedict';
 
 @Component({
   selector: 'app-midi-note',
@@ -34,7 +52,6 @@ export class MidiNoteComponent implements OnChanges {
   @Input() midiContainerRef: Element | any;
   @Input() selectedNote: MidiNoteComponent = this;
 
-  
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
   @Output() triggerReRender = new EventEmitter<number>();
   @Output() selectedNoteChange = new EventEmitter<MidiNoteComponent>();
@@ -46,8 +63,8 @@ export class MidiNoteComponent implements OnChanges {
   public topCSS: string = `0vw`;
 
   private midiContainer: Element | any;
-  public dragPosition: any = {x: 0, y: 0};
-  
+  public dragPosition: any = { x: 0, y: 0 };
+
   public notesDict: NotesDict = yPosNotesDict;
   public isSelected: boolean = this.selectedNote == this;
   private notesArray = notesArray;
@@ -67,9 +84,8 @@ export class MidiNoteComponent implements OnChanges {
     'G#': 8,
     A: 9,
     'A#': 10,
-    B: 11
+    B: 11,
   };
-
 
   containerHeight = 6; // in em
   containerTop = 0; // in pixels
@@ -104,21 +120,18 @@ export class MidiNoteComponent implements OnChanges {
   }
   //End (TEMP GPT SOLUTION)
 
-
-
   selectCurrentNote() {
     if (this.isSelected) {
       this.isSelected = false;
-    }
-    else {
+    } else {
       this.isSelected = true;
       this.selectedNoteChange.emit(this);
     }
     this.track.instrument.instrument.triggerAttackRelease(this.data.value, 0.1);
   }
   /**
-   * 
-   * @param position 
+   *
+   * @param position
    * @returns viewport position converted from Tone.Unit.Time
    */
   convertBBSToPosition(position: Tone.Unit.Time) {
@@ -137,8 +150,8 @@ export class MidiNoteComponent implements OnChanges {
   }
 
   /**
-   * 
-   * @param position 
+   *
+   * @param position
    * @returns Tone.Unit.Time convert from viewport position
    */
   convertPositionToBBS(position: number): Tone.Unit.Time {
@@ -147,15 +160,15 @@ export class MidiNoteComponent implements OnChanges {
     const sixteenth = bbsSum % 4;
     const beat = Math.floor((bbsSum / 4) % 4);
     const bar = Math.floor(bbsSum / 16) + 1;
-  
+
     return `${bar}:${beat}:${sixteenth.toFixed(3)}` as Tone.Unit.Time;
   }
 
   /**
-   * 
+   *
    * @param event Triggers on mouse up after a note has been dragged
    * Handles logic for modifying note data based on new position
-   */ 
+   */
   onDragReleased(event: CdkDragRelease) {
     const viewportWidth = window.innerWidth;
     const noteElement = event.source.element.nativeElement;
@@ -180,41 +193,40 @@ export class MidiNoteComponent implements OnChanges {
     droppedData.release = release;
     console.log('DROPPED');
     //console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
-  
-    this.dragPosition = {x: 0, y: 0};
+
+    this.dragPosition = { x: 0, y: 0 };
 
     //update data and reRender
     this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(this.track);
     this.triggerReRender.emit(this.reRender + 1);
-
   }
-  
+
   calculateWidth(start: number, end: number) {
     return end - start;
   }
 
   keyDownActions(key: string) {
     const currentNoteIndex = this.notesArray.indexOf(this.data.value);
-    const noteTimeToArray =  {
-      attack: this.data.attack.toString().split(':'), 
-      release: this.data.release.toString().split(':')
+    const noteTimeToArray = {
+      attack: this.data.attack.toString().split(':'),
+      release: this.data.release.toString().split(':'),
     };
     const bar = {
-      attack: parseInt(noteTimeToArray.attack[0]), 
-      release: parseInt(noteTimeToArray.release[0])
+      attack: parseInt(noteTimeToArray.attack[0]),
+      release: parseInt(noteTimeToArray.release[0]),
     };
     const beat = {
-      attack: parseInt(noteTimeToArray.attack[1]), 
-      release: parseInt(noteTimeToArray.release[1])
+      attack: parseInt(noteTimeToArray.attack[1]),
+      release: parseInt(noteTimeToArray.release[1]),
     };
     const sixteenth = {
-      attack: parseInt(noteTimeToArray.attack[2]), 
-      release: parseInt(noteTimeToArray.release[2])
+      attack: parseInt(noteTimeToArray.attack[2]),
+      release: parseInt(noteTimeToArray.release[2]),
     };
     switch (key) {
       case 'ArrowUp':
-        if (currentNoteIndex < (this.notesArray.length - 1)) {
+        if (currentNoteIndex < this.notesArray.length - 1) {
           const newNote = this.notesArray[currentNoteIndex + 1];
           this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
@@ -223,16 +235,15 @@ export class MidiNoteComponent implements OnChanges {
         }
         break;
       case 'ArrowDown':
-        if (currentNoteIndex > (0)) {
+        if (currentNoteIndex > 0) {
           const newNote = this.notesArray[currentNoteIndex - 1];
           this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
           this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
           this.triggerReRender.emit(this.reRender + 1);
         }
-        break;  
+        break;
       case 'ArrowLeft':
-        
         // if (this.data.attack)
         break;
       case 'ArrowRight':
@@ -250,11 +261,11 @@ export class MidiNoteComponent implements OnChanges {
     // const modifier = 1;
     // const topOffset = getNoteValue * modifier;
 
-    const topOffset = (98 - this.notesDict[this.data.value]);
+    const topOffset = 98 - this.notesDict[this.data.value];
     //console.log(topOffset);
     //console.log('start:', start, 'end:', end);
     this.setDimensions(width, start, topOffset);
-   // console.log('attack;', this.data.attack, 'release:', this.data.release, 'left;', this.leftCSS, 'width:', this.widthCSS, 'top', this.topCSS);
+    // console.log('attack;', this.data.attack, 'release:', this.data.release, 'left;', this.leftCSS, 'width:', this.widthCSS, 'top', this.topCSS);
   }
 
   setDimensions(width: number, left: number, top: number) {
@@ -264,7 +275,7 @@ export class MidiNoteComponent implements OnChanges {
     this.widthCSS = `${width}vw`;
     this.leftCSS = `${left}vw`;
     this.topCSS = `${Math.abs(top)}%`;
-    
+
     //console.log('left', this.leftCSS, 'top', this.topCSS);
   }
 

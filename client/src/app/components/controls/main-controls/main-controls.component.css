@@ -3,7 +3,7 @@
 
 .control-bar-container {
     background-color: #313131;
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Anuphan', sans-serif;
     font-weight: 300;
     /* align-items: center; */
     height: 5em;
@@ -38,7 +38,7 @@
 
 .left-header .volume-text {
     color: white;
-    font-weight: 100;
+    font-weight: 200;
     font-size: 16px;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .right-header button {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Anuphan', sans-serif;
     background-color: #171717;
     color: white;
     font-size: 12pt;
@@ -150,10 +150,10 @@
 
 .octaveText {
     /* position: absolute; */
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 100;
+    font-family: 'Anuphan', sans-serif;
+    font-weight: 200;
     font-size: 13pt;
-    padding-top: 0.15em;
+    padding-top: 0em;
     margin-left: 0.5em;
     margin-right: 0.5em;
     padding-left: 0.75em;
@@ -164,10 +164,13 @@
 }
 
 .record-status {
+    font-family: 'Anuphan', sans-serif;
+    font-weight: 100;
+    font-size: 13pt;
     color: rgb(215, 213, 213);
     position: absolute;
-    top: 0.9em;
-    margin-left: 0.5em;
+    top: 1.5em;
+    left: 57%;
 }
 
 .octaveButton {
@@ -228,6 +231,16 @@
 
 #record-button svg:hover {
     fill: rgb(201, 0, 0);
+}
+
+#stop-button svg {
+    animation: blinker 0.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
 }
 
 

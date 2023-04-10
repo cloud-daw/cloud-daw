@@ -16,13 +16,13 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
-
+  //FOR DRAG DROP, INSTEAD OF CHANGING TRACKS TO ARRAY, MAKE AN ARRAY FROM THE TRACKS SET AND REORDER THAT WAY
   @Input() synth: any;
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
   @Input()
     set selectedTrack(track: MidiTrack) {
-      // this.selectedTrackChange.emit(track);
+      this.selectedTrackChange.emit(track);
       this._selectedTrack = track;
     }
     get selectedTrack() {
@@ -31,6 +31,8 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
 
   public editing: boolean = false;
   public placeholder: string = this.track.title;
@@ -86,6 +88,10 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
     this.track.title = title;
     this.placeholder = title;
     this.trackChange.emit(this.track);
+  }
+
+  changeTrackInstrument() {
+    this.changeInstrument.emit();
   }
 
   ngOnChanges(changes: SimpleChanges) {
