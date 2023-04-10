@@ -19,7 +19,7 @@ export class ProjectsDashboardComponent  implements OnInit{
     projects: ProjectInfo[] = [];
     projectNames = new Set<string>;
     projectIds = new Set<string>; 
-    constructor(public firebaseService: FirebaseService) {  }
+    constructor(public firebaseService: FirebaseService, public _router: Router) {  }
     
     projectName: string = '';
     project: ProjectInfo = InfoizeProject(MakeNewProject('a@a.com'));
@@ -108,4 +108,8 @@ export class ProjectsDashboardComponent  implements OnInit{
             
         })
     }
+    onLogOut(){
+        this.firebaseService.logout();
+        this._router.navigateByUrl('/login');
+    }  
 }

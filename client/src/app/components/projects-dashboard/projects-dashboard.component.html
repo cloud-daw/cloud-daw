@@ -1,5 +1,8 @@
 <div *ngIf="!openProject">
     <div class="projectDashboard">
+        <div class="projectHeader">
+            <button class="logOutBtn" (click)="onLogOut()">Log Out</button>
+        </div>
         <div class="projectDashboardContent">
             <div class="createProject">
                 <div class="createProjectContent">
