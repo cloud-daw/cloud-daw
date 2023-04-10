@@ -16,6 +16,14 @@ export function GetSynthByKeyword(keyword: string) : MidiInstrument {
             const drums = LoadSampler('drumkits/kit0');
             return new MidiInstrument('Drums', drums, 2)
         }
+        case 'Jazz Guitar': {
+            const guitar = LoadSampler('guitar/jazzguitar');
+            return new MidiInstrument('Jazz Guitar', guitar, 0.5); 
+        }
+        case 'Acoustic Guitar': {
+            const guitar = LoadSampler('guitar/acoustic');
+            return new MidiInstrument('Acoustic Guitar', guitar, 0.5); 
+        }
         default: {
             return new MidiInstrument('Pluck Synth');
         }
@@ -28,29 +36,52 @@ export function GetAllSynthKeywords(): string[] {
     'Radio Synth', //   AMSynth
     'Retro Synth', //   FMSynth
     'Vintage Synth', // MONOSynth
-    'Drums' //  Drums
+    'Drums', //  Drums
+    'Jazz Guitar',
+    'Acoustic Guitar'
   ]
 }
 
+interface AudioURLS {
+    [note: string]: string;
+}
 //only drums for now
 function LoadSampler(sample: string): Tone.Sampler {
     let loaded = false;
-    const sampler = new Tone.Sampler({
-        urls: {
-            'C4': 'kick/kick.mp3',
-            'C#4': 'snare/sidestick.mp3',
-            'D4': 'snare/base.mp3',
-            'D#4': 'snare/rimshot.mp3',
-            'E4': 'toms/low.mp3',
-            'F4': 'toms/mid.mp3',
-            'F#4': 'toms/high.mp3',
-            'G4': 'hihat/closed.mp3',
-            'G#4': 'hihat/semi.mp3',
-            'A4': 'cymbals/ride.mp3',
-            'A#4': 'cymbals/ridebell.mp3',
-            'B4': 'cymbals/crash.mp3',
+    let audioURLS: any;
+    switch (sample) {
+        case 'drumkits/kit0':
+            audioURLS = {
+                'C4': 'kick/kick.mp3',
+                'C#4': 'snare/sidestick.mp3',
+                'D4': 'snare/base.mp3',
+                'D#4': 'snare/rimshot.mp3',
+                'E4': 'toms/low.mp3',
+                'F4': 'toms/mid.mp3',
+                'F#4': 'toms/high.mp3',
+                'G4': 'hihat/closed.mp3',
+                'G#4': 'hihat/semi.mp3',
+                'A4': 'cymbals/ride.mp3',
+                'A#4': 'cymbals/ridebell.mp3',
+                'B4': 'cymbals/crash.mp3'
+            }
+            break;
+        case 'guitar/jazzguitar':
+            audioURLS = {
+                'C4': 'jazz-guitar.mp3',
+            }
+            break;
+        case 'guitar/acoustic':
+            audioURLS = {
+                'C4': 'acoustic.wav',
+            }
+            break;
+        default:
+            break;
+    }
 
-        },
+    const sampler = new Tone.Sampler({
+        urls: audioURLS,
         baseUrl: `../../../../assets/audio/${sample}/`,
         onload: () => {
             console.log('done loading');

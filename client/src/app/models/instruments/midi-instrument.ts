@@ -20,7 +20,7 @@ export class MidiInstrument {
         this.name = name != '' ? name : 'Default Synth';
         this.sound = "" //to load for later
         this.synth = synth ?? {};
-        if (name != 'Drums') {
+        if (name != 'Drums' && name != 'Jazz Guitar' && name != 'Acoustic Guitar') {
             this.instrument = new Tone.PolySynth(this.synth).toDestination();
         }
         else {
