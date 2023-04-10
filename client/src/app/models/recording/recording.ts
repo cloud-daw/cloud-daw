@@ -1,7 +1,6 @@
 import { Note } from './note';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import * as Tone from 'tone'
-import { MakeKeyDict } from 'src/app/lib/dicts/keydict';
 
 enum play {
     start = 0,
@@ -55,7 +54,8 @@ export class Recording {
         private makeDuration(attack: Tone.Unit.Time, release: Tone.Unit.Time) : Tone.Unit.Time {
             let a = Tone.Time(attack).toSeconds();
             let r = Tone.Time(release).toSeconds();
-            return (r - a) + this.synth.release;
+            let dur = (r - a) + this.synth.release
+            return dur.toFixed(3);
         }
 
     /**
@@ -122,5 +122,11 @@ export class Recording {
             maxOverlap = Math.max(maxOverlap, currOverlap);
         }
         this.maxOverlaps = maxOverlap;
+    }
+
+    public UpdateDurations() {
+        for (let i = 0; i < this.data.length; i++) {
+            this.data[i].duration = this.makeDuration(this.data[i].attack, this.data[i].release)
+        }
     }
 }
