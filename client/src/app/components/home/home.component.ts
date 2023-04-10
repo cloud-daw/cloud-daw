@@ -270,8 +270,10 @@ export class HomeComponent implements AfterViewInit, OnInit{
     if (!this.isRecording) {
       this.selectedTrack.instrument = instrument;
       this.setSelectedTrack(this.selectedTrack);
-      this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
-      this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
+      this.recordings.get(this.selectedTrack.id)!.synth = instrument;
+      // this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
+      // this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
+      // this.selectedTrack.midi.UpdateOverlaps();
       this.showSelectInstrument = false;
     }
   }
