@@ -1,5 +1,5 @@
 import { first } from 'rxjs/operators';
-import { Component, AfterViewInit, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit,Input, Renderer2, EventEmitter, Output, ElementRef, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, HostListener, SimpleChanges, ViewChildren, QueryList, OnInit,Input, Renderer2, EventEmitter, Output, ElementRef, ViewChild, AfterViewChecked  } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Metronome } from '../../models/instruments/metronome';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'; //for now, do here -> in future, put in track
@@ -44,7 +44,7 @@ export enum BlockMode {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css',]
 })
-export class HomeComponent implements AfterViewInit, OnInit{
+export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   
   @ViewChildren('blockRef') blockRefs?: QueryList<MidiBlockComponent>;
   // @ViewChild('midiContainerRef', { static: false }) midiContainerRef: ElementRef | any;
@@ -202,13 +202,24 @@ export class HomeComponent implements AfterViewInit, OnInit{
   }
 
   ngAfterViewInit() {
-    // this.midiContainerRef = this._renderer.selectRootElement('#midiContainer');
-    // this.midiContainerRef = this.midiContainerElementRef;
-    this.midiContainerRefs?.changes.subscribe((changes: QueryList<Element | any>)  => {
-      this.midiContainerRef = changes.first.nativeElement;
-      console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
-    });
+    // // this.midiContainerRef = this._renderer.selectRootElement('#midiContainer');
+    // // this.midiContainerRef = this.midiContainerElementRef;
+    // this.midiContainerRefs?.changes.subscribe((changes: QueryList<Element | any>)  => {
+    //   this.midiContainerRef = changes.first.nativeElement;
+    //   console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIED:', this.midiContainerRef.nativeElement);
+    // });
   }
+
+  ngAfterViewChecked() {
+    if (!this.midiContainerRef) {
+      const firstRef = this.midiContainerRefs?.first;
+      if (firstRef) {
+        this.midiContainerRef = firstRef.nativeElement;
+        console.log('>?>?>?>?>?>?>?>?>?>?>?>?>VIEW INITIALIZED:', this.midiContainerRef.nativeElement);
+      }
+    }
+  }
+  
 
   onReRender(num: number) {
     this.reRender = num;
