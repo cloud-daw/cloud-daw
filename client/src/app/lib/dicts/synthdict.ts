@@ -44,9 +44,9 @@ export function GetSynthByKeyword(keyword: string) : MidiInstrument {
             const inst = LoadSampler('piano/grandpiano');
             return new MidiInstrument('Grand Piano', inst, 0.3, true, 'piano/grandpiano'); 
         }
-        case 'Lofi Piano': {
+        case 'Electric Piano': {
             const inst = LoadSampler('piano/electric');
-            return new MidiInstrument('Lofi Piano', inst, 0.3, true, 'piano/electric'); 
+            return new MidiInstrument('Electric Piano', inst, 0.3, true, 'piano/electric'); 
         }
         case 'String Synth': {
             const inst = LoadSampler('synth/strings');
@@ -55,6 +55,20 @@ export function GetSynthByKeyword(keyword: string) : MidiInstrument {
         case 'Pinch Lead Synth': {
             const inst = LoadSampler('synth/lead');
             return new MidiInstrument('Pinch Lead Synth', inst, 0.3, true, 'synth/lead'); 
+        }
+        case 'House Organ': {
+            const inst = LoadSampler('organ/house');
+            return new MidiInstrument('House Organ', inst, 0.3, true, 'organ/house'); 
+        }
+        case 'Electric Organ': {
+            const loadurl = 'organ/electric'
+            const inst = LoadSampler(loadurl);
+            return new MidiInstrument('Electric Organ', inst, 0.3, true, loadurl); 
+        }
+        case 'Jazz Organ': {
+            const loadurl = 'organ/jazz'
+            const inst = LoadSampler(loadurl);
+            return new MidiInstrument('Jazz Organ', inst, 0.3, true, loadurl); 
         }
         default: {
             return new MidiInstrument('Pluck Synth');
@@ -66,10 +80,12 @@ export function GetAllSynthKeywords(): string[] {
     return [
     'Drums', //  Drums
     'Grand Piano',
-    'Lofi Piano',
+    'Electric Piano',
     'Jazz Guitar',
     'Acoustic Guitar',
     'Funky Guitar',
+    'Jazz Organ',
+    'Electric Organ',
     'Cello',
     'String Synth',
     'Pinch Lead Synth',
@@ -168,7 +184,7 @@ function getAudioUrls(sample: string) {
             break;
         case 'piano/electric':
             audioURLS = {
-                'G3': 'g4.wav',
+                'D3': 'g4.wav',
             }
             break;
         case 'synth/strings':
@@ -184,6 +200,21 @@ function getAudioUrls(sample: string) {
         case 'synth/lead':
             audioURLS = {
                 'C4': 'pinch-c3.mp3',
+            }
+            break;
+        case 'organ/house':
+            audioURLS = {
+                'B4': 'house-b.mp3',
+            }
+            break;
+        case 'organ/electric':
+            audioURLS = {
+                'C4': 'electric-organ-c.mp3',
+            }
+            break;
+        case 'organ/jazz':
+            audioURLS = {
+                'C4': 'jazz-c.mp3',
             }
             break;
         default:

@@ -287,6 +287,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     const instrument = GetSynthByKeyword(inst);
     if (!this.isRecording) {
       this.selectedTrack.instrument = instrument;
+      this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
       this.setRecordingToTrack(this.selectedTrack.id); 
       if (this.recordings.has(this.selectedTrack.id)) {
         this.recordings.get(this.selectedTrack.id)!.synth = instrument;
