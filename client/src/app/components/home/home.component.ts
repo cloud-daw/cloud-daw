@@ -171,8 +171,9 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
-  public isExpanded = false;
-  public showSelectInstrument = false;
+  public isExpanded: boolean = false;
+  public showSelectInstrument: boolean = false;
+  public showUploadAudio: boolean = false;
 
   public octave = 4;
   public showEditor: boolean = false;
@@ -245,11 +246,29 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
+  promptNewAudioTrack(e: Event) {
+    // this.newAudioTrack = true;
+    this.onFileInput(e.target);
+    this.showUploadAudio = !this.showUploadAudio;
+    this.createNewAudioTrack();
+  }
+
   promptChangeTrackInstrument() {
     this.newTrackInstrument = false;
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
+  createNewAudioTrack() {
+    if (!this.isRecording) {
+      this.trackIdCounter++;
+      const newAudioTrack = new MidiTrack('Untitled Track', this.trackIdCounter, new MidiInstrument(''), true, true);
+      this.tracks.add(newAudioTrack);
+      this.project.addTrack(newAudioTrack);
+      this.setSelectedTrack(newAudioTrack);
+    }
+  }
+
+  //new Midi Track
   newTrack(instrument: MidiInstrument) {
     if (!this.isRecording) {
       this.trackIdCounter++;

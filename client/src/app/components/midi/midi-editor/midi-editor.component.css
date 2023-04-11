@@ -1,19 +1,53 @@
 .container {
-    position: fixed;
-    top: 35%;
-    left: 20%;
-    height: 65%;
-    /* width: 10000em; */
-    background-color: #292929;
-    z-index: 50;
-    opacity: 0.9;
-    /* margin: auto; */
+    /* position: absolute; */
+    height: 100%;
+    width: 100%;
 }
 
 .content {
-    margin: auto;
+    position: absolute;
+    height: 100%;
+    width: 80%;
+    left: 20%;
+}
+
+.content .midi-notes-container {
+    margin-top: 1em;
 }
 
 .header {
     color: white;
+}
+
+.control-panel {
+    display: block;
+    border: 1px solid blue;
+    position: absolute;
+    height: 100%;
+    width: 20%;
+    left: 0;
+}
+
+.control-panel .quantizer-container {
+    float: right;
+    width: 30%;
+    border: 1px solid green;
+}
+
+.quantize-button {
+    display: block;
+    font-weight: 100;
+    color: white;
+    font-size: 12pt;
+    background-color:rgb(68, 68, 68);
+    border-radius: 15px;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    padding-inline: 0.75em;
+    margin-right: 1em;
+    margin-top: 1em;
+}
+
+.quantize-button:hover {
+    background-color:rgb(98, 98, 98);
 }
