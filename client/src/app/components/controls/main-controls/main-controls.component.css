@@ -60,10 +60,12 @@
     background-color: #171717;
     color: white;
     font-size: 12pt;
+    height: 3em;
     font-weight: 200;
     color: rgb(215, 213, 213);
     margin-right: 0.1em;
     display: flex;
+    align-items: center;
     padding-inline: 1em;
     border-radius: 0px;
     outline: none;
@@ -76,24 +78,18 @@
     outline: none;
 }
 
-#bounce-button {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+.right-header button svg {
+
 }
 
-#bounce-button svg {
-    margin-right: 0.5em;
-    margin-left: -0.25em;
-
+#bounce-button {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
 
 #logout-button {
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-}
-
-#logout-button i {
-    margin-right: 0.5em;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .center-header {

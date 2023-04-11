@@ -630,6 +630,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   async ngOnInit(){
+    
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
     
     this.project = HydrateProjectFromInfo(this.projectInfo);
@@ -645,12 +646,14 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
+
+    this.loading = false; //putting this below the next block breaks for some reason
+
     if (this.isTutorial) {
         nextBtn.style.display = "block";
         instructions.style.display = "block";
     }
 
-    this.loading = false;
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
   }
