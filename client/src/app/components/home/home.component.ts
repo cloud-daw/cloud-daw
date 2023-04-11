@@ -473,6 +473,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.octave = this.selectedTrack.instrument.currentOctave;
     console.log('track changes are being made');
   }
+  
+  onTrackChange(track: MidiTrack) {
+    this.project.save();
+  }
 
   onUndo(event: number) {
     console.log('undo clicked');
