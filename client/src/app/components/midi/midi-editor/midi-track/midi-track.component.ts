@@ -85,6 +85,9 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   public solo() {
     if (this.selectedTrack == this.track) {
       // this.isSolo = true;
+      if (this.selectedTrack.isMute) {
+        this.selectedTrack.MuteTrack();
+      }
       let tracks = this.tracks;
       let exception = this.selectedTrack;
       let resultSet = new Set([...tracks].filter(element => element !== exception));
