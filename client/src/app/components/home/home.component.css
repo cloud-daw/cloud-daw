@@ -72,10 +72,44 @@
     font-weight: 200;
     color: #171717;
   }
+
+  .project-header {
+    position: relative;
+    height: 1.5em;
+    display: flex;
+    /* text-align: center; */
+    align-items: center;
+    background-color: #313131;
+  }
+
+  .project-header .logo {
+    padding-top: 0.5em;
+    float: left;
+    margin-left: 2em;
+    color: rgb(222, 222, 222);
+    font-size: 14pt;
+    font-weight: 300;
+  }
+
+  .project-header .project-name {
+    padding-top: 0.25em;
+    margin: auto;
+    color: rgb(222, 222, 222);
+    font-size: 12pt;
+    font-weight: 100;
+  }
+
+  .project-header .right {
+    padding-top: 0.5em;
+    float: right;
+    margin-right: 2em;
+    color: rgb(222, 222, 222);
+    font-size: 14pt;
+    font-weight: 300;
+  }
   
-  .header {
-    margin-left: -0.5em;
-    height: 5em;
+  .control-header {
+    height: 4em;
   }
 
   .white.active {
