@@ -8,9 +8,6 @@ enum controlStatus {
   reset = 2,
 }
 
-//! N.B. : small bug with behavior : drag slider -> hit rewind without having played/pause first, doesn't rewind
-//! But it does if they've been hit at any point so not crucial yet
-
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',

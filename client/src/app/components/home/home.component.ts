@@ -436,6 +436,13 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     //if (this.octave > 0) this.octave--;
   }
 
+  onTempoChange(event: number) {
+    console.log('catching change tempo', event);
+    this.metronome.SetTempo(event);
+    this.project.tempo = event;
+    this.project.save();
+  }
+
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
