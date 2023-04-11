@@ -7,7 +7,7 @@ import { Project } from '../../models/project'
 import { ProjectInfo } from 'src/app/models/db/project-info';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
-import { SchedulePlayback } from '../../services/recording/playback-service.service';
+import { SchedulePlayback, ScheduleAudioPlayback } from '../../services/recording/playback-service.service';
 import { BounceProjectToMP3 } from 'src/app/services/recording/bounce-service.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
@@ -90,8 +90,9 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   onTrackUpdated(track: MidiTrack) {
+    console.log('track updated');
     this.selectedTrack = track;
-    this.project.save();
+    //this.project.save();
     console.log(this.project);
     // console.log('from home', this.selectedTrack.midi.data);
   }
@@ -188,10 +189,6 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   public newTrackInstrument: boolean = false;
 
-  onFileInput(event: any) {
-    this.audio.AddAudio(event.files[0])
-  }
-
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -246,11 +243,12 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
-  promptNewAudioTrack(e: Event) {
+  promptNewAudioTrack(e: any) {
     // this.newAudioTrack = true;
-    this.onFileInput(e.target);
-    this.showUploadAudio = !this.showUploadAudio;
-    this.createNewAudioTrack();
+    if (e.target && e.target.files.length > 0) {
+      this.showUploadAudio = !this.showUploadAudio;
+      this.createNewAudioTrack(e);
+    }
   }
 
   promptChangeTrackInstrument() {
@@ -258,13 +256,15 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
-  createNewAudioTrack() {
+  createNewAudioTrack(e: any) {
     if (!this.isRecording) {
       this.trackIdCounter++;
-      const newAudioTrack = new MidiTrack('Untitled Track', this.trackIdCounter, new MidiInstrument(''), true, true);
-      this.tracks.add(newAudioTrack);
-      this.project.addTrack(newAudioTrack);
-      this.setSelectedTrack(newAudioTrack);
+      const newAudioTrack = new MidiTrack('Untitled Audio Track', this.trackIdCounter, new MidiInstrument(''), true, true);
+      newAudioTrack.setAudio(e.target.files[0], () => {
+        this.tracks.add(newAudioTrack);
+        this.project.addTrack(newAudioTrack);
+        this.setSelectedTrack(newAudioTrack);
+      })
     }
   }
 
@@ -337,18 +337,18 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
-      // this.selectedTrack.instrument.AdjustVolume(-100);
-      // this.selectedTrack.instrument.Play('a');
-      // this.selectedTrack.instrument.Release('a');
-      // setTimeout(() => {
-      //   this.selectedTrack.instrument.AdjustVolume(0);
-      // }, 500);
       this.isPlaying = true;
       this.metronome.ClearTransport();
-      Array.from(this.recordings.values()).forEach((r: Recording) => {
-        SchedulePlayback(r);
-        console.log('recording', r);
-      });
+      let thing : {isAudio: boolean, recording: Recording | undefined, audio: AudioTrack | undefined};
+      this.tracks.forEach((track) => {
+        thing = track.GetThingForPlayback();
+        if (thing.isAudio && thing.audio) {
+          ScheduleAudioPlayback(thing.audio)
+        }
+        else if (thing.recording) {
+          SchedulePlayback(thing.recording)
+        }
+      })
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
@@ -414,6 +414,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.setRecordingToTrack(this.selectedTrack.id);
+    this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.currentRecording)
   }
 
   /**
@@ -426,7 +427,6 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
-    this.project.updateTrackRecordingAtId(id, this.currentRecording)
   }
 
   /**
@@ -467,6 +467,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
+    this.project.masterVolume = this.masterVolume;
+    this.project.save();
   }
 
   bounceToMP3() {

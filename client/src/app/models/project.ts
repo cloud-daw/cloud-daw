@@ -36,7 +36,7 @@ export class Project {
 
     addTrack(track: MidiTrack) {
         this.tracks.push(track)
-        //no emitter b/c it is handled in update recording, which runs when new track created
+        this.updateEmitter.emit()
     }
 
     deleteTrack(id: number) {

@@ -1,6 +1,7 @@
 import * as Tone from 'tone';
 import { SynthOptions } from 'tone';
 import { MakeKeyDict } from '../../lib/dicts/keydict';
+import { AudioTrack } from './audio-track';
 
 //monophonic (poly requires refactor) instrument class
 
@@ -130,7 +131,7 @@ export class MidiInstrument {
         
     }
 
-    // Mute(status: boolean) {
-    //     this.instrument.volume.
-    // }
+    Mute(status: boolean) {
+        
+    }
 }
