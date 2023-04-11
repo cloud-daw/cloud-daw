@@ -155,7 +155,7 @@ function getAudioUrls(sample: string) {
             break;
         case 'guitar/funky':
             audioURLS = {
-                'C4': 'peroxide.mp3',
+                'D#4': 'peroxide.mp3',
             }
             break;
         case 'sansula':

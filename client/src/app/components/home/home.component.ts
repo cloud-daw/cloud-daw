@@ -195,6 +195,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
     this.tempo = this.project.tempo;
+    this.timeoutValue = (60 / this.tempo) * 1000; //in ms
     this.signature = this.project.signature;
     this.metronome = this.project.metronome;
     this.selectedTrack = this.project.tracks[0]
@@ -440,6 +441,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     console.log('catching change tempo', event);
     this.metronome.SetTempo(event);
     this.project.tempo = event;
+    this.tempo = event;
     this.project.save();
   }
 
