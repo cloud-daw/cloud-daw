@@ -1,8 +1,6 @@
 <div *ngIf="!loading" class="body">
     <div class="project-header">
-        <!-- <div class="logo">Cloud DAW</div> -->
         <div class="project-name">{{project.name}}</div>
-        <!-- <div class="right">Cloud DAW</div> -->
     </div>
     <div class='control-header'>
         <app-main-controls 
@@ -21,6 +19,7 @@
             [octave]="octave"
             (octaveUp)="onIncreaseOctave()"
             (octaveDown)="onDecreaseOctave()"
+            (tempoChanged)="onTempoChange($event)"
             >
             <!-- <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button> -->
         </app-main-controls>
@@ -72,14 +71,35 @@
     <div class="production-container">
         <div class='tracks-container' id="tracks">
             <div class="tracks-header">
-                <button class="new-track-button" (click)="promptNewTrackInstrument()">
+                <button class="new-track-button" type="button" [matMenuTriggerFor]="menu">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4.11765 0.882353C4.11765 0.395043 4.5127 0 5.00001 0C5.48732 0 5.88236 0.395043 5.88236 0.882353V9.11765C5.88236 9.60496 5.48732 10 5.00001 10C4.5127 10 4.11765 9.60496 4.11765 9.11765V0.882353Z" fill="white"/>
                         <path d="M0.882353 5.88235C0.395043 5.88235 -5.81111e-09 5.4873 0 4.99999C5.81111e-09 4.51268 0.395043 4.11764 0.882353 4.11764H9.11765C9.60496 4.11764 10 4.51268 10 4.99999C10 5.4873 9.60496 5.88235 9.11765 5.88235H0.882353Z" fill="white"/>
                     </svg>
                     New Track
                 </button>
-                <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()">
+                <mat-menu class='dropdown-menu' #menu="matMenu">
+                    <div class="dropdown-container">
+                        <div class="dropdown-button" *ngFor="let instrument of instruments">
+                            <button class="dropdown-item" (click)="newTrack(instrument)">
+                                {{instrument}}
+                            </button>
+                        </div>
+                    </div>
+                </mat-menu>
+                <!-- <mat-menu class='dropdown-menu' #menu="matMenu">
+                    <button class="dropdown-item" (click)="promptNewTrackInstrument()">
+                        New Instrument Track
+                    </button>
+                    <button class="dropdown-item" (click)="fileInput.click()">
+                        New Audio Track
+                        <input #fileInput type="file" accept=".mp3,.wav" (change)="promptNewAudioTrack($event)" style="display:none;" />
+                    </button>
+                </mat-menu>> -->
+                <button type="button" class="expand-piano" id="togglePiano" (click)="toggleExpand()"
+                    matTooltip="Show/hide key pad"
+                    matTooltipClass="custom-tooltip"
+                >
                     <svg width="19" height="12" viewBox="0 0 19 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 1C0 0.447715 0.447715 0 1 0H3C3.55228 0 4 0.447715 4 1V11C4 11.5523 3.55228 12 3 12H1C0.447715 12 0 11.5523 0 11V1Z" fill="#D9D9D9"/>
                         <path d="M5 1C5 0.447715 5.44772 0 6 0H8C8.55228 0 9 0.447715 9 1V11C9 11.5523 8.55228 12 8 12H6C5.44772 12 5 11.5523 5 11V1Z" fill="#D9D9D9"/>
@@ -91,23 +111,27 @@
                     </svg> 
                 </button>
             </div>
-            <app-select-instrument
+            <!-- <app-select-instrument
                 [newTrack]="newTrackInstrument"
                 (createTrack)="newTrack($event)"
                 [isPrompted]="showSelectInstrument"
                 (modifyTrack)="changeTrackInstrument($event)"
-            >
-            </app-select-instrument>
+            > -->
+            <!-- </app-select-instrument> -->
             <div class="tracks-subContainer" *ngFor="let track of tracks">
                 <app-midi-track 
                     [track]="track"
                     [tracks]="tracks"
+                    [instruments]="instruments"
                     [(selectedTrack)]="selectedTrack"
                     (onDelete)="onDeleteTrack($event)"
+                    (trackChange)="onTrackChange($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
                     [isRecording]="isRecording"
                     (click)="setSelectedTrack(track)"
                     (changeInstrument)="promptChangeTrackInstrument()"
+                    (newTrackEmitter)="newTrack($event)"
+                    (changeTrackInstrumentEmitter)="changeTrackInstrument($event)"
                     (editEmitter)="onEditTrackName($event)"
                 >
                 </app-midi-track>
@@ -146,23 +170,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="midi-editor-container">
-                <app-midi-editor
-                    [track]="selectedTrack"
-                    [vw]="maxVW"
-                    [isRecording]="isRecording"
-                    [(midi)]="selectedTrack.midi.data"
-                    (closeEditor)="closeEditor($event)"
-                    [midiContainerRef]="midiContainerRef"
-                    [reRender]="reRender"
-                    (triggerReRender)="onReRender($event)"
-                    *ngIf="showEditor"
-                    (trackUpdated)="onTrackUpdated($event)"
-                    id="midi-editor"
-                >
-                </app-midi-editor>
-            </div>
         
         </div>
         
@@ -174,3 +181,18 @@
     </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>
+<div class="midi-editor-container" *ngIf="showEditor">
+    <app-midi-editor
+        [track]="selectedTrack"
+        [vw]="maxVW"
+        [isRecording]="isRecording"
+        [(midi)]="selectedTrack.midi.data"
+        (closeEditor)="closeEditor($event)"
+        [midiContainerRef]="midiContainerRef"
+        [reRender]="reRender"
+        (triggerReRender)="onReRender($event)"
+        (trackUpdated)="onTrackUpdated($event)"
+        id="midi-editor"
+    >
+    </app-midi-editor>
+</div>

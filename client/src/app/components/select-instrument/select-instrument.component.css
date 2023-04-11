@@ -10,15 +10,15 @@
 }
 
 .container {
-    border-top: 0.5px solid #646464;
+    border-top: 0.5px solid #4a4a4a;
     width: 100%;
     /* border: 1px solid red; */
-    background-color: #242424;
+    background-color: #171717;
     height: 0em;
-    box-shadow: inset 0px 7px 15px rgba(0, 0, 0, 0.4);
     color: white;
     font-family: 'Anuphan', sans-serif;
-    font-weight: 300;
+    font-size: 12pt;
+    font-weight: 100;
     visibility: hidden;
     overflow: auto;
 }
@@ -33,16 +33,34 @@
 }
 
 .instrument {
+    font-size: 10pt;
     width: 100%;
-    border-top: 0.5px solid #646464;
+    border-top: 0.5px solid #4a4a4a;
     border-width: 60%;
     /* border-bottom: 0.5px solid #646464; */
-    padding: 0.5em;
+    padding: 1em;
     text-align: center;
+    margin: auto;
 }
 
 .instrument:hover {
     background-color: #303030;
     cursor: pointer;
+}
+
+::ng-deep .dropdown-menu {
+    background-color: #171717;
+}
+
+.dropdown-item {
+    background-color: #171717;
+    color: white;
+    padding: 1em;
+    font-size: 10pt;
+    font-weight: 100;
+}
+
+.dropdown-item:hover {
+    background-color: #353535;
 }
 

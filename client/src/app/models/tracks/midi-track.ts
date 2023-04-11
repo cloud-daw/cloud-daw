@@ -2,6 +2,9 @@ import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import { Recording } from '../recording/recording';
 import { Note } from '../recording/note';
+import { FixedSizeVirtualScrollStrategy } from '@angular/cdk/scrolling';
+
+import { AudioTrack } from '../instruments/audio-track';
 
 // Define a clip interface to hold information about each MIDI clip
 export interface Clip {
@@ -30,9 +33,10 @@ export class MidiTrack {
     selected: boolean;
     isMute: boolean;
     effects: string[] = [];
+    isAudio: boolean;
     midi: Recording = new Recording(new MidiInstrument(''));
-    clips: Clip[] = [];
-    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, volume: number = 0, effects: string[] = []) {
+    audio: AudioTrack | undefined;
+    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, isAudio: boolean = false, volume: number = 0, effects: string[] = []) {
         this.title = title;
         this.id = id;
         this.instrument = instrument;
@@ -40,6 +44,7 @@ export class MidiTrack {
         this.effects = effects;
         this.volume = volume;
         this.volumeLevel = this.volume + 56;
+        this.isAudio = isAudio;
         this.isMute = false;
         this.ChangeVolume(this.volume);
     }
@@ -63,6 +68,18 @@ export class MidiTrack {
         this.midi = new Recording(this.instrument, notes);
     }
 
+    public setAudio(file: File, callback: () => void ) {
+        if (this.isAudio && this.audio) this.audio.AddAudio(file, callback);
+    }
+
+    public GetThingForPlayback() : {isAudio: boolean, recording: Recording | undefined, audio: AudioTrack | undefined} {
+        if (this.isAudio && this.audio) return { isAudio: true, recording: undefined, audio: this.audio };
+        else return { isAudio: false, recording: this.midi, audio: undefined };
+    }
+
+    // public MuteTrack(status: boolean) {
+    //     this.instrument.Mute(status);
+    // }
     public MuteTrack() {
         if(this.isMute == false) {
             this.ChangeVolume(-100);

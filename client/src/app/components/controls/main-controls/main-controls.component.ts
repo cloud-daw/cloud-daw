@@ -1,11 +1,12 @@
-import { Component, Output, Input, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Metronome } from '../../../models/instruments/metronome';
 import * as Tone from 'tone';
 
 @Component({
   selector: 'app-main-controls',
   templateUrl: './main-controls.component.html',
-  styleUrls: ['./main-controls.component.css']
+  styleUrls: ['./main-controls.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MainControlsComponent {
   @Output() play: EventEmitter<boolean> = new EventEmitter();
@@ -21,6 +22,7 @@ export class MainControlsComponent {
   @Output() bounce: EventEmitter<any> = new EventEmitter();
   @Output() octaveUp: EventEmitter<number> = new EventEmitter<number>();
   @Output() octaveDown: EventEmitter<number> = new EventEmitter<number>();
+  @Output() tempoChanged: EventEmitter<number> = new EventEmitter<number>();
   
   @Input() isRecording: boolean = false;
 
@@ -30,6 +32,10 @@ export class MainControlsComponent {
   @Input() octave: number = 4;
 
   public dbLevel: number = 0;
+
+  editTempo: boolean = false;
+  tempoBtnMessage: string = "Edit"
+  changeTempoValue: number = this.metronome.tempo;
   constructor() {}
 
   clickPlay() {
@@ -80,6 +86,39 @@ export class MainControlsComponent {
 
   onOctaveDown() {
     this.octaveDown.emit();
+  }
+
+  handleEditTempo() {
+    this.editTempo = !this.editTempo;
+    if (this.editTempo) {
+      this.tempoBtnMessage = "Set"
+    }
+    else {
+      this.tempoBtnMessage = "Edit"
+      this.tempoChanged.emit(Math.round(this.changeTempoValue));
+    }
+  }
+
+  onEditTempo(newTempoEvent: any) {
+    if (this.validateTempoInput(newTempoEvent.target.value)) {
+      console.log('validated tempo', newTempoEvent.target.value)
+      this.changeTempoValue = parseInt(newTempoEvent.target.value)
+      this.changeTempoValue = Math.round(this.changeTempoValue);
+    } else {
+      console.log('invalid tempo given')
+    }
+  }
+
+  validateTempoInput(str: string) : boolean {
+    for (let i = 0; i < str.length; i++) {
+      if (parseInt(str.charAt(i)) >= 0) {
+        //do nothing
+      }
+       else {
+        return false;
+       }
+    }
+    return true;
   }
 
   /**

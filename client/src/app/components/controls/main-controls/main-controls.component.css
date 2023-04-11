@@ -78,9 +78,40 @@
     outline: none;
 }
 
-.right-header button svg {
-
+.custom-tooltip {
+    background: #272727;
+    background-color: #171717;
+    fill: #171717;
+    background-image: none;
+    color: white;
+    font-size: 10pt;
+    font-weight: 100;
 }
+
+.tempo-edit {
+    color: white;
+    font-weight: 100;
+    margin-left: 0.5em;
+}
+
+.tempo-edit-input {
+    background-color: #222222;
+    color: white;
+    border: none;
+    font-weight: 100;
+    width: 3em;
+    height: 2em;
+}
+
+.tempo-edit-input:focus {
+    background-color: #222222;
+    border: none;
+    font-weight: 100;
+    outline: none;
+    width: 3em;
+    height: 2em;
+}
+
 
 #bounce-button {
     border-top-left-radius: 25px;
@@ -136,19 +167,24 @@
     align-items: center;
     position: relative;
     color: white;
-    /* display: inline-block; */
-    align-items: center;
-    /* border: 1px solid red; */
-    float: right;
     margin-right: 0em;
     width: 30%;
+}
+
+.tempo-container .octaveText {
+    margin-left: -3em;
+    margin-right: -0.25em;
+}
+
+.tempo-number {
+    font-weight: 100;
 }
 
 .octaveText {
     /* position: absolute; */
     font-family: 'Anuphan', sans-serif;
     font-weight: 200;
-    font-size: 13pt;
+    font-size: 12pt;
     padding-top: 0em;
     margin-left: 0.5em;
     margin-right: 0.5em;
@@ -157,6 +193,10 @@
     height: 2em;
     /* background-color:#242323; */
     border-radius: 15px;
+}
+
+.octaveText:hover {
+    cursor: default;
 }
 
 .record-status {

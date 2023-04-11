@@ -31,7 +31,8 @@ export class MidiNotesContainerComponent implements OnChanges {
   @Input() reRender: number = 0;
 
   @Output() triggerReRender: EventEmitter<number> = new EventEmitter();
-  @Output() trackUpdated = new EventEmitter<MidiTrack>();
+  @Output() trackUpdated: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Output() selectedNoteChange: EventEmitter<MidiNoteComponent> = new EventEmitter<MidiNoteComponent>();
 
   //@ViewChild(MidiNoteComponent, { static: false }) noteComponent?: MidiNoteComponent;
 
@@ -46,10 +47,6 @@ export class MidiNotesContainerComponent implements OnChanges {
   public noteColor = this.editMode ? '#00ff62' : 'white';
   public borderCSS = this.editMode ? '0.5px solid black' : '0.5px solid white';
   public selectedNote: MidiNoteComponent = new MidiNoteComponent();
-
-  // selectCurrentNote(event: any) {
-  //   this.selectedNote = event;
-  // }
 
   onTrackUpdated(track: MidiTrack) {
     this.track = track;
@@ -66,12 +63,7 @@ export class MidiNotesContainerComponent implements OnChanges {
 
   onSelectedNoteChange(note: MidiNoteComponent) {
     this.selectedNote = note;
-  }
-
-  onQuantizeRecording(division: number) {
-    QuantizeRecording(this.track.midi, division);
-    this.trackUpdated.emit(this.track);
-    this.triggerReRender.emit(this.reRender+1);
+    this.selectedNoteChange.emit(note);
   }
 
   extractMinMax() : number[] {

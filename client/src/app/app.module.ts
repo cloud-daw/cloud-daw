@@ -26,6 +26,8 @@ import { MidiNoteComponent } from './components/midi/midi-editor/notes/midi-note
 import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
+import { MatMenuModule } from '@angular/material/menu';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,8 @@ import { ProjectsDashboardComponent } from './components/projects-dashboard/proj
     HttpClientModule,
     BrowserAnimationsModule,
     MatSliderModule,
+    MatMenuModule,
+    MatTooltipModule,
     AngularFireModule.initializeApp({
         apiKey: environment.firebase.apiKey,
         authDomain: environment.firebase.authDomain,

@@ -1,4 +1,4 @@
-import { Component, Renderer2, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
+import { Component, Renderer2, AfterViewInit, AfterViewChecked, Input, Output, EventEmitter, OnChanges, SimpleChanges, HostListener } from '@angular/core';
 import { style, animate, AnimationBuilder, AnimationFactory, AnimationPlayer } from '@angular/animations';
 import { PositionDict } from 'src/app/lib/dicts/posdict';
 
@@ -8,15 +8,12 @@ enum controlStatus {
   reset = 2,
 }
 
-//! N.B. : small bug with behavior : drag slider -> hit rewind without having played/pause first, doesn't rewind
-//! But it does if they've been hit at any point so not crucial yet
-
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.css'],
 })
-export class SliderComponent implements AfterViewInit, OnChanges {
+export class SliderComponent implements AfterViewChecked, OnChanges {
   @Input() bars: number = 16;
   @Input() bpm: number = 120;
   @Input() controlEvent: number = 2;
@@ -45,19 +42,28 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     left: 0
   };
   public sliderWidth = 0;
+  viewChecked: boolean = false;
   constructor(private _animBuilder: AnimationBuilder, private _renderer: Renderer2) { }
-  ngAfterViewInit() {
-    this._slider = this._renderer.selectRootElement('#slider');
-    this.startDragTransform = this.getCurrTransform();
-    this.startingPosition = this.getCurrVWPos();
-    this.maxVW = 100 - this.startingPosition;
-    this.sPos.emit(this.maxVW);
-    this.posDict = new PositionDict(this.maxVW, this.startingPosition, this.bars, this.signature);
-    this.setTransformOnPosition(this.startingPosition)
+
+  ngAfterViewChecked() {
+      if (!this.viewChecked) {
+        setTimeout(() => {
+          this._slider = this._renderer.selectRootElement('#slider');
+          this.startDragTransform = this.getCurrTransform();
+          this.startingPosition = this.getCurrVWPos();
+          this.maxVW = 100 - this.startingPosition;
+          console.log("???inintiation?//?", this.startingPosition);
+          this.sPos.emit(this.maxVW);
+          this.posDict = new PositionDict(this.maxVW, this.startingPosition, this.bars, this.signature);
+          this.setTransformOnPosition(this.startingPosition);
+          this.viewChecked = true;
+        }, 20);
+      }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.handleSlider(this.controlEvent)
+    console.log("GETTING CURRENT ()+++++++++++ VW", this.maxVW);
     if (changes['isRecording']) {
       if (this.isRecording) {
         this.recordingStartPos.pos = this.getCurrVWPos();
@@ -189,7 +195,8 @@ export class SliderComponent implements AfterViewInit, OnChanges {
     const interval = (this.bars * this.signature);
     const distance = currPos - this.startingPosition;
     const distanceRatio = distance / this.maxVW;
-    const intervalOffset = distanceRatio * interval
+    const intervalOffset = distanceRatio * interval;
+    this.totalTime = (((this.bars * this.signature) / this.bpm) * 60000);
     this.timeOffset = intervalOffset * (60000 / this.bpm)
   }
   getAnimTiming() {

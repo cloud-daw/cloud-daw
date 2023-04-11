@@ -2,7 +2,8 @@ import { MidiInstrument } from "src/app/models/instruments/midi-instrument";
 import { Project } from "src/app/models/project";
 import { Note } from "src/app/models/recording/note";
 import { MidiTrack } from "src/app/models/tracks/midi-track";
-import { NoteInfo, EffectInfo, TrackInfo, ProjectInfo, InstrumentInfo } from '../../models/db/project-info'
+import { AudioTrack } from "src/app/models/instruments/audio-track";
+import { NoteInfo, EffectInfo, TrackInfo, ProjectInfo, InstrumentInfo, AudioInfo } from '../../models/db/project-info'
 
 /* Info Reference
 
@@ -48,7 +49,8 @@ export interface ProjectInfo {
 */
 /* */
 
-export function InfoizeProject(project: Project) : ProjectInfo {
+export function InfoizeProject(project: Project): ProjectInfo {
+    console.log('infoizing', project);
     let tracks: TrackInfo[] = makeAllTrackInfo(project.tracks);
     return { id: project.id, name: project.name, email: project.email, master_volume: project.masterVolume, tracks: tracks, tempo: project.tempo, signature: project.signature };
 }
@@ -65,7 +67,15 @@ function makeTrackInfo(track: MidiTrack): TrackInfo {
     let instrumentI: InstrumentInfo = makeInfoFromInstrument(track.instrument);
     let notesI: NoteInfo[] = makeInfoFromRecording(track.midi.data)
     let effectsI: EffectInfo[] = makeAllEffectInfo(track.effects);
-    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.midi.maxOverlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
+    return { title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.midi.maxOverlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI, isAudio: track.isAudio, audio: makeAudioInfo(track.audio)};
+}
+
+function makeAudioInfo(audio: AudioTrack | undefined): AudioInfo | number {
+    if (audio instanceof AudioTrack) {
+        console.log("make info", audio.mp3);
+        return {name: audio.name, starts_at: audio.mp3.starts_at.toString(), buffer: audio.mp3.buffer}
+    }
+    else return 0;
 }
 
 

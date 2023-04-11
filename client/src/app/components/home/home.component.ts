@@ -7,7 +7,7 @@ import { Project } from '../../models/project'
 import { ProjectInfo } from 'src/app/models/db/project-info';
 import { Recording } from '../../models/recording/recording';
 import { Note } from '../../models/recording/note';
-import { SchedulePlayback } from '../../services/recording/playback-service.service';
+import { SchedulePlayback, ScheduleAudioPlayback } from '../../services/recording/playback-service.service';
 import { BounceProjectToMP3 } from 'src/app/services/recording/bounce-service.service';
 import * as Tone from 'tone'; 
 import { FirebaseService } from '../../services/firebase.service';
@@ -21,6 +21,8 @@ import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';
 import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
 import { ProjectManagementService } from 'src/app/services/project-management.service';
+import { AudioTrack } from 'src/app/models/instruments/audio-track';
+import { GetAllSynthKeywords, GetSynthByKeyword } from 'src/app/lib/dicts/synthdict';
   
 /**
  * Int status of keys for keyboard
@@ -106,8 +108,9 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   onTrackUpdated(track: MidiTrack) {
+    console.log('track updated');
     this.selectedTrack = track;
-    this.project.save();
+    //this.project.save();
     console.log(this.project);
     // console.log('from home', this.selectedTrack.midi.data);
   }
@@ -143,6 +146,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   @Output() close = new EventEmitter<void>();
   projectFound : boolean = false;
   isNew: boolean = false;
+  audio: AudioTrack = new AudioTrack('audio 1');
+
   project!: Project;
 
   projectKey: string = "";
@@ -191,8 +196,9 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
-  public isExpanded = true;
-  public showSelectInstrument = false;
+  public isExpanded: boolean = false;
+  public showSelectInstrument: boolean = false;
+  public showUploadAudio: boolean = false;
 
   public octave = 4;
   public showEditor: boolean = false;
@@ -206,11 +212,13 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public reRender: number = 0;
 
   public newTrackInstrument: boolean = false;
+  instruments: string[] = GetAllSynthKeywords();
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
     this.tempo = this.project.tempo;
+    this.timeoutValue = (60 / this.tempo) * 1000; //in ms
     this.signature = this.project.signature;
     this.metronome = this.project.metronome;
     this.selectedTrack = this.project.tracks[0]
@@ -257,7 +265,15 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   promptNewTrackInstrument() {
     this.newTrackInstrument = true;
-    this.showSelectInstrument = !this.showSelectInstrument;
+    this.showSelectInstrument = true;
+  }
+
+  promptNewAudioTrack(e: any) {
+    // this.newAudioTrack = true;
+    if (e.target && e.target.files.length > 0) {
+      this.showUploadAudio = !this.showUploadAudio;
+      this.createNewAudioTrack(e);
+    }
   }
 
   promptChangeTrackInstrument() {
@@ -265,7 +281,21 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
-  newTrack(instrument: MidiInstrument) {
+  createNewAudioTrack(e: any) {
+    if (!this.isRecording) {
+      this.trackIdCounter++;
+      const newAudioTrack = new MidiTrack('Untitled Audio Track', this.trackIdCounter, new MidiInstrument(''), true, true);
+      newAudioTrack.setAudio(e.target.files[0], () => {
+        this.tracks.add(newAudioTrack);
+        this.project.addTrack(newAudioTrack);
+        this.setSelectedTrack(newAudioTrack);
+      })
+    }
+  }
+
+  //new Midi Track
+  newTrack(inst: string) {
+    const instrument = GetSynthByKeyword(inst);
     if (!this.isRecording) {
       this.trackIdCounter++;
       const newTrack = new MidiTrack('Untitled Track', this.trackIdCounter, instrument, true);
@@ -276,15 +306,17 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     }
   }
 
-  changeTrackInstrument(instrument: MidiInstrument) {
+  changeTrackInstrument(inst: string) {
+    const instrument = GetSynthByKeyword(inst);
     if (!this.isRecording) {
       this.selectedTrack.instrument = instrument;
-      this.setSelectedTrack(this.selectedTrack);
-      this.recordings.get(this.selectedTrack.id)!.synth = instrument;
-      // this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
-      // this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
-      // this.selectedTrack.midi.UpdateOverlaps();
+      this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
+      this.setRecordingToTrack(this.selectedTrack.id); 
+      if (this.recordings.has(this.selectedTrack.id)) {
+        this.recordings.get(this.selectedTrack.id)!.synth = instrument;
+      } 
       this.showSelectInstrument = false;
+      console.log('in change track instrument');
     }
   }
 
@@ -337,18 +369,18 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   onPlay(event: boolean) {
     if (!this.isPlaying) {
-      // this.selectedTrack.instrument.AdjustVolume(-100);
-      // this.selectedTrack.instrument.Play('a');
-      // this.selectedTrack.instrument.Release('a');
-      // setTimeout(() => {
-      //   this.selectedTrack.instrument.AdjustVolume(0);
-      // }, 500);
       this.isPlaying = true;
       this.metronome.ClearTransport();
-      Array.from(this.recordings.values()).forEach((r: Recording) => {
-        SchedulePlayback(r);
-        console.log('recording', r);
-      });
+      let thing : {isAudio: boolean, recording: Recording | undefined, audio: AudioTrack | undefined};
+      this.tracks.forEach((track) => {
+        thing = track.GetThingForPlayback();
+        if (thing.isAudio && thing.audio) {
+          ScheduleAudioPlayback(thing.audio)
+        }
+        else if (thing.recording) {
+          SchedulePlayback(thing.recording)
+        }
+      })
       this.metronome.Start();
     }
     this.controlEvent = controlStatus.play;
@@ -416,6 +448,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.recordings.set(this.selectedTrack.id, this.currentRecording);
     this.selectedTrack.midi = this.currentRecording;
     this.setRecordingToTrack(this.selectedTrack.id);
+    this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.currentRecording)
   }
 
   /**
@@ -428,7 +461,6 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
       ? this.recordings.get(id)
       : new Recording(this.selectedTrack.instrument);
     this.currentRecording = recordingAtId || new Recording(this.selectedTrack.instrument);
-    this.project.updateTrackRecordingAtId(id, this.currentRecording)
   }
 
   /**
@@ -440,6 +472,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.setRecordingToTrack(this.selectedTrack.id);
     this.octave = this.selectedTrack.instrument.currentOctave;
     console.log('track changes are being made');
+  }
+  
+  onTrackChange(track: MidiTrack) {
+    this.project.save();
   }
 
   onUndo(event: number) {
@@ -458,9 +494,19 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     //if (this.octave > 0) this.octave--;
   }
 
+  onTempoChange(event: number) {
+    console.log('catching change tempo', event);
+    this.metronome.SetTempo(event);
+    this.project.tempo = event;
+    this.tempo = event;
+    this.project.save();
+  }
+
   onMainVolumeChange(event: number) {
     this.masterVolume = event;
     this.adjustMasterVolume(this.masterVolume);
+    this.project.masterVolume = this.masterVolume;
+    this.project.save();
   }
 
   bounceToMP3() {
