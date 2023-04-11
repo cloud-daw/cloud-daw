@@ -9,6 +9,7 @@
             (volume)="onMainVolumeChange($event)"
             (logout)="onLogout()"
             (tutorial)="onTutorial()"
+            (projects)="onProjects()"
             [isRecording]="isRecording"
             [metronome]="metronome"
             (bounce)="bounceToMP3()"
@@ -66,7 +67,7 @@
     <div class="production-container">
         <div class='tracks-container' id="tracks">
             <div class="tracks-header">
-                <button class="new-track-button" (click)="promptSelectInstrument()">
+                <button class="new-track-button" (click)="promptNewTrackInstrument()">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4.11765 0.882353C4.11765 0.395043 4.5127 0 5.00001 0C5.48732 0 5.88236 0.395043 5.88236 0.882353V9.11765C5.88236 9.60496 5.48732 10 5.00001 10C4.5127 10 4.11765 9.60496 4.11765 9.11765V0.882353Z" fill="white"/>
                         <path d="M0.882353 5.88235C0.395043 5.88235 -5.81111e-09 5.4873 0 4.99999C5.81111e-09 4.51268 0.395043 4.11764 0.882353 4.11764H9.11765C9.60496 4.11764 10 4.51268 10 4.99999C10 5.4873 9.60496 5.88235 9.11765 5.88235H0.882353Z" fill="white"/>
@@ -86,8 +87,10 @@
                 </button>
             </div>
             <app-select-instrument
+                [newTrack]="newTrackInstrument"
                 (createTrack)="newTrack($event)"
                 [isPrompted]="showSelectInstrument"
+                (modifyTrack)="changeTrackInstrument($event)"
             >
             </app-select-instrument>
             <div class="tracks-subContainer" *ngFor="let track of tracks">
@@ -99,27 +102,13 @@
                     (selectedTrackChange)="onSelectedTrackChange($event)"
                     [isRecording]="isRecording"
                     (click)="setSelectedTrack(track)"
+                    (changeInstrument)="promptChangeTrackInstrument()"
                 >
                 </app-midi-track>
             </div>
         </div>
         <div id="midiContainer" class="midi-container" #midiContainer>
-            <div class="midi-editor-container">
-                <app-midi-editor
-                    [track]="selectedTrack"
-                    [vw]="maxVW"
-                    [isRecording]="isRecording"
-                    [(midi)]="selectedTrack.midi.data"
-                    (closeEditor)="closeEditor($event)"
-                    [midiContainerRef]="midiContainerRef"
-                    [reRender]="reRender"
-                    (triggerReRender)="onReRender($event)"
-                    *ngIf="showEditor"
-                    (trackUpdated)="onTrackUpdated($event)"
-                    id="midi-editor"
-                >
-                </app-midi-editor>
-            </div>
+            
             <app-slider-grid [bars]="bars" [signature]="signature" [vw]="maxVW"></app-slider-grid>
             <app-slider
                 #sliderRef
@@ -151,7 +140,26 @@
                     </div>
                 </div>
             </div>
+
+            <div class="midi-editor-container">
+                <app-midi-editor
+                    [track]="selectedTrack"
+                    [vw]="maxVW"
+                    [isRecording]="isRecording"
+                    [(midi)]="selectedTrack.midi.data"
+                    (closeEditor)="closeEditor($event)"
+                    [midiContainerRef]="midiContainerRef"
+                    [reRender]="reRender"
+                    (triggerReRender)="onReRender($event)"
+                    *ngIf="showEditor"
+                    (trackUpdated)="onTrackUpdated($event)"
+                    id="midi-editor"
+                >
+                </app-midi-editor>
+            </div>
+        
         </div>
+        
         <div class="tutorials" id="tutorialInstructions">
             <p class="tutorialInstructionsText" id="tutorialInstructionsHeader">Welcome To Cloud DAW</p>
             <p class="tutorialInstructionsText" id="tutorialInstructionsBody">Here at cloud DAW, we stand for simplicity and making music creation accessible to all! Throughout this tutorial we will introduce you to most of the tools you have at your fingertips to make your wildest musical dream a reality. Click Next to go to the next page.</p>

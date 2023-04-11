@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400&family=Inter:wght@100;200;300;400&family=Rajdhani:wght@300;400;500&display=swap');
 
 .track-container {
     position: relative;
     background-color: #292929;
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
     font-weight: 300;
     padding: 0.25em;
     border: 1px solid #3D3D3D;
@@ -25,19 +25,36 @@
     padding-left: 0.5em;
 }
 
+.change-instrument {
+    margin-left: 0.75em;
+    /* margin-top: 0.25em; */
+    /* position: absolute; */
+    font-size: 9pt;
+    background-color: #171717;
+    padding-inline: 0.5em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    border-radius: 11px;
+}
+
+.change-instrument:hover{
+    background-color: #656565;
+}
+
 .track-instrument {
-    font-size: small;
-    margin-left: 0.5em;
+    font-size: 9pt;
+    margin-left: 1em;
+    /* background-color: #171717; */
+    /* padding-inline: 0.5em; */
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    /* border-radius: 11px; */
 }
 .track-title {
-    font-size: large;
-    margin-left: 0.75em;
-    padding-top: 0.5em;
+    font-size: 13pt;
+    margin-left: 1.2em;
+    padding-top: 0.25em;
     padding-bottom: 0.5em;
-}
-
-.track-title-container {
-
 }
 
 .track-input {
@@ -59,12 +76,31 @@
     /* height: 3em; */
 }
 
+.volume-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+}
+
 .volume-slider {
     transform: scale(0.75);
     margin-top: -0.5em;
     margin-left: -1em;
-    width: 70%;
+    padding-inline: 0.5em;
+    width: 60%;
     /* margin-left: -2.25em; */
+}
+.volume-container .volume-icon {
+    margin-left: 1em;
+    margin-top: -0.85em;
+}
+.volume-container .volume-label {
+    width: 30%;
+    color: white;
+    margin-left: -1.25em;
+    margin-top: -0.75em;
+    font-size: 11pt;
+    font-weight: 200;
 }
 
 .delete-track {

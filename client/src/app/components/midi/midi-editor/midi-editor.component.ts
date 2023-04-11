@@ -7,34 +7,38 @@ import { BlockMode } from '../../home/home.component';
 @Component({
   selector: 'app-midi-editor',
   templateUrl: './midi-editor.component.html',
-  styleUrls: ['./midi-editor.component.css']
+  styleUrls: ['./midi-editor.component.css'],
 })
 export class MidiEditorComponent {
-
-  @Input() vw : number = 100;
+  @Input() vw: number = 100;
   @Input() bars: number = 16;
   @Input() signature: number = 4;
-  @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
+  @Input() track: MidiTrack = new MidiTrack(
+    'default',
+    0,
+    new MidiInstrument(''),
+    false
+  );
   @Input() isRecording: boolean = false;
   @Input() midiContainerRef: Element | any;
   @Input() reRender: number = 0;
 
   @Output() trackUpdated = new EventEmitter<MidiTrack>();
 
-  @Input() 
-    set midi(data: Note[]) {
-      this._midi = data;
-    }
-    get midi() {
-      return this._midi;
-    }
-    private _midi: Note[] = [];
-    @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
+  @Input()
+  set midi(data: Note[]) {
+    this._midi = data;
+  }
+  get midi() {
+    return this._midi;
+  }
+  private _midi: Note[] = [];
+  @Output() midiChange: EventEmitter<Note[]> = new EventEmitter<Note[]>();
 
-    @Output() closeEditor: EventEmitter<boolean> = new EventEmitter<boolean>();
-  
+  @Output() closeEditor: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   @Output() triggerReRender: EventEmitter<number> = new EventEmitter();
-  
+
   public blockMode: BlockMode = BlockMode.Editor;
   public showEditor: boolean = true;
 

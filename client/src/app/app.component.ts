@@ -10,11 +10,11 @@ import { Router } from '@angular/router';
   
 export class AppComponent {
     title = 'CloudDaw';
-  constructor(public _router: Router) {}
+    constructor(public _router: Router) {}
     ngOnInit() {
       if (localStorage.getItem('user') !== null) {
         //is signed in
-        this._router.navigateByUrl('/home');
+        this._router.navigateByUrl('/projectsDashboard');
       }
       else {
         //is not signed in

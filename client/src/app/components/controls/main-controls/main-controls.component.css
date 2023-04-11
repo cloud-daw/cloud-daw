@@ -1,9 +1,9 @@
 @import '~bootstrap-icons/font/bootstrap-icons.css';
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400&family=Inter:wght@100;200;300;400&family=Rajdhani:wght@300;400;500&display=swap');
 
 .control-bar-container {
     background-color: #313131;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
     font-weight: 300;
     /* align-items: center; */
     height: 5em;
@@ -38,7 +38,7 @@
 
 .left-header .volume-text {
     color: white;
-    font-weight: 100;
+    font-weight: 200;
     font-size: 16px;
 }
 
@@ -56,27 +56,40 @@
 }
 
 .right-header button {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
     background-color: #171717;
     color: white;
     font-size: 12pt;
+    height: 3em;
     font-weight: 200;
     color: rgb(215, 213, 213);
-    margin-left: 0.5em;
+    margin-right: 0.1em;
     display: flex;
+    align-items: center;
+    padding-inline: 1em;
+    border-radius: 0px;
+    outline: none;
+    border: none;
 }
 
 .right-header button:hover {
-    background-color:#252424;
+    background-color:#272727;
+    border: none;
+    outline: none;
 }
 
-#bounce-button svg {
-    margin-right: 0.5em;
-    margin-left: -0.25em;
+.right-header button svg {
+
 }
 
-#logout-button i {
-    margin-right: 0.5em;
+#bounce-button {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+#logout-button {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .center-header {
@@ -95,9 +108,10 @@
     align-items: center;
     margin: auto;
     background-color: #171717;
-    border-radius: 5px;
+    border-radius: 50px;
     width: 90%;
     height: 70%;
+
 }
 
 .button-container .octave-container {
@@ -132,17 +146,27 @@
 
 .octaveText {
     /* position: absolute; */
-    font-weight: 100;
+    font-family: 'Anuphan', sans-serif;
+    font-weight: 200;
     font-size: 13pt;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-top: 0em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+    height: 2em;
+    /* background-color:#242323; */
+    border-radius: 15px;
 }
 
 .record-status {
+    font-family: 'Anuphan', sans-serif;
+    font-weight: 100;
+    font-size: 13pt;
     color: rgb(215, 213, 213);
     position: absolute;
-    top: 0.9em;
-    margin-left: 0.5em;
+    top: 1.5em;
+    left: 57%;
 }
 
 .octaveButton {
@@ -203,6 +227,16 @@
 
 #record-button svg:hover {
     fill: rgb(201, 0, 0);
+}
+
+#stop-button svg {
+    animation: blinker 0.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.5;
+  }
 }
 
 

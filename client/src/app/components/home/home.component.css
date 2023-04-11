@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400&family=Inter:wght@100;200;300;400&family=Rajdhani:wght@300;400;500&display=swap');
 
   .noteynote {
     color: white;
@@ -12,7 +11,7 @@
   .piano-controls {
     text-align: center;
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
   }
 
   .piano-controls .octave-display {
@@ -37,6 +36,7 @@
     border-bottom: 1px solid rgb(48, 48, 48);
     background-color: rgb(48, 48, 48);
     width: 100%;
+    text-align: center;
   }
 
   .expanded .piano {
@@ -45,7 +45,7 @@
   }
 
   .piano {
-    width: 40%;
+    width: fit-content;
     visibility: hidden;
     height: 0em;
     display: flex;
@@ -69,7 +69,7 @@
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
-    font-weight: 100;
+    font-weight: 200;
     color: #171717;
   }
   
@@ -92,7 +92,7 @@
     border-bottom-right-radius: 5px;
     z-index: 2;
     color: rgb(222, 222, 222);
-    font-weight: 100;
+    font-weight: 200;
   }
   
   .black.active {
@@ -104,13 +104,15 @@
     background-color: #1F1F1F;
     width: 100%;
     height: auto;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
 }
 
 .tracks-header {
+  position: relative;
   height: 3em;
   display: flex;
   align-items: center;
+  width: 100%;
   box-shadow: inset 0px 8px 6px -6px rgba(0, 0, 0, 0.2);
 }
 
@@ -123,41 +125,40 @@
   margin-left: 1em;
   /* align-items: center; */
   text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-weight: 100;
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
   font-size: 11pt;
   padding-inline: 1em;
-  padding-top: 0.3em;
+  padding-top: 0.2em;
   color: white;
 }
 
 .new-track-button svg {
-  margin-top: 0.35em;
+  margin-top: 0.4em;
   margin-right: 0.5em;
 }
 
 .new-track-button:hover {
     cursor: pointer;
-    background-color: rgb(84, 84, 84);
-    color:rgb(210, 208, 208);
+    background-color: rgb(70, 70, 70);
 }
 
 .expand-piano {
   display: flex;
+  position: absolute;
   align-items: center;
   background-color: #171717;
   border-radius: 11px;
-  margin-left: 6.5em;
-  position: relative;
-  height: 60%;
+  right: 1em;
+  height: 1.75em;
   text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-weight: 100;
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
   padding-inline: 0.5em;
 }
 
 .expand-piano:hover {
-  background-color: rgb(84, 84, 84);
+  background-color: rgb(70, 70, 70);
 }
 
 /* .expand-piano svg {
@@ -197,11 +198,12 @@
   background-color: #1F1F1F;
   height: 100em;
   margin-top: 3em;
+  /* overflow: auto; */
 }
 
 .midi-subContainer {
   position: absolute;
-  width: auto;
+  width: max-content;
 }
 
 .notes-container {
