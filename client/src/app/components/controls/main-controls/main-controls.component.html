@@ -60,9 +60,9 @@
                     </button>
                 </div>
                 <div class="tempo-container">
-                    <button class="octaveText">Tempo : {{metronome.tempo}}</button>
-                    <button class="w-20 h-20 bg-purple-400 text-black" (click)="handleEditTempo()">{{tempoBtnMessage}}</button>
-                    <input *ngIf="editTempo" class="absolute w-40 h-20 bg-purple-300" type="text" (change)="onEditTempo($event)"/>
+                    <button class="octaveText">Tempo : <span class="tempo-number">{{metronome.tempo}}</span></button>
+                    <input *ngIf="editTempo" class="tempo-edit-input" type="text" (change)="onEditTempo($event)"/>
+                    <button class="tempo-edit" (click)="handleEditTempo()">{{tempoBtnMessage}}</button>
                 </div>
                 <!-- <span class="record-status" *ngIf="isRecording">...</span> -->
             </div>

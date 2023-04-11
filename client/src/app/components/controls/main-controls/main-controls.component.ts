@@ -91,11 +91,11 @@ export class MainControlsComponent {
   handleEditTempo() {
     this.editTempo = !this.editTempo;
     if (this.editTempo) {
-      this.tempoBtnMessage = "Confirm"
+      this.tempoBtnMessage = "Set"
     }
     else {
       this.tempoBtnMessage = "Edit"
-      this.tempoChanged.emit(this.changeTempoValue);
+      this.tempoChanged.emit(Math.round(this.changeTempoValue));
     }
   }
 
@@ -103,6 +103,7 @@ export class MainControlsComponent {
     if (this.validateTempoInput(newTempoEvent.target.value)) {
       console.log('validated tempo', newTempoEvent.target.value)
       this.changeTempoValue = parseInt(newTempoEvent.target.value)
+      this.changeTempoValue = Math.round(this.changeTempoValue);
     } else {
       console.log('invalid tempo given')
     }
