@@ -59,8 +59,9 @@ export class MidiTrack {
         this.midi = new Recording(this.instrument, notes);
     }
 
-    // public MuteTrack(status: boolean) {
-    //     this.instrument.Mute(status);
+    // public MuteTrack() {
+    //     this.instrument.Mute();
+    //     console.log('testmute2');
     // }
 
     // public SoloTrack(status: boolean) {

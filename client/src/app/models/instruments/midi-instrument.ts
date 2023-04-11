@@ -64,6 +64,12 @@ export class MidiInstrument {
         this.instrument.volume.value = db;
     }
 
+    // Mute() {
+    //     console.log(this.instrument.volume.value);
+    //     this.instrument.volume.value = -40;
+    //     console.log(this.instrument.volume.value);
+    // }
+
     NotePlayback(value: string, duration: Tone.Unit.Time) {
         this.instrument.triggerAttackRelease(value, duration);
     }

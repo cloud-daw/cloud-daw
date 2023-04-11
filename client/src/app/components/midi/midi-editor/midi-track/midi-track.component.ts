@@ -35,6 +35,7 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
 
   public editing: boolean = false;
+  public isMute: boolean = false;
   public placeholder: string = this.track.title;
   //functions
   public formatLabel(value: number): string {
@@ -53,8 +54,26 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
     let volN: number = Math.round(Number(volume) * 100.0) / 100.0;
     volN -= 56;
     this.track.ChangeVolume(volN);
+    // if(volN <= 56) {
+    //   this.isMute = true;
+    //   this.track.ChangeVolume(-100);
+    // }
+    this.isMute = false;
     this.volumeLevel = this.track.volume + 56;
     console.log('updating volume', volN, this.track.instrument.instrument.volume.value)
+  }
+
+  public onMute() {
+    if(this.isMute == false) {
+      this.track.ChangeVolume(-100);
+      this.isMute = true;
+      this.volumeLevel = this.track.volume + 56;  
+    }
+    else {
+      this.track.ChangeVolume(0);
+      this.isMute = false;
+      this.volumeLevel = this.track.volume + 56;  
+    }
   }
   
   public deleteTrack() {
