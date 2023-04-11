@@ -1,17 +1,36 @@
 <div class="container">
+    <button class="close" (click)="onCloseEditor()">x</button>
+    <div class="control-panel">
+        <div class="quantizer-container">
+            <button type="button" class="quantize-button" (click)="onQuantizeRecording(2)">
+                Quantize 1/2
+            </button>
+            <button type="button" class="quantize-button" (click)="onQuantizeRecording(4)">
+                Quantize 1/4
+            </button>
+            <button type="button" class="quantize-button" (click)="onQuantizeRecording(8)">
+                Quantize 1/8
+            </button>
+            <button type="button" class="quantize-button" (click)="onQuantizeRecording(16)">
+                Quantize 1/16
+            </button>
+        </div>
+    </div>
     <div class="header">
-        <button (click)="onCloseEditor()">x</button>
+
     </div>
     <div class="content">
-        <app-midi-notes-container
-            [track]="track"
-            [vw]="vw"
-            [isRecording]="isRecording"
-            [editMode]="showEditor"
-            (trackUpdated)="onTrackUpdated($event)"
-            [midiContainerRef]="midiContainerRef"
-            [reRender]="reRender"
-            (triggerReRender)="onReRender($event)"
-        />
+        <div class="midi-notes-container">
+            <app-midi-notes-container
+                [track]="track"
+                [vw]="vw"
+                [isRecording]="isRecording"
+                [editMode]="showEditor"
+                (trackUpdated)="onTrackUpdated($event)"
+                [midiContainerRef]="midiContainerRef"
+                [reRender]="reRender"
+                (triggerReRender)="onReRender($event)"
+            />
+        </div>
     </div>
 </div>

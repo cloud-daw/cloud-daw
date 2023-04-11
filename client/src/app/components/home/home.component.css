@@ -110,6 +110,7 @@
   
   .control-header {
     height: 4em;
+    margin-left: -0.5em;
   }
 
   .white.active {
@@ -207,11 +208,14 @@
 }
 
 .midi-editor-container {
-  /* display: block;
-  top: 19%;
-  position: absolute;
-  border: 1px solid rgb(255, 0, 183); */
+  position: fixed;
+  top: 35%;
+  left: 0;
+  height: 65%;
   width: 100%;
+  background-color: #171717;
+  z-index: 2;
+  /* opacity: 0.9; */
 }
 
 .tracks-container {

@@ -3,6 +3,7 @@ import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Note } from 'src/app/models/recording/note';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { BlockMode } from '../../home/home.component';
+import { QuantizeRecording } from 'src/app/services/recording/quantize-service.service';
 
 @Component({
   selector: 'app-midi-editor',
@@ -47,6 +48,12 @@ export class MidiEditorComponent {
     this.trackUpdated.emit(track);
     // console.log('from editor', this.track.midi.data);
     //console.log('from editor', this.track.midi.data);
+  }
+
+  onQuantizeRecording(division: number) {
+    QuantizeRecording(this.track.midi, division);
+    this.trackUpdated.emit(this.track);
+    this.triggerReRender.emit(this.reRender+1);
   }
 
   onCloseEditor() {

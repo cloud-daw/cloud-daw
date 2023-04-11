@@ -68,12 +68,6 @@ export class MidiNotesContainerComponent implements OnChanges {
     this.selectedNote = note;
   }
 
-  onQuantizeRecording(division: number) {
-    QuantizeRecording(this.track.midi, division);
-    this.trackUpdated.emit(this.track);
-    this.triggerReRender.emit(this.reRender+1);
-  }
-
   extractMinMax() : number[] {
     const recording = this.track.midi.data;
     let max = 0;

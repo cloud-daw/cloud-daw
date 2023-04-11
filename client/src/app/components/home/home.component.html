@@ -1,8 +1,6 @@
 <div *ngIf="!loading" class="body">
     <div class="project-header">
-        <!-- <div class="logo">Cloud DAW</div> -->
         <div class="project-name">{{project.name}}</div>
-        <!-- <div class="right">Cloud DAW</div> -->
     </div>
     <div class='control-header'>
         <app-main-controls 
@@ -145,23 +143,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="midi-editor-container">
-                <app-midi-editor
-                    [track]="selectedTrack"
-                    [vw]="maxVW"
-                    [isRecording]="isRecording"
-                    [(midi)]="selectedTrack.midi.data"
-                    (closeEditor)="closeEditor($event)"
-                    [midiContainerRef]="midiContainerRef"
-                    [reRender]="reRender"
-                    (triggerReRender)="onReRender($event)"
-                    *ngIf="showEditor"
-                    (trackUpdated)="onTrackUpdated($event)"
-                    id="midi-editor"
-                >
-                </app-midi-editor>
-            </div>
         
         </div>
         
@@ -173,3 +154,18 @@
     </div>
 </div>
 <div *ngIf="loading" class="h-screen w-screen bg-purple-300"></div>
+<div class="midi-editor-container" *ngIf="showEditor">
+    <app-midi-editor
+        [track]="selectedTrack"
+        [vw]="maxVW"
+        [isRecording]="isRecording"
+        [(midi)]="selectedTrack.midi.data"
+        (closeEditor)="closeEditor($event)"
+        [midiContainerRef]="midiContainerRef"
+        [reRender]="reRender"
+        (triggerReRender)="onReRender($event)"
+        (trackUpdated)="onTrackUpdated($event)"
+        id="midi-editor"
+    >
+    </app-midi-editor>
+</div>
