@@ -23,6 +23,7 @@ export class FirebaseService {
             if(res.user?.emailVerified){
                 this.isLoggedIn = true
                 localStorage.setItem('user', JSON.stringify(res.user))
+                localStorage.setItem('inProject', "false")
             } else {
                 this._router.navigate(['/verifyEmail']);
             }
@@ -40,6 +41,8 @@ export class FirebaseService {
         // there is no need to automatically open tutorials if user is not new anymore.
         localStorage.setItem('isTutorial', "false")
         localStorage.removeItem('user')
+        localStorage.setItem('inProject', "false")
+        localStorage.setItem('openProjectName', "")
     }
     passwordReset(email:string){
         this.firebaseAuth.sendPasswordResetEmail(email).then(()=>{
@@ -71,5 +74,6 @@ export class FirebaseService {
     saveProject(key: string, updatedProject: ProjectInfo) {
         console.log('in save project');
         this.projectsRef.update(key, updatedProject);
+        console.log(this.projectsRef)
     }
 }

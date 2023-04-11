@@ -1,0 +1,84 @@
+.projectDashboard {
+    background-color: #1F1F1F;
+    height: 200vh;
+    width: 100%;
+}
+.projectDashboardContent {
+    border: 1px solid #1F1F1F;
+    width: 80%;
+    height: 100%;
+    margin: auto;
+}
+.createProject {
+    width: 100%;
+    margin-top: 5%;
+}
+.createProjectContent {
+    width: 50%;
+    margin: auto;
+    height: 100px;
+}
+#createProjectInput {
+    width: 80%;
+    height: 80%;
+    border-radius: 30px 0px 0px 30px;
+    float: left;
+    font-size: x-large;
+    padding-left: 10%;
+}
+.createBtn {
+    display: block;
+    background-color: #22C55E;
+    width: 20%;
+    height: 80%;
+    border-radius: 0px 30px 30px 0px;
+    font-size: x-large;
+    font-weight: bold;
+}
+.createBtn:hover {
+    background-color: #4ADE80;
+}
+
+.projects {
+    color: white;
+    width: 80%;
+    margin: auto;
+    height: 80%;
+}
+.project {
+    background-color: rgb(62, 62, 62);
+    width: 20%;
+    height: 200px;
+    margin-left: 3%;
+    margin-right: 2%;
+    margin-top: 5%;
+    border-radius: 10px;
+    float: left;
+}
+.project:hover {
+    background-color: rgb(84, 84, 84);
+    transform: scale(1.1);
+    transition: all 0.3s;
+}
+.projectName {
+    position: relative;
+    text-align: center;
+    top: 10px;
+    font-size: x-large;
+}
+.projectHeader {
+    width: 100%;
+    height: 50px;
+}
+.logOutBtn {
+    float: right;
+    background-color: #3f3f3f;
+    height: 40px;
+    width: 100px;
+    font-size: large;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-right: 20px;
+    border-radius: 5px;
+    color: white;
+}

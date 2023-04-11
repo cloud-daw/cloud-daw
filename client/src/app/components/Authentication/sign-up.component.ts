@@ -25,7 +25,7 @@ export class SignUpComponent {
             .signup(email, password)
             .then(() => {
                 if (this.firebaseService.isLoggedIn && password == password2)
-                    this._router.navigateByUrl('/home');
+                    this._router.navigateByUrl('/projectsDashboard');
             })
             .catch((error) => {
                 this.errorShown = true;
