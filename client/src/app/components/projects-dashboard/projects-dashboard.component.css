@@ -57,7 +57,7 @@
 }
 .project:hover {
     background-color: rgb(84, 84, 84);
-    transform: scale(1.1);
+    transform: scale(1.05);
     transition: all 0.3s;
 }
 .projectName {
@@ -81,4 +81,16 @@
     margin-right: 20px;
     border-radius: 5px;
     color: white;
+}
+.card {
+    background-color: rgb(62, 62, 62);
+    position: relative;
+    display: inline-block;
+}
+.delete {
+    position: absolute;
+    top:0;
+    right: 0%;
+    padding: 20px;
+    color: red;
 }

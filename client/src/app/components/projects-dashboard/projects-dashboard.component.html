@@ -12,7 +12,10 @@
             </div>
             <div class="projects">
                 <div class="project" *ngFor="let item of projectNames" (click)="sendProjectNum(item)">
-                    <img src="../../../assets/images/image 2.png" alt="track"/>
+                    <div class="card">
+                        <img src="../../../assets/images/image 2.png" alt="track"/>
+                        <div class="delete" (click)="onDeleteProject(item)">X</div>
+                    </div>
                     <div class="projectName">
                         {{item}}
                     </div>
