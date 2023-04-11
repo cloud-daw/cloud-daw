@@ -242,13 +242,12 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   promptNewTrackInstrument() {
     this.newTrackInstrument = true;
-    this.showSelectInstrument = !this.showSelectInstrument;
+    this.showSelectInstrument = true;
   }
 
   promptNewAudioTrack(e: Event) {
-    // this.newAudioTrack = true;
+    this.showSelectInstrument = false;
     this.onFileInput(e.target);
-    this.showUploadAudio = !this.showUploadAudio;
     this.createNewAudioTrack();
   }
 
@@ -282,12 +281,12 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   changeTrackInstrument(instrument: MidiInstrument) {
     if (!this.isRecording) {
       this.selectedTrack.instrument = instrument;
-      this.setSelectedTrack(this.selectedTrack);
-      this.recordings.get(this.selectedTrack.id)!.synth = instrument;
-      // this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
-      // this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
-      // this.selectedTrack.midi.UpdateOverlaps();
+      this.setRecordingToTrack(this.selectedTrack.id); 
+      if (this.recordings.has(this.selectedTrack.id)) {
+        this.recordings.get(this.selectedTrack.id)!.synth = instrument;
+      } 
       this.showSelectInstrument = false;
+      console.log('in change track instrument');
     }
   }
 

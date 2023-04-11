@@ -213,9 +213,24 @@
   left: 0;
   height: 65%;
   width: 100%;
+  background-color: rgb(23, 23, 23, 1.0);
+  z-index: 4;
+}
+
+::ng-deep .dropdown-menu {
   background-color: #171717;
-  z-index: 2;
-  /* opacity: 0.9; */
+}
+
+.dropdown-item {
+  background-color: #171717;
+  color: white;
+  padding: 1em;
+  font-size: 10pt;
+  font-weight: 100;
+}
+
+.dropdown-item:hover {
+  background-color: #353535;
 }
 
 .tracks-container {

@@ -121,12 +121,12 @@ export class MidiNoteComponent implements OnChanges {
   //End (TEMP GPT SOLUTION)
 
   selectCurrentNote() {
-    if (this.isSelected) {
-      this.isSelected = false;
-    } else {
+    // if (this.isSelected) {
+    //   this.isSelected = false;
+    // } else {
       this.isSelected = true;
       this.selectedNoteChange.emit(this);
-    }
+    
     this.track.instrument.instrument.triggerAttackRelease(this.data.value, 0.1);
   }
   /**
@@ -195,8 +195,8 @@ export class MidiNoteComponent implements OnChanges {
     //console.log('leftPos:', leftPosition, 'rightPos:', rightPosition, 'attack', attack, 'release', release);
 
     this.dragPosition = { x: 0, y: 0 };
-
     //update data and reRender
+    this.selectedNoteChange.emit(this);
     this.track.midi.UpdateOverlaps();
     this.trackUpdated.emit(this.track);
     this.triggerReRender.emit(this.reRender + 1);
@@ -231,6 +231,7 @@ export class MidiNoteComponent implements OnChanges {
           this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
           this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+          this.selectedNoteChange.emit(this);
           this.triggerReRender.emit(this.reRender + 1);
         }
         break;
@@ -240,6 +241,7 @@ export class MidiNoteComponent implements OnChanges {
           this.data.value = newNote;
           this.track.midi.UpdateOverlaps();
           this.track.instrument.instrument.triggerAttackRelease(newNote, 0.1);
+          this.selectedNoteChange.emit(this);
           this.triggerReRender.emit(this.reRender + 1);
         }
         break;
@@ -285,13 +287,5 @@ export class MidiNoteComponent implements OnChanges {
       if (this.selectedNote != this) this.isSelected = false;
       else this.isSelected = true;
     }
-    if (changes['isRecording']) {
-      if (this.data && !this.isRecording) {
-        this.updateDisplay();
-      }
-    }
-    // if (changes['data']) {
-    //   this.updateDisplay();
-    // }
   }
 }

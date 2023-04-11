@@ -2,6 +2,8 @@
     /* position: absolute; */
     height: 100%;
     width: 100%;
+    z-index: 4;
+    display: flex;
 }
 
 .content {
@@ -9,29 +11,78 @@
     height: 100%;
     width: 80%;
     left: 20%;
+    top: 0;
+
+}
+
+.grid {
+    opacity: 0.7;
+    z-index: 9;
+}
+
+.close {
+    position: absolute;
+    top: 0.5em;
+    left: 0.5em;
+    color: white;
+    z-index: 10;
 }
 
 .content .midi-notes-container {
-    margin-top: 1em;
+    margin-top: 1.5em;
+    top: 0;
+    position: absolute;
+    height: 100%;
 }
 
-.header {
+.control-panel .header {
+    width: 100%;
+    position: relative;
     color: white;
+    font-weight: 200;
+    font-size: 13pt;
+    text-align: center;
+    padding-top: 0.5em;
+}
+
+.header .header-text {
+    width: 70%;
+    margin: auto;
+    border-bottom: 0.5px solid rgb(56, 56, 56);
+    padding-bottom: 0.5em;
 }
 
 .control-panel {
     display: block;
-    border: 1px solid blue;
     position: absolute;
+    left: 0;
     height: 100%;
     width: 20%;
-    left: 0;
 }
 
 .control-panel .quantizer-container {
-    float: right;
-    width: 30%;
-    border: 1px solid green;
+    margin: auto;
+    width: 50%;
+}
+
+.control-panel .note-info-container {
+    margin-top: 1em;
+    position: relative;
+    color: white;
+    font-size: 12pt;
+    font-weight: 100;
+    margin-left: 5em;
+}
+
+.note-info .note-label {
+    background-color: #2d2d2d;
+    padding-inline: 0.5em;
+}
+
+.note-info .note-value {
+    background-color: #2e2e2e;
+    padding-inline: 0.5em;
+    border-radius: 25px;
 }
 
 .quantize-button {
