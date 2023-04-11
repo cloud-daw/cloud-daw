@@ -25,6 +25,7 @@ export class AudioTrack {
             console.log("buffer loaded", buffer)
             this.mp3 = { starts_at: '1:0:0', buffer: buffer }
             this.player.buffer = new Tone.Buffer(buffer);
+            this.player.start();
         }
     };
 
