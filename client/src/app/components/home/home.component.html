@@ -20,6 +20,7 @@
             <!-- <button class="bg-red-500 w-40 h-40" (click)="bounceToMP3()"></button> -->
         </app-main-controls>
     </div>
+    <input type="file" class="h-40 w-40 bg-red-300" accept=".mp3,.wav" (change)="onFileInput($event.target)">
     <div class="piano-container" id="piano" [ngClass]="{'expanded': isExpanded}">
         <!-- <div class="piano-controls">
             <button type="button" class="expand-piano"  (click)="toggleExpand()">Show/Hide Instrument</button>

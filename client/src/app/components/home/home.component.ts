@@ -21,6 +21,7 @@ import { HydrateProjectFromInfo } from 'src/app/lib/db/hydrate-project';
 import { InfoizeProject } from 'src/app/lib/db/infoize-project';
 import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
 import { ProjectManagementService } from 'src/app/services/project-management.service';
+import { AudioTrack } from 'src/app/models/instruments/audio-track';
   
 /**
  * Int status of keys for keyboard
@@ -120,6 +121,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   @Output() close = new EventEmitter<void>();
   projectFound : boolean = false;
   isNew: boolean = false;
+  audio: AudioTrack = new AudioTrack('audio 1');
+
   project!: Project;
 
   projectKey: string = "";
@@ -183,6 +186,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public reRender: number = 0;
 
   public newTrackInstrument: boolean = false;
+
+  onFileInput(event: any) {
+    this.audio.AddAudio(event.files[0])
+  }
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
