@@ -35,14 +35,14 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
 
   public editing: boolean = false;
-  public isMute: boolean = false;
+  // public isSolo: boolean = false;
   public placeholder: string = this.track.title;
   //functions
   public formatLabel(value: number): string {
     return `${value}db`;
   }
 
-  volumeLevel: number = this.track.volume + 56;
+  // volumeLevel: number = this.track.volume + 56;
 
   ngAfterViewInit() {
     this.placeholder = this.track.title;
@@ -58,23 +58,29 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
     //   this.isMute = true;
     //   this.track.ChangeVolume(-100);
     // }
-    this.isMute = false;
-    this.volumeLevel = this.track.volume + 56;
+    this.track.isMute = false;
+    this.track.volumeLevel = this.track.volume + 56;
     console.log('updating volume', volN, this.track.instrument.instrument.volume.value)
   }
 
   public onMute() {
-    if(this.isMute == false) {
-      this.track.ChangeVolume(-100);
-      this.isMute = true;
-      this.volumeLevel = this.track.volume + 56;  
-    }
-    else {
-      this.track.ChangeVolume(0);
-      this.isMute = false;
-      this.volumeLevel = this.track.volume + 56;  
+    this.track.MuteTrack();
+  }
+
+  public solo() {
+    if (this.selectedTrack == this.track) {
+      // this.isSolo = true;
+      let tracks = this.tracks;
+      let exception = this.selectedTrack;
+      let resultSet = new Set([...tracks].filter(element => element !== exception));
+      for(let element of resultSet) {
+        if(element.isMute != true) {
+          element.MuteTrack();
+        }
+      }
     }
   }
+  
   
   public deleteTrack() {
     if (this.tracks.size > 1 && !this.isRecording) {
