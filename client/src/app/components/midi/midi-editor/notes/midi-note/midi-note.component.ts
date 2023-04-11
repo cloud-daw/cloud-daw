@@ -93,6 +93,9 @@ export class MidiNoteComponent implements OnChanges {
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
+    if (event.code === 'ArrowUp' || event.code === 'ArrowDown') {
+      event.preventDefault();
+    }
     if (this.isSelected) {
       this.keyDownActions(event.code);
     }
@@ -100,12 +103,11 @@ export class MidiNoteComponent implements OnChanges {
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
+    if (event.code === 'ArrowUp' || event.code === 'ArrowDown') {
+      event.preventDefault();
+    }
   }
-
-  ngAfterViewInit() {
-    //console.log('ALDGKJALDKJGLADKJDGA', this.midiContainerRef);
-  }
-
+  
   populateNotePos() {
     for (let octave = 0; octave <= 7; octave++) {
       for (const note in this.notePositions) {

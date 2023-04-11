@@ -6,7 +6,6 @@ import * as Tone from 'tone';
   selector: 'app-main-controls',
   templateUrl: './main-controls.component.html',
   styleUrls: ['./main-controls.component.css'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class MainControlsComponent {
   @Output() play: EventEmitter<boolean> = new EventEmitter();

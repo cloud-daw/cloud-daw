@@ -78,7 +78,7 @@
     outline: none;
 }
 
-.custom-tooltip {
+::ng-deep .custom-tooltip {
     background: #272727;
     background-color: #171717;
     fill: #171717;
