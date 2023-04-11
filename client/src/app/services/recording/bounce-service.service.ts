@@ -55,6 +55,7 @@ export function BounceProjectToMP3(project: Project) {
             ScheduleOfflinePlaybackBasic(project.tracks[i].midi, transport)
             //ScheduleOfflinePlaybackTest(transport, i); 
         }
+        transport.position = '1:0:0';
         transport.start();
     }, x).then((buffer) => {
         console.log('bounced, buffer: ', buffer);
@@ -89,18 +90,10 @@ function findLengthOfProject(project: Project): number {
     return lengthInSeconds + 2; //give room
 }
 
-function ScheduleOfflinePlaybackTest(transport: Transport, recIdx: number) {
-    if (recIdx === 0) {
-        const synth = new Tone.PolySynth().toDestination();
-        transport.schedule((time) => {
-            synth.triggerAttackRelease("C4", 4, time)
-        }, '1:0:0')
-    }
-}
-
 function ScheduleOfflinePlaybackBasic(recording: Recording, transport: Transport) {
     //const synth = recording.synth.name != 'Drums' ? new Tone.PolySynth(recording.synth.synth).toDestination() : recording.synth.instrument;
-    if (recording.synth.name != 'Drums') {
+    console.log('bounceback', recording)
+    if (!(recording.synth.instrument instanceof Tone.Sampler)) {
         const synth = new Tone.PolySynth(recording.synth.synth).toDestination() //TODO: need to set parameters (volume, etc) to match project
         for (let i = 0; i < recording.data.length; i++) {
             transport.scheduleOnce((time) => {
@@ -109,7 +102,7 @@ function ScheduleOfflinePlaybackBasic(recording: Recording, transport: Transport
         }
     }
     else {
-        LoadSamplerBlocking('drumkits/kit0', (sampler: Tone.Sampler) => {
+        LoadSamplerBlocking(recording.synth.sample_name, (sampler: Tone.Sampler) => {
             sampler.toDestination(); //TODO: need to set parameters (volume, etc) to match project
             for (let i = 0; i < recording.data.length; i++) {
                 transport.schedule((time) => {
@@ -118,51 +111,4 @@ function ScheduleOfflinePlaybackBasic(recording: Recording, transport: Transport
             }
         });
     }
-}
-
-function ScheduleOfflinePlayback(recording: Recording, transport: Transport) {
-    console.log('scheduling offline: ', recording)
-    const data = recording.data;
-    const synth = recording.synth;
-    const release = synth.release;
-    //const overlaps = calculateOverlaps(data, release);
-    const overlaps = recording.maxOverlaps;
-    synth.setVoices(overlaps);
-    let availableSynths: SynthAvailability[] = [];
-    let useSynthIdx = 0;
-    for (let i = 0; i < synth.voices.length; i++) {
-        availableSynths.push(new SynthAvailability(i));
-    }
-    const times = data.map(note => {
-        let s = Tone.Time(note.attack).toSeconds();
-        let e = Tone.Time(note.release).toSeconds() + release;
-        return {
-            start: s,
-            end: e,
-        }
-    });
-    for (let i = 0; i < data.length; i++) {
-        useSynthIdx = manageVoices(availableSynths, times[i].end, times[i].start);
-        transport.schedule((time) => {
-            synth.voices[useSynthIdx].triggerAttackRelease(data[i].value, data[i].duration, time);
-        }, data[i].attack);
-    }
-    return true;
-}
-
-function manageVoices(availableSynths: SynthAvailability[], release: number, attack: number) : number {
-    let synthIdx = -1;
-    for (let i = 0; i < availableSynths.length; i++) {
-        //check for expired synths
-        if (availableSynths[i].isAvailable == synthStatus.unavailable && availableSynths[i].releases_at < attack) {
-            availableSynths[i].isAvailable = synthStatus.available;
-            availableSynths[i].releases_at = 0;
-        }
-        if (availableSynths[i].isAvailable == synthStatus.available && synthIdx < 0) {
-            availableSynths[i].isAvailable = synthStatus.unavailable;
-            availableSynths[i].releases_at = release;
-            synthIdx = availableSynths[i].idx;
-        }
-    }
-    return synthIdx;
 }

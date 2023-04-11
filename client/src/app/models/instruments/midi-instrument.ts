@@ -18,7 +18,8 @@ export class MidiInstrument {
     private attack: number; //unused for now
     public release: number;
     public synth: any;
-    constructor(name: string, synth?: any, release: number = 0.1, sampler?: boolean) {
+    public sample_name: string;
+    constructor(name: string, synth?: any, release: number = 0.1, sampler?: boolean, sample_name: string = "") {
         this.name = name != '' ? name : 'Default Synth';
         this.sound = "" //to load for later
         this.sampler = sampler ? sampler : false;
@@ -34,6 +35,7 @@ export class MidiInstrument {
         this.attack = 0;
         this.release = release;
         this.voices = [this.instrument];
+        this.sample_name = sample_name;
     }
 
     /**
