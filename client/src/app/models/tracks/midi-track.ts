@@ -28,8 +28,10 @@ export class MidiTrack {
     title: string;
     id: number;
     volume: number;
+    volumeLevel: number;
     instrument: MidiInstrument;
     selected: boolean;
+    isMute: boolean;
     effects: string[] = [];
     isAudio: boolean;
     midi: Recording = new Recording(new MidiInstrument(''));
@@ -41,11 +43,9 @@ export class MidiTrack {
         this.selected = selected;
         this.effects = effects;
         this.volume = volume;
+        this.volumeLevel = this.volume + 56;
         this.isAudio = isAudio;
-        if (this.isAudio) {
-            this.audio = new AudioTrack(title);
-            this.instrument.Mute(true);
-        }
+        this.isMute = false;
         this.ChangeVolume(this.volume);
     }
 
@@ -80,6 +80,18 @@ export class MidiTrack {
     // public MuteTrack(status: boolean) {
     //     this.instrument.Mute(status);
     // }
+    public MuteTrack() {
+        if(this.isMute == false) {
+            this.ChangeVolume(-100);
+            this.isMute = true;
+            this.volumeLevel = this.volume + 56;  
+          }
+          else {
+            this.ChangeVolume(0);
+            this.isMute = false;
+            this.volumeLevel = this.volume + 56;  
+          }      
+    }
 
     // public SoloTrack(status: boolean) {
     //     this.instrument.Solo(status);

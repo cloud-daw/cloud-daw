@@ -136,6 +136,16 @@
     font-weight: 200;
 }
 
+.volume-container .solo {
+    width: 30%;
+    color: white;
+    /* margin-left: -1.25em;
+    margin-top: -0.75em; */
+    font-size: 11pt;
+    font-weight: 200;
+}
+
+
 .delete-track {
     float: right;
     padding-right: 0.5em;
