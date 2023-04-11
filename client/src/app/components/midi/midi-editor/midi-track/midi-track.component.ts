@@ -33,6 +33,7 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
 
   @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
+  @Output() editEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public editing: boolean = false;
   // public isSolo: boolean = false;
@@ -46,6 +47,11 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.placeholder = this.track.title;
+  }
+
+  onEdit(bool: boolean) {
+    this.editing = bool;
+    this.editEmitter.emit(this.editing);
   }
 
   onVolumeChange(event: any) {

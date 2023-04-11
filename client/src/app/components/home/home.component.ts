@@ -52,33 +52,39 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    this.synthOnKeydown(event.key);
-    //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
-    let myDiv = document.getElementById(event.key);
-    if(this.isDrums) {
-      myDiv = document.getElementById(event.key+'1');
-    }
-    console.log(myDiv);
-    if (myDiv) {
-      myDiv.classList.add("active");
-    }
+    if(this.editingMode == false) {
+      this.synthOnKeydown(event.key);
+      //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
+      let myDiv = document.getElementById(event.key);
+      if(this.isDrums) {
+        myDiv = document.getElementById(event.key+'1');
+      }
+      console.log(myDiv);
+      if (myDiv) {
+        myDiv.classList.add("active");
+      }
+  }
     //this.PlayRelease();
   }
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    this.synthOnKeyup(event.key);
 
-    //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
-    let myDiv = document.getElementById(event.key);
-    if(this.isDrums) {
-      myDiv = document.getElementById(event.key+'1');
-    }
-    if (myDiv) {
-      myDiv.classList.remove("active");
-      console.log('test');
-    }
-    //this.PlayRelease();
+
+    if(this.editingMode == false) {
+      this.synthOnKeyup(event.key);
+
+      //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
+      let myDiv = document.getElementById(event.key);
+      if(this.isDrums) {
+        myDiv = document.getElementById(event.key+'1');
+      }
+      if (myDiv) {
+        myDiv.classList.remove("active");
+        console.log('test');
+      }
+      //this.PlayRelease();
+  }
   }
 
 
@@ -292,6 +298,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     }
   }
 
+  onEditTrackName(value: boolean) {
+    this.editingMode = value;
+  }
+
   setSelectedTrack(track: MidiTrack) {
     if (!this.isRecording) {
       const temp = this.selectedTrack;
@@ -383,6 +393,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   public editMode: boolean = false;
+  public editingMode: boolean = false;
+
 
   openEditor() {
     this.blockMode = BlockMode.Editor;

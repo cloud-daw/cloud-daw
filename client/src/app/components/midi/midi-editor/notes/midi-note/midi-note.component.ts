@@ -93,7 +93,6 @@ export class MidiNoteComponent implements OnChanges {
 
   @HostListener('document:keydown', ['$event'])
   handleKeydownEvent(event: KeyboardEvent) {
-    event.preventDefault();
     if (this.isSelected) {
       this.keyDownActions(event.code);
     }
@@ -101,7 +100,6 @@ export class MidiNoteComponent implements OnChanges {
 
   @HostListener('document:keyup', ['$event'])
   handleKeyupEvent(event: KeyboardEvent) {
-    event.preventDefault();
   }
 
   ngAfterViewInit() {

@@ -108,6 +108,7 @@
                     [isRecording]="isRecording"
                     (click)="setSelectedTrack(track)"
                     (changeInstrument)="promptChangeTrackInstrument()"
+                    (editEmitter)="onEditTrackName($event)"
                 >
                 </app-midi-track>
             </div>

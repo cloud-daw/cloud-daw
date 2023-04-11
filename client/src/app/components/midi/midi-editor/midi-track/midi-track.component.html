@@ -17,12 +17,12 @@
     </div>
     <!-- <div class='track-title' (dblclick)="changeTrackTitle('1')">{{track.title}}</div> -->
     <div class="track-title-container">
-        <label class='track-title' *ngIf="!editing" (dblclick)="editing = true">{{track.title}}</label>
+        <label class='track-title' *ngIf="!editing" (dblclick)="onEdit(true)">{{track.title}}</label>
         <input #box class='track-input' 
             *ngIf="editing" 
             type="text"
             (change)="changeTrackTitle($event, box.value)"
-            (blur)="editing = false"
+            (blur)="onEdit(false)"
             [placeholder]="placeholder"
         >
     </div>
