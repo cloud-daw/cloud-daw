@@ -2,6 +2,7 @@ import * as Tone from 'tone';
 import { MidiInstrument } from '../instruments/midi-instrument';
 import { Recording } from '../recording/recording';
 import { Note } from '../recording/note';
+import { FixedSizeVirtualScrollStrategy } from '@angular/cdk/scrolling';
 
 // Define a clip interface to hold information about each MIDI clip
 export interface Clip {
@@ -28,15 +29,17 @@ export class MidiTrack {
     instrument: MidiInstrument;
     selected: boolean;
     effects: string[] = [];
+    isAudio: boolean;
     midi: Recording = new Recording(new MidiInstrument(''));
     clips: Clip[] = [];
-    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, volume: number = 0, effects: string[] = []) {
+    constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, isAudio: boolean = false, volume: number = 0, effects: string[] = []) {
         this.title = title;
         this.id = id;
         this.instrument = instrument;
         this.selected = selected;
         this.effects = effects;
         this.volume = volume;
+        this.isAudio = isAudio;
         this.ChangeVolume(this.volume);
     }
 

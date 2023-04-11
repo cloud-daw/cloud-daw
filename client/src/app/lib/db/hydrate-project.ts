@@ -20,7 +20,7 @@ function makeAllTracks(info: TrackInfo[]) : MidiTrack[] {
 }
 
 function makeTrack(info: TrackInfo): MidiTrack {
-    let track = new MidiTrack(info.title, info.id, makeInstrumentFromInfo(info.instrument), false, info.volume, makeAllEffects(info.effects));
+    let track = new MidiTrack(info.title, info.id, makeInstrumentFromInfo(info.instrument), false, false, info.volume, makeAllEffects(info.effects));
     track.setRecording(makeRecordingFromInfo(info.notes));
     track.midi.maxOverlaps = info.overlaps;
     return track;
