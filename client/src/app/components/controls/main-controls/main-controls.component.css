@@ -6,7 +6,7 @@
     font-family: 'Anuphan', sans-serif;
     font-weight: 300;
     /* align-items: center; */
-    height: 5em;
+    height: 4em;
 }
 
 .control-bar-header {
@@ -60,7 +60,7 @@
     background-color: #171717;
     color: white;
     font-size: 12pt;
-    height: 3em;
+    height: 70%;
     font-weight: 200;
     color: rgb(215, 213, 213);
     margin-right: 0.1em;

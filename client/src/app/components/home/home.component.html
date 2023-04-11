@@ -1,5 +1,10 @@
 <div *ngIf="!loading" class="body">
-    <div class='header'>
+    <div class="project-header">
+        <!-- <div class="logo">Cloud DAW</div> -->
+        <div class="project-name">{{project.name}}</div>
+        <!-- <div class="right">Cloud DAW</div> -->
+    </div>
+    <div class='control-header'>
         <app-main-controls 
             (play)="onPlay($event)" 
             (record)="onRecord($event)" 
