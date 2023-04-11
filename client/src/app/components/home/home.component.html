@@ -125,12 +125,14 @@
                     [instruments]="instruments"
                     [(selectedTrack)]="selectedTrack"
                     (onDelete)="onDeleteTrack($event)"
+                    (trackChange)="onTrackChange($event)"
                     (selectedTrackChange)="onSelectedTrackChange($event)"
                     [isRecording]="isRecording"
                     (click)="setSelectedTrack(track)"
                     (changeInstrument)="promptChangeTrackInstrument()"
                     (newTrackEmitter)="newTrack($event)"
                     (changeTrackInstrumentEmitter)="changeTrackInstrument($event)"
+                    (editEmitter)="onEditTrackName($event)"
                 >
                 </app-midi-track>
             </div>

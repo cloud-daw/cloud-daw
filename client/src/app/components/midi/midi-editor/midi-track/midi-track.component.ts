@@ -35,6 +35,7 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
 
   @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
+  @Output() editEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output() changeTrackInstrumentEmitter: EventEmitter<string> = new EventEmitter<string>();
   @Output() newTrackEmitter:  EventEmitter<string> = new EventEmitter<string>();
@@ -61,6 +62,11 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
     const instrument = GetSynthByKeyword(inst);
     this.track.instrument = instrument;
     this.changeTrackInstrumentEmitter.emit(inst);
+  }
+
+  onEdit(bool: boolean) {
+    this.editing = bool;
+    this.editEmitter.emit(this.editing);
   }
 
   onVolumeChange(event: any) {
