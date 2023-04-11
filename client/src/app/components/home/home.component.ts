@@ -185,7 +185,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public trackIdCounter: number = 0;
   controlEvent = controlStatus.reset;
 
-  public isExpanded = false;
+  public isExpanded = true;
   public showSelectInstrument = false;
 
   public octave = 4;
