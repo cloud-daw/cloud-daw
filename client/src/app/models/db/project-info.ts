@@ -15,6 +15,12 @@ export interface EffectInfo {
     options: string[];
 }
 
+export interface AudioInfo {
+    name: string;
+    starts_at: string;
+    buffer: Float32Array[];
+}
+
 export interface TrackInfo {
     title: string;
     id: number;
@@ -25,6 +31,8 @@ export interface TrackInfo {
     isMute: boolean;
     isSolo: boolean;
     effects: EffectInfo[];
+    isAudio: boolean;
+    audio: AudioInfo | number; // 0 for undefined
 }
 
 

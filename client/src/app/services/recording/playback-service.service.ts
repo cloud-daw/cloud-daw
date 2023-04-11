@@ -1,6 +1,7 @@
 import { Note } from '../../models/recording/note';
 import { MidiInstrument } from '../../models/instruments/midi-instrument'
 import { Recording } from '../../models/recording/recording';
+import { AudioTrack } from '../../models/instruments/audio-track';
 import * as Tone from 'tone';
 
 
@@ -42,6 +43,12 @@ class SynthAvailability {
         this.releases_at = 0;
     }
 
+}
+
+export function ScheduleAudioPlayback(audio: AudioTrack) {
+    Tone.Transport.scheduleOnce((time) => {
+        audio.player.start();
+    }, audio.mp3.starts_at);
 }
 
 export function SchedulePlayback(recording: Recording) {

@@ -14,47 +14,47 @@ export function GetSynthByKeyword(keyword: string) : MidiInstrument {
         }
         case 'Drums': {
             const drums = LoadSampler('drumkits/kit0');
-            return new MidiInstrument('Drums', drums, 2, true)
+            return new MidiInstrument('Drums', drums, 2, true, 'drumkits/kit0')
         }
         case 'Jazz Guitar': {
             const guitar = LoadSampler('guitar/jazzguitar');
-            return new MidiInstrument('Jazz Guitar', guitar, 0.2, true); 
+            return new MidiInstrument('Jazz Guitar', guitar, 0.2, true, 'guitar/jazzguitar'); 
         }
         case 'Acoustic Guitar': {
             const guitar = LoadSampler('guitar/acoustic');
-            return new MidiInstrument('Acoustic Guitar', guitar, 0.3, true); 
+            return new MidiInstrument('Acoustic Guitar', guitar, 0.3, true, 'guitar/acoustic'); 
         }
         case 'Funky Guitar': {
             const inst = LoadSampler('guitar/funky');
-            return new MidiInstrument('Funky Guitar', inst, 0.3, true); 
+            return new MidiInstrument('Funky Guitar', inst, 0.3, true, 'guitar/funky'); 
         }
         case 'Sansula': {
             const inst = LoadSampler('sansula');
-            return new MidiInstrument('Sansula', inst, 0.5, true); 
+            return new MidiInstrument('Sansula', inst, 0.5, true, 'sansula'); 
         }
         case 'Cello': {
             const inst = LoadSampler('cello');
-            return new MidiInstrument('Cello', inst, 0.3, true); 
+            return new MidiInstrument('Cello', inst, 0.3, true, 'cello'); 
         }
         case 'Harmonium': {
             const inst = LoadSampler('harmonium');
-            return new MidiInstrument('Harmonium', inst, 0.2, true); 
+            return new MidiInstrument('Harmonium', inst, 0.2, true, 'harmonium'); 
         }
         case 'Grand Piano': {
             const inst = LoadSampler('piano/grandpiano');
-            return new MidiInstrument('Grand Piano', inst, 0.3, true); 
+            return new MidiInstrument('Grand Piano', inst, 0.3, true, 'piano/grandpiano'); 
         }
         case 'Lofi Piano': {
             const inst = LoadSampler('piano/electric');
-            return new MidiInstrument('Lofi Piano', inst, 0.3, true); 
+            return new MidiInstrument('Lofi Piano', inst, 0.3, true, 'piano/electric'); 
         }
         case 'String Synth': {
             const inst = LoadSampler('synth/strings');
-            return new MidiInstrument('String Synth', inst, 0.3, true); 
+            return new MidiInstrument('String Synth', inst, 0.3, true, 'synth/strings'); 
         }
         case 'Pinch Lead Synth': {
             const inst = LoadSampler('synth/lead');
-            return new MidiInstrument('Pinch Lead Synth', inst, 0.3, true); 
+            return new MidiInstrument('Pinch Lead Synth', inst, 0.3, true, 'synth/lead'); 
         }
         default: {
             return new MidiInstrument('Pluck Synth');
@@ -101,21 +101,9 @@ function LoadSampler(sample: string): Tone.Sampler {
 }
 
 export function LoadSamplerBlocking(sample: string, callback: (sampler: Tone.Sampler) => void): void {
+    const audioURLs = getAudioUrls(sample);
   const sampler = new Tone.Sampler({
-    urls: {
-      'C4': 'kick/kick.mp3',
-      'C#4': 'snare/sidestick.mp3',
-      'D4': 'snare/base.mp3',
-      'D#4': 'snare/rimshot.mp3',
-      'E4': 'toms/low.mp3',
-      'F4': 'toms/mid.mp3',
-      'F#4': 'toms/high.mp3',
-      'G4': 'hihat/closed.mp3',
-      'G#4': 'hihat/semi.mp3',
-      'A4': 'cymbals/ride.mp3',
-      'A#4': 'cymbals/ridebell.mp3',
-      'B4': 'cymbals/crash.mp3',
-    },
+    urls: audioURLs,
     baseUrl: `../../../../assets/audio/${sample}/`,
     onload: () => {
       console.log('done loading');
@@ -155,7 +143,7 @@ function getAudioUrls(sample: string) {
             break;
         case 'guitar/funky':
             audioURLS = {
-                'C4': 'peroxide.mp3',
+                'D#4': 'peroxide.mp3',
             }
             break;
         case 'sansula':

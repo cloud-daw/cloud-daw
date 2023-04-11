@@ -8,9 +8,6 @@ enum controlStatus {
   reset = 2,
 }
 
-//! N.B. : small bug with behavior : drag slider -> hit rewind without having played/pause first, doesn't rewind
-//! But it does if they've been hit at any point so not crucial yet
-
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
@@ -198,7 +195,8 @@ export class SliderComponent implements AfterViewChecked, OnChanges {
     const interval = (this.bars * this.signature);
     const distance = currPos - this.startingPosition;
     const distanceRatio = distance / this.maxVW;
-    const intervalOffset = distanceRatio * interval
+    const intervalOffset = distanceRatio * interval;
+    this.totalTime = (((this.bars * this.signature) / this.bpm) * 60000);
     this.timeOffset = intervalOffset * (60000 / this.bpm)
   }
   getAnimTiming() {

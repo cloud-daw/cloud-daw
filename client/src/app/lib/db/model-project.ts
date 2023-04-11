@@ -1,6 +1,7 @@
-import { NoteInfo, EffectInfo, TrackInfo, ProjectInfo, InstrumentInfo } from '../../models/db/project-info'
+import { NoteInfo, EffectInfo, TrackInfo, ProjectInfo, InstrumentInfo, AudioInfo } from '../../models/db/project-info'
 
-export function MakeInfoFromDbRes(res: any) : ProjectInfo {
+export function MakeInfoFromDbRes(res: any): ProjectInfo {
+    console.log('db res', res);
     let tracks: TrackInfo[] = makeAllTrackInfo(res.tracks);
     return { id: res.id, name: res.name, email: res.email, master_volume: res.masterVolume, tracks: tracks, tempo: res.tempo, signature: res.signature };
 }
@@ -18,7 +19,8 @@ function makeTrackInfo(track: any): TrackInfo {
     const recording = track.notes ? track.notes : []
     let notesI: NoteInfo[] = makeInfoFromRecording(recording)
     let effectsI: EffectInfo[] = makeAllEffectInfo(track.effects);
-    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.overlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI};
+    let isAudio = track.isAudio || false;
+    return {title: track.title, id: track.id, instrument: instrumentI, notes: notesI, overlaps: track.overlaps, volume: track.volume, isMute: false, isSolo: false, effects: effectsI, isAudio: isAudio, audio: makeAudioInfo(track.audio)};
 }
 
 
@@ -26,6 +28,14 @@ function makeTrackInfo(track: any): TrackInfo {
 
 function makeAllEffectInfo(info: string[]): EffectInfo[] {
     return [];
+}
+
+function makeAudioInfo(audio: any): AudioInfo | number {
+    if (audio !== undefined && audio != 0 && audio.buffer) {
+        console.log('from db res audio', audio)
+        return {name: audio.name, starts_at: audio.starts_at.toString(), buffer: audio.buffer}
+    }
+    else return 0;
 }
 
 // function makeEffectInfo(effect: string): EffectInfo {

@@ -4,6 +4,8 @@ import { Recording } from '../recording/recording';
 import { Note } from '../recording/note';
 import { FixedSizeVirtualScrollStrategy } from '@angular/cdk/scrolling';
 
+import { AudioTrack } from '../instruments/audio-track';
+
 // Define a clip interface to hold information about each MIDI clip
 export interface Clip {
     id: number;
@@ -31,7 +33,7 @@ export class MidiTrack {
     effects: string[] = [];
     isAudio: boolean;
     midi: Recording = new Recording(new MidiInstrument(''));
-    clips: Clip[] = [];
+    audio: AudioTrack | undefined;
     constructor(title: string, id: number, instrument: MidiInstrument, selected: boolean, isAudio: boolean = false, volume: number = 0, effects: string[] = []) {
         this.title = title;
         this.id = id;
@@ -40,6 +42,10 @@ export class MidiTrack {
         this.effects = effects;
         this.volume = volume;
         this.isAudio = isAudio;
+        if (this.isAudio) {
+            this.audio = new AudioTrack(title);
+            this.instrument.Mute(true);
+        }
         this.ChangeVolume(this.volume);
     }
 
@@ -60,6 +66,15 @@ export class MidiTrack {
 
     public setRecording(notes: Note[]) {
         this.midi = new Recording(this.instrument, notes);
+    }
+
+    public setAudio(file: File, callback: () => void ) {
+        if (this.isAudio && this.audio) this.audio.AddAudio(file, callback);
+    }
+
+    public GetThingForPlayback() : {isAudio: boolean, recording: Recording | undefined, audio: AudioTrack | undefined} {
+        if (this.isAudio && this.audio) return { isAudio: true, recording: undefined, audio: this.audio };
+        else return { isAudio: false, recording: this.midi, audio: undefined };
     }
 
     // public MuteTrack(status: boolean) {
