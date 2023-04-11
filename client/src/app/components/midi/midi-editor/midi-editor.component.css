@@ -12,7 +12,6 @@
     width: 80%;
     left: 20%;
     top: 0;
-
 }
 
 .grid {
@@ -46,10 +45,11 @@
 }
 
 .header .header-text {
-    width: 70%;
+    width: 100%;
     margin: auto;
-    border-bottom: 0.5px solid rgb(56, 56, 56);
+    /* border-bottom: 0.5px solid rgb(106, 106, 106); */
     padding-bottom: 0.5em;
+    font-weight: 600;
 }
 
 .control-panel {
@@ -61,8 +61,19 @@
 }
 
 .control-panel .quantizer-container {
-    margin: auto;
-    width: 50%;
+    margin-top: 1em;
+    width: 80%;
+    display: block;
+    margin-inline: auto;
+}
+
+.quantizer-container .quantize-pill {
+    position: relative;
+    display: flex;
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+    margin-inline: auto;
 }
 
 .control-panel .note-info-container {
@@ -71,34 +82,59 @@
     color: white;
     font-size: 12pt;
     font-weight: 100;
-    margin-left: 5em;
+    margin-left: 3em;
+}
+
+.note-info-header {
+    color: white;
+    font-size: 12pt;
+    position: relative;
+    margin-top: 3em;
+    margin-inline: auto;
+    width: 70%;
+    text-align: center;
+    font-weight: 400;
+    margin-bottom: 0em;
+    border-bottom: 0.5px solid rgb(105, 105, 105);
+    padding-bottom: 0.5em;
 }
 
 .note-info .note-label {
-    background-color: #2d2d2d;
+    /* background-color: #2d2d2d; */
     padding-inline: 0.5em;
 }
 
 .note-info .note-value {
-    background-color: #2e2e2e;
-    padding-inline: 0.5em;
-    border-radius: 25px;
+    background-color: #373737;
+    box-shadow: inset 0px 0px 4px 0px rgba(0, 0, 0, 0.5);
+    padding-inline: 0.75em;
+    border-radius: 15px;
 }
 
 .quantize-button {
-    display: block;
+    display: inline-block;
+    /* display: block; */
     font-weight: 100;
     color: white;
     font-size: 12pt;
     background-color:rgb(68, 68, 68);
-    border-radius: 15px;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
     padding-inline: 0.75em;
-    margin-right: 1em;
+    margin-right: 0.25em;
     margin-top: 1em;
 }
 
 .quantize-button:hover {
     background-color:rgb(98, 98, 98);
+}
+
+#half, #eigth {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#quarter, #sixteenth {
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }

@@ -78,6 +78,16 @@
     outline: none;
 }
 
+.custom-tooltip {
+    background: #272727;
+    background-color: #171717;
+    fill: #171717;
+    background-image: none;
+    color: white;
+    font-size: 10pt;
+    font-weight: 100;
+}
+
 .right-header button svg {
 
 }

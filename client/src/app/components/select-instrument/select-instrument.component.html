@@ -1,4 +1,4 @@
-<div class="master" [ngClass] ="{'show' : isPrompted}">
+<!-- <div class="master" [ngClass] ="{'show' : isPrompted}">
     <div class="container">
         <div class="header" *ngIf="newTrack">
             Select an instrument:
@@ -17,9 +17,33 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
-<!-- <div *ngFor="let instrument of instruments" class="{{instrument}}" (click)="createInstrument(instrument)">
-    {{instrument}}
-  </div> -->
+<mat-menu class='dropdown-menu' #menu="matMenu">
+    <div *ngFor="let instrument of instruments">
+        <button class="dropdown-item" *ngIf="newTrack" (click)="createTrackWithInstrument(instrument)">
+            {{instrument}}
+        </button>
+        <button class="dropdown-item" *ngIf="!newTrack" (click)="changeTrackInstrument(instrument)">
+            {{instrument}}
+        </button>
+    </div>
+</mat-menu>>
+
+  <!-- <button class="new-track-button" type="button" [matMenuTriggerFor]="menu">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.11765 0.882353C4.11765 0.395043 4.5127 0 5.00001 0C5.48732 0 5.88236 0.395043 5.88236 0.882353V9.11765C5.88236 9.60496 5.48732 10 5.00001 10C4.5127 10 4.11765 9.60496 4.11765 9.11765V0.882353Z" fill="white"/>
+        <path d="M0.882353 5.88235C0.395043 5.88235 -5.81111e-09 5.4873 0 4.99999C5.81111e-09 4.51268 0.395043 4.11764 0.882353 4.11764H9.11765C9.60496 4.11764 10 4.51268 10 4.99999C10 5.4873 9.60496 5.88235 9.11765 5.88235H0.882353Z" fill="white"/>
+    </svg>
+    New Track
+</button> -->
+<!-- <mat-menu class='dropdown-menu' #menu="matMenu">
+    <button class="dropdown-item" (click)="promptNewTrackInstrument()">
+        New Instrument Track
+    </button>
+    <button class="dropdown-item" (click)="fileInput.click()">
+        New Audio Track
+        <input #fileInput type="file" accept=".mp3,.wav" (change)="promptNewAudioTrack($event)" style="display:none;" />
+    </button>
+</mat-menu>> -->
   

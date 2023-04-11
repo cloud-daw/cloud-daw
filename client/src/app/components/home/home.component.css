@@ -221,6 +221,11 @@
   background-color: #171717;
 }
 
+.dropdown-container {
+  max-height: 15em;
+  overflow: auto;
+}
+
 .dropdown-item {
   background-color: #171717;
   color: white;

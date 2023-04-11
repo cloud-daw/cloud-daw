@@ -1,11 +1,12 @@
-import { Component, Output, Input, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { Metronome } from '../../../models/instruments/metronome';
 import * as Tone from 'tone';
 
 @Component({
   selector: 'app-main-controls',
   templateUrl: './main-controls.component.html',
-  styleUrls: ['./main-controls.component.css']
+  styleUrls: ['./main-controls.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class MainControlsComponent {
   @Output() play: EventEmitter<boolean> = new EventEmitter();

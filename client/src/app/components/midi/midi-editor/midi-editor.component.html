@@ -3,13 +3,16 @@
     <div class="control-panel">
         <div class="header">
             <div class="header-text">
-                Note Editor : {{selectedNote.vw}}
+                Editor : {{track.title}}
             </div>
+        </div>
+        <div class="note-info-header">
+            Note Info
         </div>
         <div class="note-info-container">
             <div class="note-info" id="value">
                 <span class="note-label">
-                    Note: 
+                    Note:
                 </span>
                 <span class="note-value">
                     {{selectedNoteData.note}}
@@ -32,43 +35,44 @@
                 </span>
             </div>
         </div>
+        <div class="note-info-header">
+            Quantize
+        </div>
         <div class="quantizer-container">
-            <button type="button" class="quantize-button" (click)="onQuantizeRecording(2)">
-                Quantize 1/2
-            </button>
-            <button type="button" class="quantize-button" (click)="onQuantizeRecording(4)">
-                Quantize 1/4
-            </button>
-            <button type="button" class="quantize-button" (click)="onQuantizeRecording(8)">
-                Quantize 1/8
-            </button>
-            <button type="button" class="quantize-button" (click)="onQuantizeRecording(16)">
-                Quantize 1/16
-            </button>
+            <div class="quantize-pill">
+                <button type="button" class="quantize-button" id="half" (click)="onQuantizeRecording(2)">
+                    1/2
+                </button>
+                <button type="button" class="quantize-button" id="quarter" (click)="onQuantizeRecording(4)">
+                    1/4
+                </button>
+            </div>
+            <div class="quantize-pill">
+                <button type="button" class="quantize-button" id="eigth" (click)="onQuantizeRecording(8)">
+                    1/8
+                </button>
+                <button type="button" class="quantize-button" id="sixteenth" (click)="onQuantizeRecording(16)">
+                    1/16
+                </button>
+            </div>
         </div>
     </div>
     <div class="content">
         <div class="grid">
             <div class="absolute w-full h-full bg-transparent flex justify-between z-50">
                 <div *ngFor="let m of griddex" class="flex justify-between">
-                    <div *ngIf="m % 4 == 0" class="relative mt-4 text-md text-gray-300 -ml-px w-[0.5px] bg-measureLineColor h-full grow shrink select-none font-thin">
+                    <div *ngIf="m % 4 == 0"
+                        class="relative mt-4 text-md text-gray-300 -ml-px w-[0.5px] bg-measureLineColor h-full grow shrink select-none font-thin">
                     </div>
-                    <div *ngIf="m % 4 != 0" class="w-[0.5px] bg-gridLineColor mt-4 -ml-px h-[full] grow shrink"></div>
+                    <div *ngIf="m % 4 != 0" class="w-[0.5px] bg-gridLineColor mt-4 -ml-px h-[full] grow shrink">
+                    </div>
                 </div>
             </div>
         </div>
         <div class="midi-notes-container">
-            <app-midi-notes-container
-                [track]="track"
-                [vw]="vw"
-                [isRecording]="isRecording"
-                [editMode]="showEditor"
-                (trackUpdated)="onTrackUpdated($event)"
-                [midiContainerRef]="midiContainerRef"
-                [reRender]="reRender"
-                (triggerReRender)="onReRender($event)"
-                (selectedNoteChange)="onSelectedNoteChange($event)"
-            />
+            <app-midi-notes-container [track]="track" [vw]="vw" [isRecording]="isRecording" [editMode]="showEditor"
+                (trackUpdated)="onTrackUpdated($event)" [midiContainerRef]="midiContainerRef" [reRender]="reRender"
+                (triggerReRender)="onReRender($event)" (selectedNoteChange)="onSelectedNoteChange($event)" />
         </div>
     </div>
 </div>

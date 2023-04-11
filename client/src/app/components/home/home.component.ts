@@ -22,6 +22,7 @@ import { InfoizeProject } from 'src/app/lib/db/infoize-project';
 import { MakeInfoFromDbRes } from 'src/app/lib/db/model-project';
 import { ProjectManagementService } from 'src/app/services/project-management.service';
 import { AudioTrack } from 'src/app/models/instruments/audio-track';
+import { GetAllSynthKeywords, GetSynthByKeyword } from 'src/app/lib/dicts/synthdict';
   
 /**
  * Int status of keys for keyboard
@@ -188,6 +189,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   public reRender: number = 0;
 
   public newTrackInstrument: boolean = false;
+  instruments: string[] = GetAllSynthKeywords();
 
   initVars() {
     this.masterVolume = this.project.masterVolume;
@@ -269,7 +271,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   //new Midi Track
-  newTrack(instrument: MidiInstrument) {
+  newTrack(inst: string) {
+    const instrument = GetSynthByKeyword(inst);
     if (!this.isRecording) {
       this.trackIdCounter++;
       const newTrack = new MidiTrack('Untitled Track', this.trackIdCounter, instrument, true);
@@ -280,7 +283,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     }
   }
 
-  changeTrackInstrument(instrument: MidiInstrument) {
+  changeTrackInstrument(inst: string) {
+    const instrument = GetSynthByKeyword(inst);
     if (!this.isRecording) {
       this.selectedTrack.instrument = instrument;
       this.setRecordingToTrack(this.selectedTrack.id); 

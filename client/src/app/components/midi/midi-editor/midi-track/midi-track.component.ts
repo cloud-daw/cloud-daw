@@ -5,6 +5,7 @@ import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
 import { FormsModule } from '@angular/forms';
 import * as Tone from 'tone';
+import { GetSynthByKeyword } from 'src/app/lib/dicts/synthdict';
 
 @Component({
   selector: 'app-midi-track',
@@ -16,6 +17,7 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  @Input() instruments: string[] = [];
   //FOR DRAG DROP, INSTEAD OF CHANGING TRACKS TO ARRAY, MAKE AN ARRAY FROM THE TRACKS SET AND REORDER THAT WAY
   @Input() synth: any;
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
@@ -34,6 +36,9 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
 
   @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() changeTrackInstrumentEmitter: EventEmitter<string> = new EventEmitter<string>();
+  @Output() newTrackEmitter:  EventEmitter<string> = new EventEmitter<string>();
+
   public editing: boolean = false;
   public placeholder: string = this.track.title;
   //functions
@@ -45,6 +50,16 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     this.placeholder = this.track.title;
+  }
+
+  newTrackHandler(inst: string) {
+    this.newTrackEmitter.emit(inst);
+  }
+
+  changeTrackInstrumentHandler(inst: string) {
+    const instrument = GetSynthByKeyword(inst);
+    this.track.instrument = instrument;
+    this.changeTrackInstrumentEmitter.emit(inst);
   }
 
   onVolumeChange(event: any) {
@@ -93,6 +108,8 @@ export class MidiTrackComponent implements AfterViewInit, OnChanges {
   changeTrackInstrument() {
     this.changeInstrument.emit();
   }
+
+  
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedTrack']) {
