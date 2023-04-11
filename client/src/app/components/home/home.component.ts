@@ -182,6 +182,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   public reRender: number = 0;
 
+  public newTrackInstrument: boolean = false;
+
   initVars() {
     this.masterVolume = this.project.masterVolume;
     this.synth = this.project.tracks[0].instrument;
@@ -230,17 +232,35 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.isExpanded = !this.isExpanded;
   }
 
-  promptSelectInstrument() {
+  promptNewTrackInstrument() {
+    this.newTrackInstrument = true;
+    this.showSelectInstrument = !this.showSelectInstrument;
+  }
+
+  promptChangeTrackInstrument() {
+    this.newTrackInstrument = false;
     this.showSelectInstrument = !this.showSelectInstrument;
   }
 
   newTrack(instrument: MidiInstrument) {
     if (!this.isRecording) {
       this.trackIdCounter++;
-      const newTrack = new MidiTrack(`Track ${this.trackIdCounter}`, this.trackIdCounter, instrument, true);
+      const newTrack = new MidiTrack('Untitled Track', this.trackIdCounter, instrument, true);
       this.tracks.add(newTrack);
       this.project.addTrack(newTrack);
       this.setSelectedTrack(newTrack);
+      this.showSelectInstrument = false;
+    }
+  }
+
+  changeTrackInstrument(instrument: MidiInstrument) {
+    if (!this.isRecording) {
+      this.selectedTrack.instrument = instrument;
+      this.setSelectedTrack(this.selectedTrack);
+      this.recordings.get(this.selectedTrack.id)!.synth = instrument;
+      // this.project.changeTrackInstrument(this.selectedTrack.id, instrument);
+      // this.project.updateTrackRecordingAtId(this.selectedTrack.id, this.recordings.get(this.selectedTrack.id) as Recording);
+      // this.selectedTrack.midi.UpdateOverlaps();
       this.showSelectInstrument = false;
     }
   }
@@ -390,6 +410,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   onSelectedTrackChange(track: MidiTrack) {
     this.setRecordingToTrack(this.selectedTrack.id);
     this.octave = this.selectedTrack.instrument.currentOctave;
+    console.log('track changes are being made');
   }
 
   onUndo(event: number) {
@@ -609,6 +630,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   }
 
   async ngOnInit(){
+    
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
     
     this.project = HydrateProjectFromInfo(this.projectInfo);
@@ -624,12 +646,14 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
+
+    this.loading = false; //putting this below the next block breaks for some reason
+
     if (this.isTutorial) {
         nextBtn.style.display = "block";
         instructions.style.display = "block";
     }
 
-    this.loading = false;
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
   }

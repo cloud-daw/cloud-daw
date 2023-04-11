@@ -3,11 +3,10 @@
     top: 35%;
     left: 20%;
     height: 65%;
-    width: 10000em;
-    background-color: rgba(248, 92, 92, 0.4);
+    /* width: 10000em; */
+    background-color: #292929;
     z-index: 50;
     opacity: 0.9;
-    border-radius: 5px;
     /* margin: auto; */
 }
 

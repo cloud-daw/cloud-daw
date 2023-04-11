@@ -1,8 +1,9 @@
 
-import { Component, EventEmitter, Inject, Input, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { MidiInstrument } from 'src/app/models/instruments/midi-instrument';
 import { Recording } from 'src/app/models/recording/recording';
 import { MidiTrack } from 'src/app/models/tracks/midi-track';
+import { FormsModule } from '@angular/forms';
 import * as Tone from 'tone';
 
 @Component({
@@ -11,16 +12,17 @@ import * as Tone from 'tone';
   styleUrls: ['./midi-track.component.css']
 })
 
-export class MidiTrackComponent {
+export class MidiTrackComponent implements AfterViewInit, OnChanges {
   //child/parent vars
   @Input() track: MidiTrack = new MidiTrack('default', 0, new MidiInstrument(''), false);
   @Output() trackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
+  //FOR DRAG DROP, INSTEAD OF CHANGING TRACKS TO ARRAY, MAKE AN ARRAY FROM THE TRACKS SET AND REORDER THAT WAY
   @Input() synth: any;
   @Input() tracks: Set<MidiTrack> = new Set<MidiTrack>();
   @Input() isRecording: boolean = false;
   @Input()
     set selectedTrack(track: MidiTrack) {
-      // this.selectedTrackChange.emit(track);
+      this.selectedTrackChange.emit(track);
       this._selectedTrack = track;
     }
     get selectedTrack() {
@@ -29,12 +31,21 @@ export class MidiTrackComponent {
   @Output() selectedTrackChange: EventEmitter<MidiTrack> = new EventEmitter<MidiTrack>();
   private _selectedTrack: MidiTrack = new MidiTrack('', 0, new MidiInstrument(''), false);
   @Output() onDelete: EventEmitter<number> = new EventEmitter<number>();
+
+  @Output() changeInstrument: EventEmitter<any> = new EventEmitter<any>();
+
+  public editing: boolean = false;
+  public placeholder: string = this.track.title;
   //functions
   public formatLabel(value: number): string {
     return `${value}db`;
   }
 
   volumeLevel: number = this.track.volume + 56;
+
+  ngAfterViewInit() {
+    this.placeholder = this.track.title;
+  }
 
   onVolumeChange(event: any) {
     const inputElement = event.target as HTMLInputElement;
@@ -71,9 +82,16 @@ export class MidiTrackComponent {
     }
   }
 
-  changeTrackTitle(title: string) {
+  changeTrackTitle(e: Event, title: string) {
+    // this.track.title = title;
+    // this.trackTitle = title;
     this.track.title = title;
+    this.placeholder = title;
     this.trackChange.emit(this.track);
+  }
+
+  changeTrackInstrument() {
+    this.changeInstrument.emit();
   }
 
   ngOnChanges(changes: SimpleChanges) {

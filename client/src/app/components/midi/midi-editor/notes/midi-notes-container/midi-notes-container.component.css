@@ -32,6 +32,23 @@
     background-color: rgb(255, 72, 96);
 }
 
+.header {
+    display: flex;
+}
+
+.quantize-button {
+    color: white;
+    font-size: 12pt;
+    background-color:rgb(21, 21, 21);
+    border-radius: 5px;
+    padding: 0.25em;
+    margin-right: 1em;
+}
+
+.quantize-button:hover {
+    background-color:rgb(98, 98, 98);
+}
+
 .edit-notes-container {
     position: absolute;
     color: rgb(255, 255, 255);
@@ -39,8 +56,8 @@
     left: 0;
     border-top: 0.5px solid rgb(48, 48, 48);
     border-bottom: 0.5px solid rgb(48, 48, 48);
-    border: 0.1px solid rgb(255, 0, 0);
-    background-color: rgb(50, 50, 50);
+    /* border: 0.1px solid rgb(255, 0, 0); */
+    background-color: rgb(98, 98, 98);
     opacity: 0.9;
     border-radius: 5px;
     display: flex;

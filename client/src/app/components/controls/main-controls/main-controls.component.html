@@ -1,41 +1,119 @@
 <div class="control-bar-container">
     <div class="control-bar-header">
         <div class="left-header">
+            <div class="volume-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.35 16.7262C12.0167 16.8595 11.7083 16.8179 11.425 16.6012C11.1417 16.3845 11 16.0845 11 15.7012C11 15.5179 11.0543 15.3555 11.163 15.2142C11.2717 15.0729 11.409 14.9685 11.575 14.9012C12.9083 14.3679 13.9793 13.5179 14.788 12.3512C15.5967 11.1845 16.0007 9.86786 16 8.40119C16 6.93452 15.5957 5.61786 14.787 4.45119C13.9783 3.28452 12.9077 2.43452 11.575 1.90119C11.3917 1.83452 11.25 1.72619 11.15 1.57619C11.05 1.42619 11 1.25952 11 1.07619C11 0.709524 11.1417 0.417857 11.425 0.20119C11.7083 -0.0154762 12.0167 -0.0571429 12.35 0.0761905C14.05 0.759524 15.4167 1.85119 16.45 3.35119C17.4833 4.85119 18 6.53452 18 8.40119C18 10.2679 17.4833 11.9512 16.45 13.4512C15.4167 14.9512 14.05 16.0429 12.35 16.7262ZM1 11.4262C0.71667 11.4262 0.479003 11.3302 0.287003 11.1382C0.0950034 10.9462 -0.000663206 10.7089 3.46021e-06 10.4262V6.42619C3.46021e-06 6.14286 0.0960036 5.90519 0.288004 5.71319C0.480004 5.52119 0.717337 5.42552 1 5.42619H4L7.3 2.12619C7.61667 1.80952 7.97934 1.73852 8.388 1.91319C8.79667 2.08786 9.00067 2.40052 9 2.85119V14.0012C9 14.4512 8.79567 14.7639 8.387 14.9392C7.97834 15.1145 7.616 15.0435 7.3 14.7262L4 11.4262H1ZM11 12.4262V4.37619C11.75 4.72619 12.3543 5.26786 12.813 6.00119C13.2717 6.73452 13.5007 7.54286 13.5 8.42619C13.5 9.30952 13.2707 10.1095 12.812 10.8262C12.3533 11.5429 11.7493 12.0762 11 12.4262Z" fill="#D9D9D9"/>
+                </svg>            
+            </div>
             <div class="volume-slider" id="volume">
                 <app-main-volume (volumeChange)="onVolumeChange($event)"></app-main-volume>
+            </div>
+            <div class="volume-text">
+                {{dbLevel}} db
             </div>
         </div>
         <div class="center-header" id="center-main-controls">
             <!-- <button id="arrow" class="control-button" name="undo" (click)="clickUndo()"> UNDO BUTTON
             </button> -->
-            <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-rewind-fill" viewBox="0 0 16 16">
-                    <path d="M8.404 7.304a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L8.404 7.304Z"/>
-                    <path d="M.404 7.304a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L.404 7.304Z"/>
-                </svg>
-            </button>
-            <button class="control-button" name="play" (click)="clickPlay()"> <!-- PLAY BUTTON -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-play-fill" viewBox="0 0 16 16">
-                    <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
-                  </svg>
-            </button>
-            <button class="control-button" name="pause" (click)="clickPause()"> <!-- PAUSE BUTTON -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-pause-fill" viewBox="0 0 16 16">
-                    <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
-                </svg>
-            </button>
-            <button class="control-button" id="record-button" name="record" (click)="clickRecord()"> <!-- RECORD BUTTON -->
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="bi bi-record-fill" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
-                  </svg>
-            </button>
-            <span class="record-status" *ngIf="isRecording">Recording...</span>
+            <div class="button-container">
+                <div class="octave-container">
+                    <button class="octaveButton" id="octaveInc" (click)="onOctaveDown()">
+                        <svg width="18" height="3" viewBox="0 0 18 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="3" width="3" height="18" rx="1" transform="rotate(-90 0 3)" fill="#D9D9D9"/>
+                        </svg>
+                    </button>
+                    <button class="octaveText">Octave : {{octave}}</button>
+                    <button class="octaveButton" id="octaveDec" (click)="onOctaveUp()">
+                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 1C7 0.44771 7.44772 0 8 0H9C9.55228 0 10 0.447715 10 1V16C10 16.5523 9.55228 17 9 17H8C7.44772 17 7 16.5523 7 16V1Z" fill="#D9D9D9"/>
+                            <path d="M1 10C0.447715 10 -6.58593e-09 9.55228 0 9L1.19248e-08 8C1.85108e-08 7.44772 0.447715 7 1 7H16C16.5523 7 17 7.44772 17 8V9C17 9.55228 16.5523 10 16 10H1Z" fill="#D9D9D9"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="control-button-container">
+                    <button class="control-button" name="rewind" (click)="clickRewind()"> <!-- REWIND BUTTON -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-rewind-fill" viewBox="0 0 16 16">
+                            <path d="M8.404 7.304a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L8.404 7.304Z"/>
+                            <path d="M.404 7.304a.802.802 0 0 0 0 1.392l6.363 3.692c.52.302 1.233-.043 1.233-.696V4.308c0-.653-.713-.998-1.233-.696L.404 7.304Z"/>
+                        </svg>
+                    </button>
+                    <button class="control-button" name="play" (click)="clickPlay()"> <!-- PLAY BUTTON -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-play-fill" viewBox="0 0 16 16">
+                            <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                        </svg>
+                    </button>
+                    <button class="control-button" name="pause" (click)="clickPause()"> <!-- PAUSE BUTTON -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-pause-fill" viewBox="0 0 16 16">
+                            <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+                        </svg>
+                    </button>
+                    <button *ngIf="!isRecording" class="control-button" id="record-button" name="record" (click)="clickRecord()" > <!-- RECORD BUTTON -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="red" class="bi bi-record-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
+                        </svg>
+                    </button>
+                    <button *ngIf="isRecording" class="control-button" id="stop-button" name="record" (click)="clickRecord()" > <!-- RECORD BUTTON -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="bi bi-stop-fill" viewBox="0 0 16 16">
+                            <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="tempo-container">
+                    <button class="octaveButton" (click)="onOctaveDown()">
+                        <svg width="18" height="3" viewBox="0 0 18 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect y="3" width="3" height="18" rx="1" transform="rotate(-90 0 3)" fill="#D9D9D9"/>
+                        </svg>
+                    </button>
+                    <button class="octaveText">Tempo : {{octave}}</button>
+                    <button class="octaveButton" (click)="onOctaveUp()">
+                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 1C7 0.447715 7.44772 0 8 0H9C9.55228 0 10 0.447715 10 1V16C10 16.5523 9.55228 17 9 17H8C7.44772 17 7 16.5523 7 16V1Z" fill="#D9D9D9"/>
+                            <path d="M1 10C0.447715 10 -6.58593e-09 9.55228 0 9L1.19248e-08 8C1.85108e-08 7.44772 0.447715 7 1 7H16C16.5523 7 17 7.44772 17 8V9C17 9.55228 16.5523 10 16 10H1Z" fill="#D9D9D9"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- <span class="record-status" *ngIf="isRecording">...</span> -->
+            </div>
         </div>
         <div class="right-header">
-            <button type="button" id="bounce-button" class="btn btn-dark" (click)="clickBounce()"> Export </button>
-            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickTutorial()"> Tutorials</button>
-            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickProjects()"> Projects</button>
-            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"><i class="bi bi-box-arrow-right"></i> Logout</button>   
+            <button type="button" id="bounce-button" class="btn btn-dark" (click)="clickBounce()"
+                data-toggle="tooltip"
+                data-placement="bottom" 
+                title="Export project as .mp3"
+            > 
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-down-fill" viewBox="0 0 16 16">
+                    <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2zm2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708z"/>
+                </svg>
+            </button>
+            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickTutorial()"
+                data-toggle="tooltip"
+                data-placement="bottom" 
+                title="Show/Hide Tutorial"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+            </button>
+            <button type="button" id="tutorial-button" class="btn btn-dark" (click)="clickProjects()"
+                data-toggle="tooltip"
+                data-placement="bottom" 
+                title="Go to Projects Dashboard"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-disc-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-6 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0zM4 8a4 4 0 0 1 4-4 .5.5 0 0 0 0-1 5 5 0 0 0-5 5 .5.5 0 0 0 1 0zm9 0a.5.5 0 1 0-1 0 4 4 0 0 1-4 4 .5.5 0 0 0 0 1 5 5 0 0 0 5-5z"/>
+                </svg>
+            </button>
+            <button type="button" id="logout-button" class="btn btn-dark" (click)="clickLogout()"
+                data-toggle="tooltip"
+                data-placement="bottom" 
+                title="Logout"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                </svg>
+            </button>   
         </div>
     </div>
     <!-- <div class="tempo-control-container">

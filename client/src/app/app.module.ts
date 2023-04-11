@@ -27,7 +27,6 @@ import { MidiEditorComponent } from './components/midi/midi-editor/midi-editor.c
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ProjectsDashboardComponent } from './components/projects-dashboard/projects-dashboard.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,

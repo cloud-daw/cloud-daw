@@ -19,12 +19,17 @@ export class MainControlsComponent {
   @Output() projects: EventEmitter<any> = new EventEmitter();
   @Output() logout: EventEmitter<any> = new EventEmitter();
   @Output() bounce: EventEmitter<any> = new EventEmitter();
+  @Output() octaveUp: EventEmitter<number> = new EventEmitter<number>();
+  @Output() octaveDown: EventEmitter<number> = new EventEmitter<number>();
   
   @Input() isRecording: boolean = false;
 
   @Input() metronome: Metronome = new Metronome();
   @Input() bar: number = 1;
   @Input() beat: number = 1;
+  @Input() octave: number = 4;
+
+  public dbLevel: number = 0;
   constructor() {}
 
   clickPlay() {
@@ -48,6 +53,7 @@ export class MainControlsComponent {
   }
 
   onVolumeChange(event: number) {
+    this.adjustMasterVolume(event);
     this.volume.emit(event);
   }
 
@@ -68,11 +74,20 @@ export class MainControlsComponent {
     this.bounce.emit();
   }
 
+  onOctaveUp() {
+    this.octaveUp.emit();
+  }
+
+  onOctaveDown() {
+    this.octaveDown.emit();
+  }
+
   /**
    * Changes master node volume level.
    * @param db The new value for master volume
    */
   private adjustMasterVolume(db: number) {
     Tone.Destination.volume.value = db;
-}
+    this.dbLevel = db;
+  }
 }

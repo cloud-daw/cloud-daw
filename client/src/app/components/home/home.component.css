@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@100;200;300;400&family=Inter:wght@100;200;300;400&family=Rajdhani:wght@300;400;500&display=swap');
 
   .noteynote {
     color: white;
@@ -9,24 +8,10 @@
     box-sizing: border-box;
   }
 
-  .piano-controls .expand-piano {
-    font-weight: 300;
-    user-select: none;
-    padding-inline: 1em;
-    top: 3em;
-    background-color: rgb(62, 62, 62);
-    border-radius: 5px;
-    float: left;
-  }
-
-  .piano-controls .expand-piano:hover {
-    background-color: rgb(84, 84, 84);
-  }
-
   .piano-controls {
     text-align: center;
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
   }
 
   .piano-controls .octave-display {
@@ -51,6 +36,7 @@
     border-bottom: 1px solid rgb(48, 48, 48);
     background-color: rgb(48, 48, 48);
     width: 100%;
+    text-align: center;
   }
 
   .expanded .piano {
@@ -59,7 +45,7 @@
   }
 
   .piano {
-    width: 40%;
+    width: fit-content;
     visibility: hidden;
     height: 0em;
     display: flex;
@@ -78,28 +64,73 @@
   
   .white {
     --width: 60px;
-    background-color: white;
-    border: 1px solid #333;
+    background-color: rgb(222, 222, 222);
+    border: 0.5px solid #333;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: inset 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+    font-weight: 200;
+    color: #171717;
+  }
+
+  .project-header {
+    position: relative;
+    height: 1.5em;
+    display: flex;
+    /* text-align: center; */
+    align-items: center;
+    background-color: #313131;
+  }
+
+  .project-header .logo {
+    padding-top: 0.5em;
+    float: left;
+    margin-left: 2em;
+    color: rgb(222, 222, 222);
+    font-size: 14pt;
+    font-weight: 300;
+  }
+
+  .project-header .project-name {
+    padding-top: 0.25em;
+    margin: auto;
+    color: rgb(222, 222, 222);
+    font-size: 12pt;
+    font-weight: 100;
+  }
+
+  .project-header .right {
+    padding-top: 0.5em;
+    float: right;
+    margin-right: 2em;
+    color: rgb(222, 222, 222);
+    font-size: 14pt;
+    font-weight: 300;
   }
   
-  .header {
-    margin-left: -0.5em;
+  .control-header {
+    height: 4em;
   }
 
   .white.active {
-    background-color: #CCC;
+    background-color: #b8b8b8;
   }
   
   .black {
     --width: 30px;
-    background-color: black;
+    background-color: #171717;
+    box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.5);
     margin-left: calc(var(--width) / -2);
     margin-right: calc(var(--width) / -2);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     z-index: 2;
+    color: rgb(222, 222, 222);
+    font-weight: 200;
   }
   
   .black.active {
-    background-color: #333;
+    background-color: #4c4c4c;
   }
   
 .body {
@@ -107,32 +138,71 @@
     background-color: #1F1F1F;
     width: 100%;
     height: auto;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Anuphan', sans-serif;
+}
+
+.tracks-header {
+  position: relative;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-shadow: inset 0px 8px 6px -6px rgba(0, 0, 0, 0.2);
 }
 
 .new-track-button {
-    text-align: center;
-    width: 50%;
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-    color: white;
-    background-color: #262626;
-    margin: auto;
-    border-radius: 5px;
-    padding-inline: 0.5em;
-    padding-top: 0.2em;
-    height: 2em;
+  display: flex;
+  background-color: #171717;
+  border-radius: 17px;
+  position: relative;
+  height: 60%;
+  margin-left: 1em;
+  /* align-items: center; */
+  text-align: center;
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
+  font-size: 11pt;
+  padding-inline: 1em;
+  padding-top: 0.2em;
+  color: white;
+}
+
+.new-track-button svg {
+  margin-top: 0.4em;
+  margin-right: 0.5em;
 }
 
 .new-track-button:hover {
     cursor: pointer;
-    background-color: #2f2f2f;
+    background-color: rgb(70, 70, 70);
 }
+
+.expand-piano {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  background-color: #171717;
+  border-radius: 11px;
+  right: 1em;
+  height: 1.75em;
+  text-align: center;
+  font-family: 'Anuphan', sans-serif;
+  font-weight: 200;
+  padding-inline: 0.5em;
+}
+
+.expand-piano:hover {
+  background-color: rgb(70, 70, 70);
+}
+
+/* .expand-piano svg {
+} */
 
 .production-container {
     height: 100%;
     width: 100%;
-    background-color: #1F1F1F;
+    background-color: #262626;
+    box-shadow: inset 0px 7px 15px rgba(0, 0, 0, 0.5);
     display: flex;
 }
 
@@ -145,9 +215,9 @@
 }
 
 .tracks-container {
-    background-color: #3f3f3f;
-    width: 20%;
-    height: auto;
+  background-color: #292929;
+  width: 20%;
+  height: auto;
 }
 
 .tracks-subContainer {
@@ -159,13 +229,15 @@
   width: 80%;
   position: relative;
   box-sizing: border-box;
+  background-color: #1F1F1F;
   height: 100em;
-  margin-top: 2em;
+  margin-top: 3em;
+  /* overflow: auto; */
 }
 
 .midi-subContainer {
   position: absolute;
-  width: auto;
+  width: max-content;
 }
 
 .notes-container {
