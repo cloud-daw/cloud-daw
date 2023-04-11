@@ -54,7 +54,11 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   handleKeydownEvent(event: KeyboardEvent) {
     this.synthOnKeydown(event.key);
     //if (this.keyboardStatus[event.key] != keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toAttack; //schedules attack
-    const myDiv = document.getElementById(event.key);
+    let myDiv = document.getElementById(event.key);
+    if(this.isDrums) {
+      myDiv = document.getElementById(event.key+'1');
+    }
+    console.log(myDiv);
     if (myDiv) {
       myDiv.classList.add("active");
     }
@@ -66,9 +70,13 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     this.synthOnKeyup(event.key);
 
     //if (this.keyboardStatus[event.key] == keyStatus.isPlaying) this.keyboardStatus[event.key] = keyStatus.toRelease; //schedules release
-    const myDiv = document.getElementById(event.key);
+    let myDiv = document.getElementById(event.key);
+    if(this.isDrums) {
+      myDiv = document.getElementById(event.key+'1');
+    }
     if (myDiv) {
       myDiv.classList.remove("active");
+      console.log('test');
     }
     //this.PlayRelease();
   }
@@ -79,7 +87,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   @HostListener('window:mouseup', ['$event'])
   handleMouseupEvent(event: MouseEvent) {
     if (this.currMousekey != '') {
-      const myDiv = document.getElementById(this.currMousekey);
+      let myDiv = document.getElementById(this.currMousekey);
+      if(this.isDrums) {
+        myDiv = document.getElementById(this.currMousekey+'1');
+      }  
       if (myDiv) {
         myDiv.classList.remove("active");
       }
@@ -97,7 +108,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   onKeyMousedown(key: string) {
     this.currMousekey = key;
-    const myDiv = document.getElementById(this.currMousekey);
+    let myDiv = document.getElementById(this.currMousekey);
+    if(this.isDrums) {
+      myDiv = document.getElementById(this.currMousekey+'1');
+    }
     if (myDiv) {
       myDiv.classList.add("active");
     }
@@ -106,7 +120,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
   onKeyMouseup(key: string) {
     if (this.currMousekey != '') {
-      const myDiv = document.getElementById(this.currMousekey);
+      let myDiv = document.getElementById(this.currMousekey);
+      if(this.isDrums) {
+        myDiv = document.getElementById(this.currMousekey+'1');
+      }  
       if (myDiv) {
         myDiv.classList.remove("active");
       }
