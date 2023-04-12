@@ -19,10 +19,12 @@ export class ProjectsDashboardComponent  implements OnInit{
     projects: ProjectInfo[] = [];
     projectNames = new Set<string>;
     projectIds = new Set<string>; 
+    projectKeys: string[] = [];
     constructor(public firebaseService: FirebaseService, public _router: Router) {  }
     
     projectName: string = '';
     project: ProjectInfo = InfoizeProject(MakeNewProject('a@a.com'));
+    projectKey: string = '';
     savedName: string | null = localStorage.getItem("openProjectName");
     openProject: boolean = localStorage.getItem('inProject') == "true";
     initialized: boolean = false
@@ -35,6 +37,7 @@ export class ProjectsDashboardComponent  implements OnInit{
                 this.projectNames.add(x[i].name)
                 this.projectIds.add(x[i].id)
                 this.projects.push(MakeInfoFromDbRes(x[i]))
+                this.projectKeys.push(x[i].key);
             }
             console.log('projects: ', this.projectIds)
             this.initialized = true;
@@ -51,8 +54,10 @@ export class ProjectsDashboardComponent  implements OnInit{
     
     // openProject: boolean = false;
     sendProjectNum(nameClicked: string) {
-        
-        this.project = this.getInfoFromName(nameClicked);
+        const idx = this.getIdxFromName(nameClicked);
+        this.project = this.projects[idx];
+        this.projectKey = this.projectKeys[idx];
+        //this.project = this.getInfoFromName(nameClicked);
         this.openProject = true;
         this.projectName = nameClicked;
         localStorage.setItem('inProject', "true")
@@ -66,6 +71,15 @@ export class ProjectsDashboardComponent  implements OnInit{
             }
         }
         return this.projects[0];
+    }
+
+    getIdxFromName(name: string) : number {
+        for (let i = 0; i < this.projects.length; i++) {
+            if (this.projects[i].name === name) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     async submitProjTitle(projectNameInput: string) {

@@ -143,14 +143,13 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   // projects
   @Input() projectName: string = '';
   @Input() projectInfo!: ProjectInfo;
+  @Input() projectKey: string = '';
   @Output() close = new EventEmitter<void>();
   projectFound : boolean = false;
   isNew: boolean = false;
   audio: AudioTrack = new AudioTrack('audio 1');
 
   project!: Project;
-
-  projectKey: string = "";
   loading: boolean = true;
   constructor(public firebaseService: FirebaseService, public _router: Router, private _renderer: Renderer2, private projectManagement: ProjectManagementService) {
     this.keyboardStatus = {
@@ -687,24 +686,24 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     console.log('home level changes: ', changes);
   }
 
-  async getProjectKey(projectName: string) : Promise<string> {
-    console.log("Trying to get key from project name")
-    let foundKey = ""
-    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-    return new Promise((resolve, reject) => {
-        this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
-            for (let i = 0; i < x.length; i++) {
-                if (projectName === x[i].name) {
-                    resolve(x[i].key)
-                }
-            }
-            reject()
-        });
-    })
+  // async getProjectKey(projectName: string) : Promise<string> {
+  //   console.log("Trying to get key from project name")
+  //   let foundKey = ""
+  //   const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+  //   return new Promise((resolve, reject) => {
+  //       this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
+  //           for (let i = 0; i < x.length; i++) {
+  //               if (projectName === x[i].name) {
+  //                   resolve(x[i].key)
+  //               }
+  //           }
+  //           reject()
+  //       });
+  //   })
     
-  }
+  // }
 
-  async ngOnInit(){
+  ngOnInit(){
     
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
     
@@ -712,12 +711,10 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     console.log(this.projectInfo)
     this.initVars();
     this.project.updateEmitter.subscribe(() => {
-        console.log("updateEmitter event emitted.");
-        console.log("project name in ngonInit: " + this.projectName);
-        this.getProjectKey(this.project.name).then((key) => {
-            this.firebaseService.saveProject(key, InfoizeProject(this.project))
-        }).catch((err) => console.log(err));
-    })
+      console.log("updateEmitter event emitted.");
+      console.log("project name in ngonInit: " + this.projectName);
+      this.firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
+    });
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");

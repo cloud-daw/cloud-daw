@@ -22,4 +22,4 @@
     </div>
 </div>
 
-<app-home *ngIf="openProject && initialized" [projectName]="projectName" [projectInfo]="project" (close)="onCloseHome()"></app-home>
+<app-home *ngIf="openProject && initialized" [projectName]="projectName" [projectInfo]="project" [projectKey]="projectKey" (close)="onCloseHome()"></app-home>
