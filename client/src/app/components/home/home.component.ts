@@ -704,9 +704,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
   // }
 
   ngOnInit(){
-    
+    //no longer async
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
-    
     this.project = HydrateProjectFromInfo(this.projectInfo);
     console.log(this.projectInfo)
     this.initVars();
