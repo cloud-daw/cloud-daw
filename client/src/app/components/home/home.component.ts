@@ -686,22 +686,22 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     console.log('home level changes: ', changes);
   }
 
-  // async getProjectKey(projectName: string) : Promise<string> {
-  //   console.log("Trying to get key from project name")
-  //   let foundKey = ""
-  //   const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
-  //   return new Promise((resolve, reject) => {
-  //       this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
-  //           for (let i = 0; i < x.length; i++) {
-  //               if (projectName === x[i].name) {
-  //                   resolve(x[i].key)
-  //               }
-  //           }
-  //           reject()
-  //       });
-  //   })
+  async getProjectKey(projectName: string) : Promise<string> {
+    console.log("Trying to get key from project name")
+    let foundKey = ""
+    const sessionEmail = JSON.parse(localStorage.getItem('user') || "").email
+    return new Promise((resolve, reject) => {
+        this.firebaseService.getProjectByEmail(sessionEmail).pipe().subscribe(x => {
+            for (let i = 0; i < x.length; i++) {
+                if (projectName === x[i].name) {
+                    resolve(x[i].key)
+                }
+            }
+            reject()
+        });
+    })
     
-  // }
+  }
 
   goHomeOnUndefined() {
       localStorage.setItem("inProject", "false")
@@ -709,7 +709,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
       this.close.emit();
   }
 
-  ngOnInit(){
+  async ngOnInit(){
     //no longer async
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
     try {
@@ -722,11 +722,13 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     console.log(this.projectInfo)
     console.log('KEY:', this.projectKey);
     this.initVars();
-    this.project.updateEmitter.subscribe(() => {
-      console.log("updateEmitter event emitted.");
-      console.log("project name in ngonInit: " + this.projectName);
-      this.firebaseService.saveProject(this.projectKey, InfoizeProject(this.project))
-    });
+    this.getProjectKey(this.projectName).then((key) => {
+      this.project.updateEmitter.subscribe(() => {
+        console.log("updateEmitter event emitted.");
+        console.log("project name in ngonInit: " + this.projectName);
+        this.firebaseService.saveProject(key, InfoizeProject(this.project))
+      })
+  }).catch((err) => {this.goHomeOnUndefined()});
     // toggle the necessary elements of the tutorial.
     const nextBtn = <HTMLElement>document.getElementById("next-button-tutorial");
     const instructions = <HTMLElement>document.getElementById("tutorialInstructions");
