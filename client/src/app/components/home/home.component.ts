@@ -703,10 +703,22 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     
   // }
 
+  goHomeOnUndefined() {
+      localStorage.setItem("inProject", "false")
+      localStorage.removeItem('openProjectName')
+      this.close.emit();
+  }
+
   ngOnInit(){
     //no longer async
     this.isTutorial = "true" == localStorage.getItem('isTutorial');
-    this.project = HydrateProjectFromInfo(this.projectInfo);
+    try {
+      this.project = HydrateProjectFromInfo(this.projectInfo);
+      if (this.project === undefined) throw new Error('project undefined');
+    } catch (err){
+      this.goHomeOnUndefined();
+    }
+    
     console.log(this.projectInfo)
     this.initVars();
     this.project.updateEmitter.subscribe(() => {
@@ -727,11 +739,6 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
-    if (this.project === undefined) { //no project exists, fix screen bug
-      localStorage.setItem("inProject", "false")
-      localStorage.removeItem('openProjectName')
-      this.close.emit();
-    }
   }
 
 }
