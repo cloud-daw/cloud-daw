@@ -727,6 +727,11 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
 
     // reset tutorial state so that tutorial always starts from the beginning.
     this.tutorialState = 0;
+    if (this.project === undefined) { //no project exists, fix screen bug
+      localStorage.setItem("inProject", "false")
+      localStorage.removeItem('openProjectName')
+      this.close.emit();
+    }
   }
 
 }
