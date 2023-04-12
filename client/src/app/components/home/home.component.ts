@@ -299,8 +299,8 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
       this.trackIdCounter++;
       const newTrack = new MidiTrack('Untitled Track', this.trackIdCounter, instrument, true);
       this.tracks.add(newTrack);
-      this.project.addTrack(newTrack);
       this.setSelectedTrack(newTrack);
+      this.project.addTrack(newTrack);
       this.showSelectInstrument = false;
     }
   }
@@ -720,6 +720,7 @@ export class HomeComponent implements AfterViewInit, OnInit, AfterViewChecked{
     }
     
     console.log(this.projectInfo)
+    console.log('KEY:', this.projectKey);
     this.initVars();
     this.project.updateEmitter.subscribe(() => {
       console.log("updateEmitter event emitted.");
