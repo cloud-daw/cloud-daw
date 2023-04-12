@@ -89,9 +89,7 @@ export class ProjectsDashboardComponent  implements OnInit{
             const newProjInfo = InfoizeProject(MakeNewProject(sessionEmail, projectNameInput))
             this.firebaseService.initProject(newProjInfo);
             this.project = newProjInfo;
-            this.openProject = true;
             this.projectName = projectNameInput;
-            localStorage.setItem('openProjectName', projectNameInput)
         })
         .catch(()=>{
             alert("Invalid Project Name. Name should be unique and 1-15 characters long");
