@@ -24,6 +24,10 @@ NOTABLY: Angular receives data from http in the form of Observables. https://rxj
 Need to, UI: Visualize keyboard, recorded track
 Need to, Server: Process recording array and store in model
 
+## Final Description
+
+Online digital music production tool. Allows users to create and manage multiple tracks/projects by using a variety of instruments (piano, drums, etc.) with an intuitive and easy to use interface. 
+
 ## Link
 
 https://cloud-daw.vercel.app/
